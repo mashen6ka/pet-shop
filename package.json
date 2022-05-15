@@ -1,0 +1,10 @@
+{
+  "name": "animal-shop",
+  "version": "1.0.0",
+  "description": "puk",
+  "author": "mashen6ka",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}
