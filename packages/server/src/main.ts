@@ -1,9 +1,9 @@
 import "reflect-metadata";
 import express from "express";
 import { Client } from "pg";
-import { ClientController } from "./controller";
-import { PgClientRepo } from "./repository";
-import { ClientService } from "./service";
+import { ClientController, ProductController } from "./controller";
+import { PgClientRepo, PgProductRepo } from "./repository";
+import { ClientService, ProductService } from "./service";
 // import bodyParser from "body-parser";
 
 const port = 3000;
@@ -55,6 +55,30 @@ app.post("/client/delete", (req, res) => {
 app.post("/client/get", (req, res) => {
   console.log(req.body);
   clientController.getClient(req, res);
+});
+
+const productRepo = new PgProductRepo(pgClient);
+const productService = new ProductService(productRepo);
+const productController = new ProductController(productService);
+
+app.post("/product/create", (req, res) => {
+  console.log(req.body);
+  productController.createProduct(req, res);
+});
+
+app.post("/product/update", (req, res) => {
+  console.log(req.body);
+  productController.updateProduct(req, res);
+});
+
+app.post("/product/delete", (req, res) => {
+  console.log(req.body);
+  productController.deleteProduct(req, res);
+});
+
+app.post("/product/get", (req, res) => {
+  console.log(req.body);
+  productController.getProduct(req, res);
 });
 
 app.listen(port);
