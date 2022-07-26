@@ -9,11 +9,12 @@ export default class PgClientRepo implements IClientRepo {
     this.conn = conn;
   }
 
-  async createClient(client: ClientEntity): Promise<void> {
-    await this.conn.query(
+  async createClient(client: ClientEntity): Promise<Number> {
+    const res = await this.conn.query(
       `INSERT INTO client (login, password, first_name, last_name, 
        middle_name, birthday, email, phone, personal_discount) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+       RETURNING id`,
       [
         client.login,
         client.password,
@@ -26,6 +27,7 @@ export default class PgClientRepo implements IClientRepo {
         client.personalDiscount,
       ]
     );
+    return res?.rows?.[0]?.id;
   }
 
   async updateClient(client: ClientEntity): Promise<void> {

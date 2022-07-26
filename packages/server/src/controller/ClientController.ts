@@ -12,12 +12,14 @@ export default class ClientController {
     this.service = service;
   }
 
-  async createClient(req: Request, res: Response): Promise<void> {
+  async createClient(req: Request, res: Response): Promise<Number> {
     try {
       const client = plainToInstance(ClientEntity, req.body);
       await validateOrReject(client);
-      await this.service.createClient(client);
-      res.status(200).json({ success: true });
+      console.log("pupup");
+      const id = await this.service.createClient(client);
+      console.log("id = ", id);
+      res.status(200).json({ success: true, data: { id } });
       return;
     } catch (err) {
       res.status(502).json({ success: false, error: err });

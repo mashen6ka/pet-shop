@@ -8,9 +8,10 @@ export default class ClientService {
     this.repo = repo;
   }
 
-  async createClient(client: ClientEntity): Promise<void> {
+  async createClient(client: ClientEntity): Promise<Number> {
     //хеширование пароля
-    await this.repo.createClient(client);
+    const id = await this.repo.createClient(client);
+    return id;
   }
 
   async updateClient(client: ClientEntity): Promise<void> {
