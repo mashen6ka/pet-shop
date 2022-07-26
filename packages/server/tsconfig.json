@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "target": "ES2021",
+    "noImplicitAny": true,
+    "module": "CommonJS",
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  }
+}
