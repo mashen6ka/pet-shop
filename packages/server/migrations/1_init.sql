@@ -36,7 +36,7 @@ CREATE TABLE "client" (
   "birthday" date,
   "email" varchar(512) UNIQUE NOT NULL,
   "phone" varchar(16),
-  "personal_discount" int NOT NULL DEFAULT 0 CHECK(personal_discount >= 0 AND  personal_discount < 100)
+  "personal_discount" int NOT NULL DEFAULT 0 CHECK(personal_discount >= 0 AND  personal_discount <= 100)
 );
 
 CREATE TABLE "company" (
@@ -58,7 +58,7 @@ CREATE TABLE "product" (
   "description" text NOT NULL,
   "country_id" int NOT NULL,
   "initial_price" int NOT NULL,
-  "discount" int NOT NULL DEFAULT 0 CHECK(discount >= 0 AND  discount < 100)
+  "discount" int NOT NULL DEFAULT 0 CHECK(discount >= 0 AND  discount <= 100)
 );
 
 CREATE TABLE "product_shop" (
