@@ -1,9 +1,13 @@
 import "reflect-metadata";
 import express from "express";
 import { Client } from "pg";
-import { ClientController, ProductController } from "./controller";
-import { PgClientRepo, PgProductRepo } from "./repository";
-import { ClientService, ProductService } from "./service";
+import {
+  ClientController,
+  ProductController,
+  WorkerController,
+} from "./controller";
+import { PgClientRepo, PgProductRepo, PgWorkerRepo } from "./repository";
+import { ClientService, ProductService, WorkerService } from "./service";
 // import bodyParser from "body-parser";
 
 const port = 3000;
@@ -79,6 +83,30 @@ app.post("/product/delete", (req, res) => {
 app.post("/product/get", (req, res) => {
   console.log(req.body);
   productController.getProduct(req, res);
+});
+
+const workerRepo = new PgWorkerRepo(pgClient);
+const workerService = new WorkerService(workerRepo);
+const workerController = new WorkerController(workerService);
+
+app.post("/worker/create", (req, res) => {
+  console.log(req.body);
+  workerController.createWorker(req, res);
+});
+
+app.post("/worker/update", (req, res) => {
+  console.log(req.body);
+  workerController.updateWorker(req, res);
+});
+
+app.post("/worker/delete", (req, res) => {
+  console.log(req.body);
+  workerController.deleteWorker(req, res);
+});
+
+app.post("/worker/get", (req, res) => {
+  console.log(req.body);
+  workerController.getWorker(req, res);
 });
 
 app.listen(port);
