@@ -5,9 +5,20 @@ import {
   ClientController,
   ProductController,
   WorkerController,
+  ShopController,
 } from "./controller";
-import { PgClientRepo, PgProductRepo, PgWorkerRepo } from "./repository";
-import { ClientService, ProductService, WorkerService } from "./service";
+import {
+  PgClientRepo,
+  PgProductRepo,
+  PgWorkerRepo,
+  PgShopRepo,
+} from "./repository";
+import {
+  ClientService,
+  ProductService,
+  WorkerService,
+  ShopService,
+} from "./service";
 // import bodyParser from "body-parser";
 
 const port = 3000;
@@ -107,6 +118,35 @@ app.post("/worker/delete", (req, res) => {
 app.post("/worker/get", (req, res) => {
   console.log(req.body);
   workerController.getWorker(req, res);
+});
+
+const shopRepo = new PgShopRepo(pgClient);
+const shopService = new ShopService(shopRepo);
+const shopController = new ShopController(shopService);
+
+app.post("/shop/create", (req, res) => {
+  console.log(req.body);
+  shopController.createShop(req, res);
+});
+
+app.post("/shop/update", (req, res) => {
+  console.log(req.body);
+  shopController.updateShop(req, res);
+});
+
+app.post("/shop/delete", (req, res) => {
+  console.log(req.body);
+  shopController.deleteShop(req, res);
+});
+
+app.post("/shop/get", (req, res) => {
+  console.log(req.body);
+  shopController.getShop(req, res);
+});
+
+app.post("/shop/get/list", (req, res) => {
+  console.log(req.body);
+  shopController.getShopList(req, res);
 });
 
 app.listen(port);

@@ -7,8 +7,13 @@ import PgProductRepo from "./PgProductRepo";
 import IWorkerRepo from "./IWorkerRepo";
 import PgWorkerRepo from "./PgWorkerRepo";
 
+import IShopRepo from "./IShopRepo";
+import PgShopRepo from "./PgShopRepo";
+
 export { IClientRepo, PgClientRepo };
 
 export { IProductRepo, PgProductRepo };
 
 export { IWorkerRepo, PgWorkerRepo };
+
+export { IShopRepo, PgShopRepo };
