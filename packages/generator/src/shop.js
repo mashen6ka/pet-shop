@@ -15,11 +15,11 @@ async function getShopData(count) {
     const maxTo = 23;
     const weekdays = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 
-    const data = [];
+    const data = {};
     for (let day of weekdays) {
       const from = Math.floor(Math.random() * (maxFrom - minFrom + 1) + minFrom); //prettier-ignore
       const to = Math.floor(Math.random() * (maxTo - minTo + 1) + minTo);
-      data.push({ [day]: { from: from, to: to } });
+      data[day] = { from: from, to: to };
     }
     return JSON.stringify(data);
   }
@@ -42,7 +42,7 @@ async function getShopData(count) {
 
 export default async function generateShop(count, folder, createCsvWriter) {
   const csvWriter = createCsvWriter({
-    path: folder + "shop_point.csv",
+    path: folder + "shop.csv",
     header: getShopHeader(),
   });
 
@@ -50,5 +50,5 @@ export default async function generateShop(count, folder, createCsvWriter) {
 
   csvWriter
     .writeRecords(data)
-    .then(() => console.log("Shop_point successfully generated"));
+    .then(() => console.log("Shop successfully generated"));
 }
