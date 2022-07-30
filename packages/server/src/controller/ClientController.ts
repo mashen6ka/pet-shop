@@ -16,9 +16,7 @@ export default class ClientController {
     try {
       const client = plainToInstance(ClientEntity, req.body);
       await validateOrReject(client);
-      console.log("pupup");
       const id = await this.service.createClient(client);
-      console.log("id = ", id);
       res.status(200).json({ success: true, data: { id } });
       return;
     } catch (err) {
