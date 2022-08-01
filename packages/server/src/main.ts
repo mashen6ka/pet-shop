@@ -6,18 +6,21 @@ import {
   ProductController,
   WorkerController,
   ShopController,
+  CompanyController,
 } from "./controller";
 import {
   PgClientRepo,
   PgProductRepo,
   PgWorkerRepo,
   PgShopRepo,
+  PgCompanyRepo,
 } from "./repository";
 import {
   ClientService,
   ProductService,
   WorkerService,
   ShopService,
+  CompanyService,
 } from "./service";
 // import bodyParser from "body-parser";
 
@@ -147,6 +150,30 @@ app.post("/shop/get", (req, res) => {
 app.post("/shop/get/list", (req, res) => {
   console.log(req.body);
   shopController.getShopList(req, res);
+});
+
+const companyRepo = new PgCompanyRepo(pgClient);
+const companyService = new CompanyService(companyRepo);
+const companyController = new CompanyController(companyService);
+
+app.post("/company/create", (req, res) => {
+  console.log(req.body);
+  companyController.createCompany(req, res);
+});
+
+app.post("/company/update", (req, res) => {
+  console.log(req.body);
+  companyController.updateCompany(req, res);
+});
+
+app.post("/company/delete", (req, res) => {
+  console.log(req.body);
+  companyController.deleteCompany(req, res);
+});
+
+app.post("/company/get", (req, res) => {
+  console.log(req.body);
+  companyController.getCompany(req, res);
 });
 
 app.listen(port);
