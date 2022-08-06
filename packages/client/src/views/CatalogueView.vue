@@ -32,14 +32,18 @@
           img-top
           style="max-width: 20rem; min-width: 20rem"
           img-src="https://placekitten.com/600/600"
-          :title="product.name"
         >
-          <b-button @click="addProductToCart(product)">
-            <div class="my-auto">
+          <b-card-title
+            ><b-link :to="{ name: 'product', params: { id: product.id } }">{{
+              product.name
+            }}</b-link></b-card-title
+          >
+          <b-card-text>
+            <b-button @click="addProductToCart(product)">
               {{ product.initialPrice / 100 }} ₽
               <b-icon-cart></b-icon-cart>
-            </div>
-          </b-button>
+            </b-button>
+          </b-card-text>
         </b-card>
       </b-card-group>
       <b-pagination
@@ -60,16 +64,20 @@ import {
   BButton,
   BIconCart,
   BAlert,
+  BLink,
+  BCardTitle,
 } from "bootstrap-vue";
 
 export default {
   components: {
     BCardGroup,
     BCard,
-    // BCardText,
+    BCardText,
     BButton,
     BIconCart,
     BAlert,
+    BLink,
+    BCardTitle,
   },
   computed: {
     rows() {

@@ -3,6 +3,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 // import HomeView from "../views/HomeView.vue";
 import CatalogueView from "../views/CatalogueView.vue";
 import ContactsView from "../views/ContactsView.vue";
+import ProductView from "../views/ProductView.vue";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,11 @@ const routes: Array<RouteConfig> = [
     path: "/contacts",
     name: "contacts",
     component: ContactsView,
+  },
+  {
+    path: "/product/:id",
+    name: "product",
+    component: ProductView,
   },
 ];
 
