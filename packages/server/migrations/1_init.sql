@@ -47,7 +47,7 @@ CREATE TABLE "company" (
   "address" text NOT NULL
 );
 
-CREATE TABLE "client_company" (
+CREATE TABLE "client__company" (
   "client_id" int NOT NULL,
   "company_id" int NOT NULL
 );
@@ -61,7 +61,7 @@ CREATE TABLE "product" (
   "discount" int NOT NULL DEFAULT 0 CHECK(discount >= 0 AND  discount <= 100)
 );
 
-CREATE TABLE "product_shop" (
+CREATE TABLE "product__shop" (
   "product_id" int NOT NULL,
   "shop_id" int NOT NULL,
   "quantity" int NOT NULL
@@ -88,7 +88,7 @@ CREATE TABLE "order_status" (
   "name" varchar(32) NOT NULL
 );
 
-CREATE TABLE "order_items" (
+CREATE TABLE "order__product" (
   "order_id" int NOT NULL,
   "product_id" int NOT NULL,
   "quantity" int NOT NULL DEFAULT 1
@@ -98,13 +98,13 @@ ALTER TABLE "worker" ADD FOREIGN KEY ("job_id") REFERENCES "job" ("id");
 
 ALTER TABLE "worker" ADD FOREIGN KEY ("shop_id") REFERENCES "shop" ("id");
 
-ALTER TABLE "client_company" ADD FOREIGN KEY ("client_id") REFERENCES "client" ("id");
+ALTER TABLE "client__company" ADD FOREIGN KEY ("client_id") REFERENCES "client" ("id");
 
-ALTER TABLE "client_company" ADD FOREIGN KEY ("company_id") REFERENCES "company" ("id");
+ALTER TABLE "client__company" ADD FOREIGN KEY ("company_id") REFERENCES "company" ("id");
 
-ALTER TABLE "product_shop" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
+ALTER TABLE "product__shop" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
 
-ALTER TABLE "product_shop" ADD FOREIGN KEY ("shop_id") REFERENCES "shop" ("id");
+ALTER TABLE "product__shop" ADD FOREIGN KEY ("shop_id") REFERENCES "shop" ("id");
 
 ALTER TABLE "product" ADD FOREIGN KEY ("country_id") REFERENCES "country" ("id");
 
@@ -116,6 +116,6 @@ ALTER TABLE "order" ADD FOREIGN KEY ("status_id") REFERENCES "order_status" ("id
 
 ALTER TABLE "order" ADD FOREIGN KEY ("shop_id") REFERENCES "shop" ("id");
 
-ALTER TABLE "order_items" ADD FOREIGN KEY ("order_id") REFERENCES "order" ("id");
+ALTER TABLE "order__product" ADD FOREIGN KEY ("order_id") REFERENCES "order" ("id");
 
-ALTER TABLE "order_items" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
+ALTER TABLE "order__product" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
