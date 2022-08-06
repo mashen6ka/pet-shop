@@ -20,7 +20,7 @@ export default class ClientController {
       res.status(200).json({ success: true, data: { id } });
       return;
     } catch (err) {
-      res.status(502).json({ success: false, error: err });
+      res.status(502).json({ success: false, error: new Error(err).message });
       return;
     }
   }
@@ -33,7 +33,7 @@ export default class ClientController {
       res.status(200).json({ success: true });
       return;
     } catch (err) {
-      res.status(502).json({ success: false, error: err });
+      res.status(502).json({ success: false, error: new Error(err).message });
       return;
     }
   }
@@ -48,7 +48,7 @@ export default class ClientController {
       res.status(200).json({ success: true });
       return;
     } catch (err) {
-      res.status(502).json({ success: false, error: err });
+      res.status(502).json({ success: false, error: new Error(err).message });
       return;
     }
   }
@@ -66,7 +66,7 @@ export default class ClientController {
       res.status(200).json({ success: true, data: client });
       return;
     } catch (err) {
-      res.status(502).json({ success: false, error: err });
+      res.status(502).json({ success: false, error: new Error(err).message });
       return;
     }
   }
