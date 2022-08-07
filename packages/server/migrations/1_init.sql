@@ -78,6 +78,13 @@ CREATE TABLE "order__product" (
   "quantity" int NOT NULL DEFAULT 1
 );
 
+CREATE TABLE "session" (
+  "user_id" int NOT NULL,
+  "token" text NOT NULL,
+);
+
+ALTER TABLE "session" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+
 ALTER TABLE "user__company" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
 ALTER TABLE "user__company" ADD FOREIGN KEY ("company_id") REFERENCES "company" ("id");
