@@ -7,6 +7,7 @@ import {
   WorkerController,
   ShopController,
   CompanyController,
+  OrderController,
 } from "./controller";
 import {
   PgClientRepo,
@@ -14,6 +15,7 @@ import {
   PgWorkerRepo,
   PgShopRepo,
   PgCompanyRepo,
+  PgOrderRepo,
 } from "./repository";
 import {
   ClientService,
@@ -21,6 +23,7 @@ import {
   WorkerService,
   ShopService,
   CompanyService,
+  OrderService,
 } from "./service";
 // import bodyParser from "body-parser";
 
@@ -174,6 +177,45 @@ app.post("/company/delete", (req, res) => {
 app.post("/company/get", (req, res) => {
   console.log(req.body);
   companyController.getCompany(req, res);
+});
+
+const orderRepo = new PgOrderRepo(pgClient);
+const orderService = new OrderService(orderRepo);
+const orderController = new OrderController(orderService);
+
+app.post("/order/create", (req, res) => {
+  console.log(req.body);
+  orderController.createOrder(req, res);
+});
+
+app.post("/order/update", (req, res) => {
+  console.log(req.body);
+  orderController.updateOrder(req, res);
+});
+
+app.post("/order/delete", (req, res) => {
+  console.log(req.body);
+  orderController.deleteOrder(req, res);
+});
+
+app.post("/order/get", (req, res) => {
+  console.log(req.body);
+  orderController.getOrder(req, res);
+});
+
+app.post("/order/create/product", (req, res) => {
+  console.log(req.body);
+  orderController.createOrderProduct(req, res);
+});
+
+app.post("/order/delete/product", (req, res) => {
+  console.log(req.body);
+  orderController.deleteOrderProduct(req, res);
+});
+
+app.post("/order/update/product", (req, res) => {
+  console.log(req.body);
+  orderController.updateOrderProduct(req, res);
 });
 
 app.listen(port);
