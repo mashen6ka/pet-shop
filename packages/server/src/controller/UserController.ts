@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "../service";
-import { UserEntity } from "../entity";
+import { CompanyEntity, UserEntity } from "../entity";
 import { validateOrReject } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import _ from "lodash";
@@ -64,6 +64,24 @@ export default class UserController {
         throw "User not found";
       }
       res.status(200).json({ success: true, data: user });
+      return;
+    } catch (err) {
+      res.status(502).json({ success: false, error: new Error(err).message });
+      return;
+    }
+  }
+
+  async getUserCompanyList(
+    req: Request,
+    res: Response
+  ): Promise<Array<CompanyEntity>> {
+    try {
+      const id = req.body.id;
+      if (!Number.isInteger(id)) {
+        throw "Invalid data: id must be an int value";
+      }
+      const companyList = await this.service.getUserCompanyList(id);
+      res.status(200).json({ success: true, data: companyList });
       return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });

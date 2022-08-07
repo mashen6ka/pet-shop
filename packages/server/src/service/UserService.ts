@@ -1,4 +1,4 @@
-import { UserEntity } from "../entity";
+import { CompanyEntity, UserEntity } from "../entity";
 import { IUserRepo } from "../repository";
 
 export default class UserService {
@@ -26,5 +26,10 @@ export default class UserService {
   async getUser(id: number): Promise<UserEntity> {
     const user = await this.repo.getUser(id);
     return user;
+  }
+
+  async getUserCompanyList(id: number): Promise<Array<CompanyEntity>> {
+    const companyList = await this.repo.getUserCompanyList(id);
+    return companyList;
   }
 }

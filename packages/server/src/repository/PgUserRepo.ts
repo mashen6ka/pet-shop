@@ -1,4 +1,4 @@
-import { UserEntity } from "../entity";
+import { CompanyEntity, UserEntity } from "../entity";
 import IUserRepo from "./IUserRepo";
 import { Client as pgConn } from "pg";
 
@@ -70,5 +70,19 @@ export default class PgUserRepo implements IUserRepo {
     const user = new UserEntity(res.rows[0]);
 
     return user;
+  }
+
+  async getUserCompanyList(id: number): Promise<Array<CompanyEntity>> {
+    const res = await this.conn.query(
+      `SELECT id, name, "KPP", "INN", address
+       FROM "company" c JOIN user__company uc ON c.id = uc.company_id
+       WHERE uc.user_id = $1`,
+      [id]
+    );
+    let companyList: Array<CompanyEntity> = [];
+    for (let company of res.rows) {
+      companyList.push(new CompanyEntity(company));
+    }
+    return companyList;
   }
 }

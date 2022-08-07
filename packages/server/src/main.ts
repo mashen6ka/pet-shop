@@ -75,6 +75,11 @@ app.post("/user/get", (req, res) => {
   userController.getUser(req, res);
 });
 
+app.post("/user/get/company/list", (req, res) => {
+  console.log(req.body);
+  userController.getUserCompanyList(req, res);
+});
+
 const productRepo = new PgProductRepo(pgClient);
 const productService = new ProductService(productRepo);
 const productController = new ProductController(productService);
