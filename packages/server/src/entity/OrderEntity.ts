@@ -6,7 +6,7 @@ import {
   IsArray,
   ValidateNested,
 } from "class-validator";
-import OrderItemEntity from "./OrderItemEntity";
+// import OrderItemEntity from "./OrderItemEntity";
 
 export default class OrderEntity {
   @IsOptional()
@@ -14,7 +14,7 @@ export default class OrderEntity {
   id: number;
 
   @IsInt()
-  clientId: number;
+  userId: number;
 
   @IsOptional()
   @IsInt()
@@ -38,11 +38,6 @@ export default class OrderEntity {
 
   @IsInt()
   price: number;
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => OrderItemEntity)
-  orderItemList: Array<OrderItemEntity>;
 
   constructor(partial: Partial<OrderEntity>) {
     Object.assign(this, partial);

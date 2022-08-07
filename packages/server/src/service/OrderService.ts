@@ -1,4 +1,4 @@
-import { OrderEntity } from "../entity";
+import { OrderEntity, OrderItemEntity } from "../entity";
 import { IOrderRepo } from "../repository";
 
 export default class OrderService {
@@ -31,11 +31,11 @@ export default class OrderService {
     productId: number,
     quantity: number
   ): Promise<void> {
-    await this.repo.createOrderProduct(orderId, productId, quantity);
+    await this.repo.createOrderItem(orderId, productId, quantity);
   }
 
   async deleteOrderProduct(orderId: number, productId: number): Promise<void> {
-    await this.repo.deleteOrderProduct(orderId, productId);
+    await this.repo.deleteOrderItem(orderId, productId);
   }
 
   async updateOrderProduct(
@@ -43,6 +43,11 @@ export default class OrderService {
     productId: number,
     quantity: number
   ): Promise<void> {
-    await this.repo.updateOrderProduct(orderId, productId, quantity);
+    await this.repo.updateOrderItem(orderId, productId, quantity);
+  }
+
+  async getOrderItemList(orderId: number): Promise<Array<OrderItemEntity>> {
+    const orderItemList = await this.repo.getOrderItemList(orderId);
+    return orderItemList;
   }
 }

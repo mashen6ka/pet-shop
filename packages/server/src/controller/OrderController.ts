@@ -141,4 +141,22 @@ export default class OrderController {
       return;
     }
   }
+
+  async getOrderItemList(req: Request, res: Response): Promise<OrderEntity> {
+    try {
+      const orderId = req.body.orderId;
+      if (!Number.isInteger(orderId)) {
+        throw "Invalid data: orderId must be an int value";
+      }
+      const orderItemList = await this.service.getOrderItemList(orderId);
+      if (orderItemList.length === 0) {
+        throw "Order is empty";
+      }
+      res.status(200).json({ success: true, data: orderItemList });
+      return;
+    } catch (err) {
+      res.status(502).json({ success: false, error: new Error(err).message });
+      return;
+    }
+  }
 }
