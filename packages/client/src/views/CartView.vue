@@ -142,20 +142,18 @@ export default {
       return this.$store.getters["cart/CART"];
     },
     itemsQuantity() {
-      return this.$store.getters["cart/CART"].length;
+      return this.items.length;
     },
     totalPrice() {
       let price = 0;
-      this.$store.getters["cart/CART"].forEach(
+      this.items.forEach(
         (item) => (price += item.product.initialPrice * item.quantity)
       );
       return price;
     },
     totalQuantity() {
       let quantity = 0;
-      this.$store.getters["cart/CART"].forEach(
-        (item) => (quantity += item.quantity)
-      );
+      this.items.forEach((item) => (quantity += item.quantity));
       return quantity;
     },
   },
