@@ -80,6 +80,16 @@ app.post("/user/get/company/list", (req, res) => {
   userController.getUserCompanyList(req, res);
 });
 
+app.post("/user/create/company", (req, res) => {
+  console.log(req.body);
+  userController.createUserCompany(req, res);
+});
+
+app.post("/user/delete/company", (req, res) => {
+  console.log(req.body);
+  userController.deleteUserCompany(req, res);
+});
+
 const productRepo = new PgProductRepo(pgClient);
 const productService = new ProductService(productRepo);
 const productController = new ProductController(productService);

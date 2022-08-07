@@ -6,4 +6,6 @@ export default interface IUserRepo {
   deleteUser: (id: number) => Promise<void>;
   getUser: (id: number) => Promise<UserEntity>;
   getUserCompanyList: (id: number) => Promise<Array<CompanyEntity>>;
+  createUserCompany: (userId: number, companyId: number) => Promise<void>;
+  deleteUserCompany: (userId: number, companyId: number) => Promise<void>;
 }

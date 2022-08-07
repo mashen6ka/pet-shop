@@ -88,4 +88,36 @@ export default class UserController {
       return;
     }
   }
+
+  async createUserCompany(req: Request, res: Response): Promise<void> {
+    try {
+      const userId = req.body.userId;
+      const companyId = req.body.companyId;
+      if (!Number.isInteger(userId) || !Number.isInteger(userId)) {
+        throw "Invalid data: userId & companyId must be int values";
+      }
+      await this.service.createUserCompany(userId, companyId);
+      res.status(200).json({ success: true });
+      return;
+    } catch (err) {
+      res.status(502).json({ success: false, error: new Error(err).message });
+      return;
+    }
+  }
+
+  async deleteUserCompany(req: Request, res: Response): Promise<void> {
+    try {
+      const userId = req.body.userId;
+      const companyId = req.body.companyId;
+      if (!Number.isInteger(userId) || !Number.isInteger(userId)) {
+        throw "Invalid data: userId & companyId must be int values";
+      }
+      await this.service.deleteUserCompany(userId, companyId);
+      res.status(200).json({ success: true });
+      return;
+    } catch (err) {
+      res.status(502).json({ success: false, error: new Error(err).message });
+      return;
+    }
+  }
 }

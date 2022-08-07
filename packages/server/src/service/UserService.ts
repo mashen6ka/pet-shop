@@ -32,4 +32,12 @@ export default class UserService {
     const companyList = await this.repo.getUserCompanyList(id);
     return companyList;
   }
+
+  async createUserCompany(userId: number, companyId: number): Promise<void> {
+    await this.repo.createUserCompany(userId, companyId);
+  }
+
+  async deleteUserCompany(userId: number, companyId: number): Promise<void> {
+    await this.repo.deleteUserCompany(userId, companyId);
+  }
 }

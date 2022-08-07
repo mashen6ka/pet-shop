@@ -85,4 +85,21 @@ export default class PgUserRepo implements IUserRepo {
     }
     return companyList;
   }
+
+  // добавить верификацию компаний, чтоб потом убрать дубли
+  async createUserCompany(userId: number, companyId: number): Promise<void> {
+    const res = await this.conn.query(
+      `INSERT INTO "user__company" (user_id, company_id)
+       VALUES ($1, $2)`,
+      [userId, companyId]
+    );
+  }
+
+  async deleteUserCompany(userId: number, companyId: number): Promise<void> {
+    const res = await this.conn.query(
+      `DELETE FROM "user__company"
+       WHERE user_id = $1 AND company_id = $2`,
+      [userId, companyId]
+    );
+  }
 }
