@@ -43,7 +43,8 @@ CREATE TABLE "product" (
   "country_id" int NOT NULL,
   "manufacturer_id" int NOT NULL,
   "initial_price" int NOT NULL,
-  "discount" int NOT NULL DEFAULT 0 CHECK(discount >= 0 AND  discount <= 100)
+  "discount" int NOT NULL DEFAULT 0 CHECK(discount >= 0 AND  discount <= 100),
+  "img_url" text NULL
 );
 
 CREATE TABLE "product__shop" (

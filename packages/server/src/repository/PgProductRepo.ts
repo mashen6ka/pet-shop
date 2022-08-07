@@ -12,8 +12,8 @@ export default class PgProductRepo implements IProductRepo {
   async createProduct(product: ProductEntity): Promise<Number> {
     const res = await this.conn.query(
       `INSERT INTO "product" (name, description, country_id, initial_price, 
-        discount, manufacturer_id)
-       VALUES ($1, $2, $3, $4, $5, $6)
+        discount, manufacturer_id, img_url)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
        RETURNING id`,
       [
         product.name,
@@ -22,6 +22,7 @@ export default class PgProductRepo implements IProductRepo {
         product.initialPrice,
         product.discount,
         product.manufacturerId,
+        product.imgUrl,
       ]
     );
 
@@ -31,9 +32,9 @@ export default class PgProductRepo implements IProductRepo {
   async updateProduct(product: ProductEntity): Promise<void> {
     await this.conn.query(
       `UPDATE "product" SET (name, description, country_id, initial_price, 
-        discount, manufacturer_id) 
-       = ($1, $2, $3, $4, $5, $6)
-       WHERE id = $7`,
+        discount, manufacturer_id, img_url) 
+       = ($1, $2, $3, $4, $5, $6, $7)
+       WHERE id = $8`,
       [
         product.name,
         product.description,
@@ -41,6 +42,7 @@ export default class PgProductRepo implements IProductRepo {
         product.initialPrice,
         product.discount,
         product.manufacturerId,
+        product.imgUrl,
         product.id,
       ]
     );

@@ -25,6 +25,10 @@ export default class ProductEntity {
   @Max(100)
   discount: number;
 
+  @IsOptional()
+  @IsString()
+  imgUrl: string;
+
   constructor(partial: Partial<ProductEntity>) {
     Object.assign(this, partial);
   }
