@@ -64,6 +64,9 @@
 import {
   BAlert,
   BCard,
+  BCardText,
+  BButton,
+  BFormInput,
   BInputGroup,
   BIconCart,
   BInputGroupAppend,
@@ -76,6 +79,9 @@ export default {
   components: {
     BAlert,
     BCard,
+    BCardText,
+    BButton,
+    BFormInput,
     BInputGroup,
     BIconCart,
     BInputGroupAppend,
@@ -110,7 +116,10 @@ export default {
       };
     },
     addProductToCart(product) {
-      // чето как-то сохранять в корзину (вьюекс)
+      this.$store.dispatch("cart/ADD_CART_ITEM", {
+        product: product,
+        quantity: this.quantity,
+      });
       this.showAddedProductToCart = true;
     },
   },

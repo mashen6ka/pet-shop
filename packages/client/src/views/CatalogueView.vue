@@ -66,6 +66,7 @@ import {
   BAlert,
   BLink,
   BCardTitle,
+  BPagination,
 } from "bootstrap-vue";
 
 export default {
@@ -78,6 +79,7 @@ export default {
     BAlert,
     BLink,
     BCardTitle,
+    BPagination,
   },
   computed: {
     rows() {
@@ -115,7 +117,10 @@ export default {
     },
 
     addProductToCart(product) {
-      // чето как-то сохранять в корзину (вьюекс)
+      this.$store.dispatch("cart/ADD_CART_ITEM", {
+        product: product,
+        quantity: 1,
+      });
       this.showAddedProductToCart = true;
     },
   },

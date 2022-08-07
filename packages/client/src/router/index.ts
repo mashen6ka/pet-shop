@@ -4,6 +4,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 import CatalogueView from "../views/CatalogueView.vue";
 import ContactsView from "../views/ContactsView.vue";
 import ProductView from "../views/ProductView.vue";
+import CartView from "../views/CartView.vue";
 
 Vue.use(VueRouter);
 
@@ -27,6 +28,11 @@ const routes: Array<RouteConfig> = [
     path: "/product/:id",
     name: "product",
     component: ProductView,
+  },
+  {
+    path: "/cart",
+    name: "cart",
+    component: CartView,
   },
 ];
 
