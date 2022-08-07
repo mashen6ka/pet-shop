@@ -114,6 +114,11 @@ app.post("/product/get", (req, res) => {
   productController.getProduct(req, res);
 });
 
+app.post("/product/get/list", (req, res) => {
+  console.log(req.body);
+  productController.getProductList(req, res);
+});
+
 const shopRepo = new PgShopRepo(pgClient);
 const shopService = new ShopService(shopRepo);
 const shopController = new ShopController(shopService);

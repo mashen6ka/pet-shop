@@ -70,4 +70,21 @@ export default class ProductController {
       return;
     }
   }
+
+  async getProductList(
+    req: Request,
+    res: Response
+  ): Promise<Array<ProductEntity>> {
+    try {
+      const productList = await this.service.getProductList();
+      if (_.isEmpty(productList)) {
+        throw "No products avaliable";
+      }
+      res.status(200).json({ success: true, data: productList });
+      return;
+    } catch (err) {
+      res.status(502).json({ success: false, error: new Error(err).message });
+      return;
+    }
+  }
 }

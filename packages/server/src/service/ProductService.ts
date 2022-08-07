@@ -26,4 +26,9 @@ export default class ProductService {
     const product = await this.repo.getProduct(id);
     return product;
   }
+
+  async getProductList(): Promise<Array<ProductEntity>> {
+    const productList = await this.repo.getProductList();
+    return productList;
+  }
 }

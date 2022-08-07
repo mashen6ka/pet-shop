@@ -66,4 +66,15 @@ export default class PgProductRepo implements IProductRepo {
 
     return product;
   }
+
+  async getProductList(): Promise<Array<ProductEntity>> {
+    const res = await this.conn.query(`SELECT * from "product"`, []);
+    const productList: Array<ProductEntity> = [];
+
+    for (let product of res.rows) {
+      productList.push(new ProductEntity(product));
+    }
+
+    return productList;
+  }
 }
