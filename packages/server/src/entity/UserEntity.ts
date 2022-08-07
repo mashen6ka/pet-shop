@@ -7,6 +7,7 @@ import {
   IsString,
   Min,
   Max,
+  IsBoolean,
   IsOptional,
 } from "class-validator";
 
@@ -20,6 +21,9 @@ export default class ClientEntity {
 
   @IsString()
   password: string;
+
+  @IsBoolean()
+  worker: boolean;
 
   @IsString()
   firstName: string;

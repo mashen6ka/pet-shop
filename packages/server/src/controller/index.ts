@@ -1,15 +1,12 @@
-import ClientController from "./ClientController";
+import UserController from "./UserController";
 import ProductController from "./ProductController";
-import WorkerController from "./WorkerController";
 import ShopController from "./ShopController";
 import CompanyController from "./CompanyController";
 import OrderController from "./OrderController";
 
-export { ClientController };
+export { UserController };
 
 export { ProductController };
-
-export { WorkerController };
 
 export { ShopController };
 

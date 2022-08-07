@@ -1,11 +1,8 @@
-import IClientRepo from "./IClientRepo";
-import PgClientRepo from "./PgClientRepo";
+import IUserRepo from "./IUserRepo";
+import PgUserRepo from "./PgUserRepo";
 
 import IProductRepo from "./IProductRepo";
 import PgProductRepo from "./PgProductRepo";
-
-import IWorkerRepo from "./IWorkerRepo";
-import PgWorkerRepo from "./PgWorkerRepo";
 
 import IShopRepo from "./IShopRepo";
 import PgShopRepo from "./PgShopRepo";
@@ -16,11 +13,9 @@ import PgCompanyRepo from "./PgCompanyRepo";
 import IOrderRepo from "./IOrderRepo";
 import PgOrderRepo from "./PgOrderRepo";
 
-export { IClientRepo, PgClientRepo };
+export { IUserRepo, PgUserRepo };
 
 export { IProductRepo, PgProductRepo };
-
-export { IWorkerRepo, PgWorkerRepo };
 
 export { IShopRepo, PgShopRepo };
 

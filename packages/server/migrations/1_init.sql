@@ -1,20 +1,3 @@
-CREATE TABLE "worker" (
-  "id" SERIAL PRIMARY KEY,
-  "login" varchar(32) UNIQUE NOT NULL,
-  "password" varchar(32) NOT NULL,
-  "first_name" varchar(32) NOT NULL,
-  "last_name" varchar(32) NOT NULL,
-  "middle_name" varchar(32),
-  "birthday" date,
-  "email" varchar(512) UNIQUE NOT NULL,
-  "phone" varchar(16),
-  "passport_series" varchar(4) NOT NULL,
-  "passport_num" varchar(6) NOT NULL,
-  "INN" varchar(12) NOT NULL,
-  "job_id" int NOT NULL,
-  "shop_id" int NOT NULL
-);
-
 CREATE TABLE "job" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar(32) NOT NULL
@@ -26,15 +9,16 @@ CREATE TABLE "shop" (
   "working_hours" jsonb NOT NULL
 );
 
-CREATE TABLE "client" (
+CREATE TABLE "user" (
   "id" SERIAL PRIMARY KEY,
   "login" varchar(32) UNIQUE NOT NULL,
   "password" varchar(32) NOT NULL,
+  "worker" boolean NOT NULL DEFAULT false,
   "first_name" varchar(32) NOT NULL,
   "last_name" varchar(32) NOT NULL,
   "middle_name" varchar(32),
   "birthday" date,
-  "email" varchar(512) UNIQUE NOT NULL,
+  "email" varchar(512) NOT NULL,
   "phone" varchar(16),
   "personal_discount" int NOT NULL DEFAULT 0 CHECK(personal_discount >= 0 AND  personal_discount <= 100)
 );
@@ -47,8 +31,8 @@ CREATE TABLE "company" (
   "address" text NOT NULL
 );
 
-CREATE TABLE "client__company" (
-  "client_id" int NOT NULL,
+CREATE TABLE "user__company" (
+  "user_id" int NOT NULL,
   "company_id" int NOT NULL
 );
 
@@ -74,7 +58,7 @@ CREATE TABLE "country" (
 
 CREATE TABLE "order" (
   "id" SERIAL PRIMARY KEY,
-  "client_id" int NOT NULL,
+  "user_id" int NOT NULL,
   "company_id" int,
   "status_id" int NOT NULL,
   "created_at" timestamp DEFAULT LOCALTIMESTAMP,
@@ -94,13 +78,9 @@ CREATE TABLE "order__product" (
   "quantity" int NOT NULL DEFAULT 1
 );
 
-ALTER TABLE "worker" ADD FOREIGN KEY ("job_id") REFERENCES "job" ("id");
+ALTER TABLE "user__company" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
-ALTER TABLE "worker" ADD FOREIGN KEY ("shop_id") REFERENCES "shop" ("id");
-
-ALTER TABLE "client__company" ADD FOREIGN KEY ("client_id") REFERENCES "client" ("id");
-
-ALTER TABLE "client__company" ADD FOREIGN KEY ("company_id") REFERENCES "company" ("id");
+ALTER TABLE "user__company" ADD FOREIGN KEY ("company_id") REFERENCES "company" ("id");
 
 ALTER TABLE "product__shop" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
 
@@ -108,7 +88,7 @@ ALTER TABLE "product__shop" ADD FOREIGN KEY ("shop_id") REFERENCES "shop" ("id")
 
 ALTER TABLE "product" ADD FOREIGN KEY ("country_id") REFERENCES "country" ("id");
 
-ALTER TABLE "order" ADD FOREIGN KEY ("client_id") REFERENCES "client" ("id");
+ALTER TABLE "order" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
 ALTER TABLE "order" ADD FOREIGN KEY ("company_id") REFERENCES "company" ("id");
 

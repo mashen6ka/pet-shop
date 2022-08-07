@@ -78,12 +78,12 @@ export default class PgOrderRepo implements IOrderRepo {
       );
     }
     // допилить
-    const order = new OrderEntity(resOrder.rows[0], orderItemList);
+    const order = new OrderEntity(resOrder.rows[0]);
 
     return order;
   }
 
-  async createOrderItem(
+  async createOrderProduct(
     orderId: number,
     productId: Number,
     quantity: Number
@@ -95,7 +95,7 @@ export default class PgOrderRepo implements IOrderRepo {
     );
   }
 
-  async deleteOrderItem(orderId: number, productId: Number): Promise<void> {
+  async deleteOrderProduct(orderId: number, productId: Number): Promise<void> {
     const res = await this.conn.query(
       `DELETE FROM "order__product"
        WHERE order_id = $1 and product_id = $2`,
@@ -103,7 +103,7 @@ export default class PgOrderRepo implements IOrderRepo {
     );
   }
 
-  async updateOrderItem(
+  async updateOrderProduct(
     orderId: number,
     productId: Number,
     quantity: Number

@@ -2,25 +2,22 @@ import "reflect-metadata";
 import express from "express";
 import { Client } from "pg";
 import {
-  ClientController,
+  UserController,
   ProductController,
-  WorkerController,
   ShopController,
   CompanyController,
   OrderController,
 } from "./controller";
 import {
-  PgClientRepo,
+  PgUserRepo,
   PgProductRepo,
-  PgWorkerRepo,
   PgShopRepo,
   PgCompanyRepo,
   PgOrderRepo,
 } from "./repository";
 import {
-  ClientService,
+  UserService,
   ProductService,
-  WorkerService,
   ShopService,
   CompanyService,
   OrderService,
@@ -54,28 +51,28 @@ pgClient.connect((err) => {
   }
 });
 
-const clientRepo = new PgClientRepo(pgClient);
-const clientService = new ClientService(clientRepo);
-const clientController = new ClientController(clientService);
+const userRepo = new PgUserRepo(pgClient);
+const userService = new UserService(userRepo);
+const userController = new UserController(userService);
 
-app.post("/client/create", (req, res) => {
+app.post("/user/create", (req, res) => {
   console.log(req.body);
-  clientController.createClient(req, res);
+  userController.createUser(req, res);
 });
 
-app.post("/client/update", (req, res) => {
+app.post("/user/update", (req, res) => {
   console.log(req.body);
-  clientController.updateClient(req, res);
+  userController.updateUser(req, res);
 });
 
-app.post("/client/delete", (req, res) => {
+app.post("/user/delete", (req, res) => {
   console.log(req.body);
-  clientController.deleteClient(req, res);
+  userController.deleteUser(req, res);
 });
 
-app.post("/client/get", (req, res) => {
+app.post("/user/get", (req, res) => {
   console.log(req.body);
-  clientController.getClient(req, res);
+  userController.getUser(req, res);
 });
 
 const productRepo = new PgProductRepo(pgClient);
@@ -100,30 +97,6 @@ app.post("/product/delete", (req, res) => {
 app.post("/product/get", (req, res) => {
   console.log(req.body);
   productController.getProduct(req, res);
-});
-
-const workerRepo = new PgWorkerRepo(pgClient);
-const workerService = new WorkerService(workerRepo);
-const workerController = new WorkerController(workerService);
-
-app.post("/worker/create", (req, res) => {
-  console.log(req.body);
-  workerController.createWorker(req, res);
-});
-
-app.post("/worker/update", (req, res) => {
-  console.log(req.body);
-  workerController.updateWorker(req, res);
-});
-
-app.post("/worker/delete", (req, res) => {
-  console.log(req.body);
-  workerController.deleteWorker(req, res);
-});
-
-app.post("/worker/get", (req, res) => {
-  console.log(req.body);
-  workerController.getWorker(req, res);
 });
 
 const shopRepo = new PgShopRepo(pgClient);
@@ -179,44 +152,44 @@ app.post("/company/get", (req, res) => {
   companyController.getCompany(req, res);
 });
 
-const orderRepo = new PgOrderRepo(pgClient);
-const orderService = new OrderService(orderRepo);
-const orderController = new OrderController(orderService);
+// const orderRepo = new PgOrderRepo(pgClient);
+// const orderService = new OrderService(orderRepo);
+// const orderController = new OrderController(orderService);
 
-app.post("/order/create", (req, res) => {
-  console.log(req.body);
-  orderController.createOrder(req, res);
-});
+// app.post("/order/create", (req, res) => {
+//   console.log(req.body);
+//   orderController.createOrder(req, res);
+// });
 
-app.post("/order/update", (req, res) => {
-  console.log(req.body);
-  orderController.updateOrder(req, res);
-});
+// app.post("/order/update", (req, res) => {
+//   console.log(req.body);
+//   orderController.updateOrder(req, res);
+// });
 
-app.post("/order/delete", (req, res) => {
-  console.log(req.body);
-  orderController.deleteOrder(req, res);
-});
+// app.post("/order/delete", (req, res) => {
+//   console.log(req.body);
+//   orderController.deleteOrder(req, res);
+// });
 
-app.post("/order/get", (req, res) => {
-  console.log(req.body);
-  orderController.getOrder(req, res);
-});
+// app.post("/order/get", (req, res) => {
+//   console.log(req.body);
+//   orderController.getOrder(req, res);
+// });
 
-app.post("/order/create/product", (req, res) => {
-  console.log(req.body);
-  orderController.createOrderProduct(req, res);
-});
+// app.post("/order/create/product", (req, res) => {
+//   console.log(req.body);
+//   orderController.createOrderProduct(req, res);
+// });
 
-app.post("/order/delete/product", (req, res) => {
-  console.log(req.body);
-  orderController.deleteOrderProduct(req, res);
-});
+// app.post("/order/delete/product", (req, res) => {
+//   console.log(req.body);
+//   orderController.deleteOrderProduct(req, res);
+// });
 
-app.post("/order/update/product", (req, res) => {
-  console.log(req.body);
-  orderController.updateOrderProduct(req, res);
-});
+// app.post("/order/update/product", (req, res) => {
+//   console.log(req.body);
+//   orderController.updateOrderProduct(req, res);
+// });
 
 app.listen(port);
 console.log(`App started. Listening to port ${port}`);

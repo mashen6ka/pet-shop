@@ -1,15 +1,12 @@
-import ClientService from "./ClientService";
+import UserService from "./UserService";
 import ProductService from "./ProductService";
-import WorkerService from "./WorkerService";
 import ShopService from "./ShopService";
 import CompanyService from "./CompanyService";
 import OrderService from "./OrderService";
 
-export { ClientService };
+export { UserService };
 
 export { ProductService };
-
-export { WorkerService };
 
 export { ShopService };
 
