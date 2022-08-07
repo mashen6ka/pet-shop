@@ -76,11 +76,11 @@ export default class UserController {
     res: Response
   ): Promise<Array<CompanyEntity>> {
     try {
-      const id = req.body.id;
-      if (!Number.isInteger(id)) {
-        throw "Invalid data: id must be an int value";
+      const userId = req.body.userId;
+      if (!Number.isInteger(userId)) {
+        throw "Invalid data: userId must be an int value";
       }
-      const companyList = await this.service.getUserCompanyList(id);
+      const companyList = await this.service.getUserCompanyList(userId);
       res.status(200).json({ success: true, data: companyList });
       return;
     } catch (err) {
