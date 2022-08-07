@@ -14,7 +14,7 @@
 
     <div>
       <b-card
-        img-src="https://placekitten.com/300/300"
+        :img-src="this.product.imgUrl"
         img-alt="Card image"
         img-left
         class="m-3"
@@ -111,8 +111,10 @@ export default {
         name: `Puk-${id}`,
         description: `pupupu-${id}`,
         countryId: 1,
+        manufacturerId: 1,
         initialPrice: 10000,
         discount: 15,
+        imgUrl: "https://placekitten.com/300/300",
       };
     },
     addProductToCart(product) {

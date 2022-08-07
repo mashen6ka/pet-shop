@@ -31,7 +31,7 @@
           class="text-center mx-auto my-2"
           img-top
           style="max-width: 20rem; min-width: 20rem"
-          img-src="https://placekitten.com/600/600"
+          :img-src="product.imgUrl"
         >
           <b-card-title
             ><b-link :to="{ name: 'product', params: { id: product.id } }">{{
@@ -109,8 +109,10 @@ export default {
           name: `Puk-${i}`,
           description: `pupupu-${i}`,
           countryId: 1,
+          manufacturerId: 1,
           initialPrice: 10000,
           discount: 15,
+          imgUrl: "https://placekitten.com/300/300",
         });
       }
       return productList;

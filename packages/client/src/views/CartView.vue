@@ -3,12 +3,13 @@
     <b-list-group v-if="itemsQuantity !== 0" class="m-3">
       <b-list-group-item>
         <b-card
-          img-src="https://placekitten.com/100/100"
+          :img-src="item.product.imgUrl"
           img-alt="Card image"
           img-left
           class="m-3"
           v-for="item in items"
           :key="item.product.id"
+          style="max-height: 8rem; min-height: 8rem"
         >
           <b-card-body align="left" align-v="center">
             <b-row align-v="center">
