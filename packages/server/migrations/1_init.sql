@@ -41,6 +41,7 @@ CREATE TABLE "product" (
   "name" varchar(128) NOT NULL,
   "description" text NOT NULL,
   "country_id" int NOT NULL,
+  "manufacturer_id" int NOT NULL,
   "initial_price" int NOT NULL,
   "discount" int NOT NULL DEFAULT 0 CHECK(discount >= 0 AND  discount <= 100)
 );
@@ -54,6 +55,11 @@ CREATE TABLE "product__shop" (
 CREATE TABLE "country" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar(32) NOT NULL
+);
+
+CREATE TABLE "manufacturer" (
+  "id" SERIAL PRIMARY KEY,
+  "name" varchar(128) NOT NULL
 );
 
 CREATE TABLE "order" (
@@ -80,7 +86,7 @@ CREATE TABLE "order__product" (
 
 CREATE TABLE "session" (
   "user_id" int NOT NULL,
-  "token" text NOT NULL,
+  "token" text NOT NULL
 );
 
 ALTER TABLE "session" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
@@ -94,6 +100,8 @@ ALTER TABLE "product__shop" ADD FOREIGN KEY ("product_id") REFERENCES "product" 
 ALTER TABLE "product__shop" ADD FOREIGN KEY ("shop_id") REFERENCES "shop" ("id");
 
 ALTER TABLE "product" ADD FOREIGN KEY ("country_id") REFERENCES "country" ("id");
+
+ALTER TABLE "product" ADD FOREIGN KEY ("manufacturer_id") REFERENCES "manufacturer" ("id");
 
 ALTER TABLE "order" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 

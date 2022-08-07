@@ -12,7 +12,10 @@ export default class ProductEntity {
   description: string;
 
   @IsInt()
-  countryId: string;
+  countryId: number;
+
+  @IsInt()
+  manufacturerId: number;
 
   @IsInt()
   initialPrice: number;
