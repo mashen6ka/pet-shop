@@ -120,8 +120,10 @@
                 <b-col>
                   <label>Total Price:</label>
                 </b-col>
-              </b-row></b-list-group-item
-            >
+                <b-col>
+                  <label></label>
+                </b-col> </b-row
+            ></b-list-group-item>
           </b-list-group>
           <b-list-group
             class="m-3"
@@ -153,8 +155,12 @@
                 <b-col>
                   <label>{{ countOrderPrice(order) / 100 }} ₽</label>
                 </b-col>
-              </b-row></b-list-group-item
-            >
+                <b-col>
+                  <b-button @click="showOrderModal(order)"
+                    ><b-icon-search></b-icon-search
+                  ></b-button>
+                </b-col> </b-row
+            ></b-list-group-item>
           </b-list-group>
           <p v-if="userOrderList.length === 0">
             Oops! You don't have any placed orders yet :(
@@ -177,10 +183,9 @@
                   <label>Address: </label>
                 </b-col>
                 <b-col>
-                  <label>Action:</label>
-                </b-col>
-              </b-row></b-list-group-item
-            >
+                  <label></label>
+                </b-col> </b-row
+            ></b-list-group-item>
           </b-list-group>
           <b-list-group class="m-3">
             <b-list-group-item>
@@ -229,15 +234,60 @@
         </b-tab>
       </b-tabs>
     </b-card>
+
+    <b-modal v-model="isOrderModal" size="xl" hide-footer ok-variant="primary">
+      <b-list-group class="m-3">
+        <b-list-group-item variant="primary">
+          <b-row align-v="center" class="m-1">
+            <b-col class="text-left">
+              <label>Name:</label>
+            </b-col>
+            <b-col class="text-center">
+              <label>Price:</label>
+            </b-col>
+            <b-col class="text-center">
+              <label>Quantity:</label>
+            </b-col>
+            <b-col class="text-right">
+              <label>Total:</label>
+            </b-col>
+          </b-row>
+        </b-list-group-item>
+      </b-list-group>
+      <b-list-group
+        class="m-3"
+        v-for="item in currOrder.itemList"
+        :key="item.product.id"
+      >
+        <b-list-group-item>
+          <b-row align-v="center" class="m-1">
+            <b-col class="text-left">
+              {{ item.product.name }}
+            </b-col>
+            <b-col class="text-center">
+              {{ item.product.initialPrice / 100 }} ₽
+            </b-col>
+            <b-col class="text-center">
+              {{ item.quantity }}
+            </b-col>
+            <b-col class="text-right">
+              {{ (item.product.initialPrice * item.quantity) / 100 }} ₽
+            </b-col>
+          </b-row>
+        </b-list-group-item>
+      </b-list-group>
+    </b-modal>
   </div>
 </template>
 
 <script>
+// наверное стоит разбить табы на отдельные компоненты
 import {
   BListGroup,
   BButton,
   BIconTrash,
   BIconPlus,
+  BIconSearch,
   BListGroupItem,
   BCard,
   BTabs,
@@ -245,6 +295,7 @@ import {
   BRow,
   BCol,
   BFormInput,
+  BModal,
 } from "bootstrap-vue";
 
 export default {
@@ -253,6 +304,7 @@ export default {
     BButton,
     BIconTrash,
     BIconPlus,
+    BIconSearch,
     BListGroupItem,
     BCard,
     BTabs,
@@ -260,6 +312,7 @@ export default {
     BRow,
     BCol,
     BFormInput,
+    BModal,
   },
   computed: {
     userId() {
@@ -298,7 +351,10 @@ export default {
     ]);
   },
   data() {
-    return {};
+    return {
+      isOrderModal: false,
+      currOrder: {},
+    };
   },
   methods: {
     // переименовать orderStatus везде в status (в бд наверн тоже)
@@ -318,6 +374,14 @@ export default {
         price += item.product.initialPrice * item.quantity;
       });
       return price;
+    },
+    showOrderModal(order) {
+      this.currOrder = order;
+      this.isOrderModal = true;
+    },
+    closeOrderModal() {
+      this.currOrder = {};
+      this.isOrderModal = false;
     },
   },
 };
