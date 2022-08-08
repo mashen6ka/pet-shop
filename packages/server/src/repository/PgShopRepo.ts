@@ -43,7 +43,12 @@ export default class PgShopRepo implements IShopRepo {
        WHERE id = $1`,
       [id]
     );
-    const shop = new ShopEntity(res.rows[0]);
+    const shopFields = res.rows[0];
+    const shop = new ShopEntity({
+      id: shopFields.id,
+      address: shopFields.address,
+      workingHours: shopFields.working_hours,
+    });
 
     return shop;
   }
@@ -51,8 +56,14 @@ export default class PgShopRepo implements IShopRepo {
   async getShopList(): Promise<Array<ShopEntity>> {
     const res = await this.conn.query(`SELECT * from shop`, []);
     let shopList = [];
-    for (let shop of res.rows) {
-      shopList.push(new ShopEntity(shop));
+    for (let shopFields of res.rows) {
+      shopList.push(
+        new ShopEntity({
+          id: shopFields.id,
+          address: shopFields.address,
+          workingHours: shopFields.working_hours,
+        })
+      );
     }
     return shopList;
   }

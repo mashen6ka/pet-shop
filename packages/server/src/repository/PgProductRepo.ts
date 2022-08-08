@@ -62,7 +62,17 @@ export default class PgProductRepo implements IProductRepo {
        WHERE id = $1`,
       [id]
     );
-    const product = new ProductEntity(res.rows[0]);
+    const productFields = res.rows[0];
+    const product = new ProductEntity({
+      id: productFields.id,
+      name: productFields.name,
+      description: productFields.description,
+      countryId: productFields.country_id,
+      manufacturerId: productFields.manufacturer_id,
+      initialPrice: productFields.initial_price,
+      discount: productFields.discount,
+      imgUrl: productFields.img_url,
+    });
 
     return product;
   }
@@ -71,8 +81,19 @@ export default class PgProductRepo implements IProductRepo {
     const res = await this.conn.query(`SELECT * from "product"`, []);
     const productList: Array<ProductEntity> = [];
 
-    for (let product of res.rows) {
-      productList.push(new ProductEntity(product));
+    for (let productFields of res.rows) {
+      productList.push(
+        new ProductEntity({
+          id: productFields.id,
+          name: productFields.name,
+          description: productFields.description,
+          countryId: productFields.country_id,
+          manufacturerId: productFields.manufacturer_id,
+          initialPrice: productFields.initial_price,
+          discount: productFields.discount,
+          imgUrl: productFields.img_url,
+        })
+      );
     }
 
     return productList;

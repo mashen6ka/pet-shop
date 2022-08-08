@@ -43,7 +43,14 @@ export default class PgCompanyRepo implements ICompanyRepo {
        WHERE id = $1`,
       [id]
     );
-    const company = new CompanyEntity(res.rows[0]);
+    const companyFields = res.rows[0];
+    const company = new CompanyEntity({
+      id: companyFields.id,
+      name: companyFields.name,
+      KPP: companyFields.KPP,
+      INN: companyFields.INN,
+      address: companyFields.address,
+    });
 
     return company;
   }

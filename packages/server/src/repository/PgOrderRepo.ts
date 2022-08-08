@@ -62,7 +62,17 @@ export default class PgOrderRepo implements IOrderRepo {
        WHERE id = $1`,
       [id]
     );
-    const order = new OrderEntity(res.rows[0]);
+    const orderFields = res.rows[0];
+    const order = new OrderEntity({
+      id: orderFields.id,
+      userId: orderFields.userId,
+      companyId: orderFields.companyId,
+      statusId: orderFields.statusId,
+      createdAt: orderFields.createdAt,
+      completedAt: orderFields.completedAt,
+      shopId: orderFields.shopId,
+      price: orderFields.price,
+    });
 
     return order;
   }
@@ -78,10 +88,18 @@ export default class PgOrderRepo implements IOrderRepo {
     );
 
     const orderItemList: Array<OrderItemEntity> = [];
-    for (let orderItem of res.rows) {
-      const quantity = orderItem.quantity;
-      delete orderItem.quantity;
-      const product = new ProductEntity(orderItem);
+    for (let orderItemFields of res.rows) {
+      const quantity = orderItemFields.quantity;
+      const product = new ProductEntity({
+        id: orderItemFields.id,
+        name: orderItemFields.name,
+        description: orderItemFields.description,
+        countryId: orderItemFields.country_id,
+        manufacturerId: orderItemFields.manufacturer_id,
+        initialPrice: orderItemFields.initial_price,
+        discount: orderItemFields.discount,
+        imgUrl: orderItemFields.img_url,
+      });
       orderItemList.push(
         new OrderItemEntity({ product: product, quantity: quantity })
       );

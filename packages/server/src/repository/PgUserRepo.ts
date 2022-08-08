@@ -67,7 +67,20 @@ export default class PgUserRepo implements IUserRepo {
        WHERE id = $1`,
       [id]
     );
-    const user = new UserEntity(res.rows[0]);
+    const userFields = res.rows[0];
+    const user = new UserEntity({
+      id: userFields.id,
+      login: userFields.login,
+      password: userFields.password,
+      worker: userFields.worker,
+      firstName: userFields.firstName,
+      lastName: userFields.lastName,
+      middleName: userFields.middleName,
+      birthday: userFields.birthday,
+      email: userFields.birthday,
+      phone: userFields.phone,
+      personalDiscount: userFields.personalDiscount,
+    });
 
     return user;
   }
@@ -80,8 +93,16 @@ export default class PgUserRepo implements IUserRepo {
       [userId]
     );
     let companyList: Array<CompanyEntity> = [];
-    for (let company of res.rows) {
-      companyList.push(new CompanyEntity(company));
+    for (let companyFields of res.rows) {
+      companyList.push(
+        new CompanyEntity({
+          id: companyFields.id,
+          name: companyFields.name,
+          KPP: companyFields.KPP,
+          INN: companyFields.INN,
+          address: companyFields.address,
+        })
+      );
     }
     return companyList;
   }
