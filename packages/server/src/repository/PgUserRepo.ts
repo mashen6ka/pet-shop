@@ -118,12 +118,12 @@ export default class PgUserRepo implements IUserRepo {
       orderList.push(
         new OrderEntity({
           id: orderFields.id,
-          userId: orderFields.userId,
-          companyId: orderFields.companyId,
-          statusId: orderFields.statusId,
-          createdAt: orderFields.createdAt,
-          completedAt: orderFields.completedAt,
-          shopId: orderFields.shopId,
+          userId: orderFields.user_id,
+          companyId: orderFields.company_id,
+          statusId: orderFields.status_id,
+          createdAt: orderFields.created_at,
+          completedAt: orderFields.completed_at,
+          shopId: orderFields.shop_id,
           price: orderFields.price,
         })
       );
