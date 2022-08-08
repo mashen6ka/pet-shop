@@ -3,6 +3,7 @@ import ProductService from "./ProductService";
 import ShopService from "./ShopService";
 import CompanyService from "./CompanyService";
 import OrderService from "./OrderService";
+import ManufacturerService from "./ManufacturerService";
 
 export { UserService };
 
@@ -13,3 +14,5 @@ export { ShopService };
 export { CompanyService };
 
 export { OrderService };
+
+export { ManufacturerService };

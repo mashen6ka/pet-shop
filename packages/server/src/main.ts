@@ -7,6 +7,7 @@ import {
   ShopController,
   CompanyController,
   OrderController,
+  ManufacturerController,
 } from "./controller";
 import {
   PgUserRepo,
@@ -14,6 +15,7 @@ import {
   PgShopRepo,
   PgCompanyRepo,
   PgOrderRepo,
+  PgManufacturerRepo,
 } from "./repository";
 import {
   UserService,
@@ -21,6 +23,7 @@ import {
   ShopService,
   CompanyService,
   OrderService,
+  ManufacturerService,
 } from "./service";
 // import bodyParser from "body-parser";
 
@@ -214,6 +217,35 @@ app.post("/order/update/item", (req, res) => {
 app.post("/order/get/item/list", (req, res) => {
   console.log(req.body);
   orderController.getOrderItemList(req, res);
+});
+
+const manufacturerRepo = new PgManufacturerRepo(pgClient);
+const manufacturerService = new ManufacturerService(manufacturerRepo);
+const manufacturerController = new ManufacturerController(manufacturerService);
+
+app.post("/manufacturer/create", (req, res) => {
+  console.log(req.body);
+  manufacturerController.createManufacturer(req, res);
+});
+
+app.post("/manufacturer/update", (req, res) => {
+  console.log(req.body);
+  manufacturerController.updateManufacturer(req, res);
+});
+
+app.post("/manufacturer/delete", (req, res) => {
+  console.log(req.body);
+  manufacturerController.deleteManufacturer(req, res);
+});
+
+app.post("/manufacturer/get", (req, res) => {
+  console.log(req.body);
+  manufacturerController.getManufacturer(req, res);
+});
+
+app.post("/manufacturer/get/list", (req, res) => {
+  console.log(req.body);
+  manufacturerController.getManufacturerList(req, res);
 });
 
 app.listen(port);
