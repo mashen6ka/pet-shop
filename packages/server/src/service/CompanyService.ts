@@ -25,4 +25,9 @@ export default class CompanyService {
     const company = await this.repo.getCompany(id);
     return company;
   }
+
+  async getCompanyList(): Promise<Array<CompanyEntity>> {
+    const companyList = await this.repo.getCompanyList();
+    return companyList;
+  }
 }

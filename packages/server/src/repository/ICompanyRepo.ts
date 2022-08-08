@@ -5,4 +5,5 @@ export default interface ICompanyRepo {
   updateCompany: (company: CompanyEntity) => Promise<void>;
   deleteCompany: (id: number) => Promise<void>;
   getCompany: (id: number) => Promise<CompanyEntity>;
+  getCompanyList: () => Promise<Array<CompanyEntity>>;
 }

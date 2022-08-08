@@ -54,4 +54,23 @@ export default class PgCompanyRepo implements ICompanyRepo {
 
     return company;
   }
+
+  async getCompanyList(): Promise<Array<CompanyEntity>> {
+    const res = await this.conn.query(`SELECT * from "company"`, []);
+    const companyList: Array<CompanyEntity> = [];
+
+    for (let companyFields of res.rows) {
+      companyList.push(
+        new CompanyEntity({
+          id: companyFields.id,
+          name: companyFields.name,
+          KPP: companyFields.KPP,
+          INN: companyFields.INN,
+          address: companyFields.address,
+        })
+      );
+    }
+
+    return companyList;
+  }
 }

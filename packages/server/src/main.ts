@@ -186,6 +186,11 @@ app.post("/company/get", (req, res) => {
   companyController.getCompany(req, res);
 });
 
+app.post("/company/get/list", (req, res) => {
+  console.log(req.body);
+  companyController.getCompanyList(req, res);
+});
+
 const orderRepo = new PgOrderRepo(pgClient);
 const orderService = new OrderService(orderRepo);
 const orderController = new OrderController(orderService);

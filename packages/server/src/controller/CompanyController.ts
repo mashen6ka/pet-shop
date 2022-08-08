@@ -70,4 +70,18 @@ export default class CompanyController {
       return;
     }
   }
+
+  async getCompanyList(req: Request, res: Response): Promise<CompanyEntity> {
+    try {
+      const companyList = await this.service.getCompanyList();
+      if (_.isEmpty(companyList)) {
+        throw "No companies avaliable";
+      }
+      res.status(200).json({ success: true, data: companyList });
+      return;
+    } catch (err) {
+      res.status(502).json({ success: false, error: new Error(err).message });
+      return;
+    }
+  }
 }
