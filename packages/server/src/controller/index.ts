@@ -4,6 +4,7 @@ import ShopController from "./ShopController";
 import CompanyController from "./CompanyController";
 import OrderController from "./OrderController";
 import ManufacturerController from "./ManufacturerController";
+import CountryController from "./CountryController";
 
 export { UserController };
 
@@ -16,3 +17,5 @@ export { CompanyController };
 export { OrderController };
 
 export { ManufacturerController };
+
+export { CountryController };

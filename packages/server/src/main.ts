@@ -8,6 +8,7 @@ import {
   CompanyController,
   OrderController,
   ManufacturerController,
+  CountryController,
 } from "./controller";
 import {
   PgUserRepo,
@@ -16,6 +17,7 @@ import {
   PgCompanyRepo,
   PgOrderRepo,
   PgManufacturerRepo,
+  PgCountryRepo,
 } from "./repository";
 import {
   UserService,
@@ -24,6 +26,7 @@ import {
   CompanyService,
   OrderService,
   ManufacturerService,
+  CountryService,
 } from "./service";
 // import bodyParser from "body-parser";
 
@@ -246,6 +249,35 @@ app.post("/manufacturer/get", (req, res) => {
 app.post("/manufacturer/get/list", (req, res) => {
   console.log(req.body);
   manufacturerController.getManufacturerList(req, res);
+});
+
+const countryRepo = new PgCountryRepo(pgClient);
+const countryService = new CountryService(countryRepo);
+const countryController = new CountryController(countryService);
+
+app.post("/country/create", (req, res) => {
+  console.log(req.body);
+  countryController.createCountry(req, res);
+});
+
+app.post("/country/update", (req, res) => {
+  console.log(req.body);
+  countryController.updateCountry(req, res);
+});
+
+app.post("/country/delete", (req, res) => {
+  console.log(req.body);
+  countryController.deleteCountry(req, res);
+});
+
+app.post("/country/get", (req, res) => {
+  console.log(req.body);
+  countryController.getCountry(req, res);
+});
+
+app.post("/country/get/list", (req, res) => {
+  console.log(req.body);
+  countryController.getCountryList(req, res);
 });
 
 app.listen(port);

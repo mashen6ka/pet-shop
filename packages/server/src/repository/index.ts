@@ -16,6 +16,9 @@ import PgOrderRepo from "./PgOrderRepo";
 import IManufacturerRepo from "./IManufacturerRepo";
 import PgManufacturerRepo from "./PgManufacturerRepo";
 
+import ICountryRepo from "./ICountryRepo";
+import PgCountryRepo from "./PgCountryRepo";
+
 export { IUserRepo, PgUserRepo };
 
 export { IProductRepo, PgProductRepo };
@@ -27,3 +30,5 @@ export { ICompanyRepo, PgCompanyRepo };
 export { IOrderRepo, PgOrderRepo };
 
 export { IManufacturerRepo, PgManufacturerRepo };
+
+export { ICountryRepo, PgCountryRepo };
