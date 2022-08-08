@@ -3,11 +3,12 @@ import Vuex from "vuex";
 
 import Cart from "./Cart";
 import Product from "./Product";
-import AuthClient from "./AuthClient";
+import User from "./User";
 import Shop from "./Shop";
 import Company from "./Company";
 import Manufacturer from "./Manufacturer";
 import Country from "./Country";
+import OrderStatus from "./OrderStatus";
 
 Vue.use(Vuex);
 
@@ -19,6 +20,7 @@ export default new Vuex.Store({
     company: Company,
     country: Country,
     manufacturer: Manufacturer,
-    authClient: AuthClient,
+    user: User,
+    orderStatus: OrderStatus,
   },
 });
