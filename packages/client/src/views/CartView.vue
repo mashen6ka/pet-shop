@@ -6,6 +6,7 @@
           :img-src="item.product.imgUrl"
           img-alt="Card image"
           img-left
+          img-width="150"
           class="m-3"
           v-for="item in itemList"
           :key="item.product.id"
