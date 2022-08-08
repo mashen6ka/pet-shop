@@ -5,6 +5,7 @@ import CompanyService from "./CompanyService";
 import OrderService from "./OrderService";
 import ManufacturerService from "./ManufacturerService";
 import CountryService from "./CountryService";
+import OrderStatusService from "./OrderStatusService";
 
 export { UserService };
 
@@ -19,3 +20,5 @@ export { OrderService };
 export { ManufacturerService };
 
 export { CountryService };
+
+export { OrderStatusService };

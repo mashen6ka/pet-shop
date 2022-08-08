@@ -6,6 +6,7 @@ import OrderEntity from "./OrderEntity";
 import OrderItemEntity from "./OrderItemEntity";
 import ManufacturerEntity from "./ManufacturerEntity";
 import CountryEntity from "./CountryEntity";
+import OrderStatusEntity from "./OrderStatusEntity";
 
 export { UserEntity };
 
@@ -20,3 +21,5 @@ export { OrderEntity, OrderItemEntity };
 export { ManufacturerEntity };
 
 export { CountryEntity };
+
+export { OrderStatusEntity };

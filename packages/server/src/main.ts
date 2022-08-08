@@ -9,6 +9,7 @@ import {
   OrderController,
   ManufacturerController,
   CountryController,
+  OrderStatusController,
 } from "./controller";
 import {
   PgUserRepo,
@@ -18,6 +19,7 @@ import {
   PgOrderRepo,
   PgManufacturerRepo,
   PgCountryRepo,
+  PgOrderStatusRepo,
 } from "./repository";
 import {
   UserService,
@@ -27,6 +29,7 @@ import {
   OrderService,
   ManufacturerService,
   CountryService,
+  OrderStatusService,
 } from "./service";
 // import bodyParser from "body-parser";
 
@@ -283,6 +286,35 @@ app.post("/country/get", (req, res) => {
 app.post("/country/get/list", (req, res) => {
   console.log(req.body);
   countryController.getCountryList(req, res);
+});
+
+const orderStatusRepo = new PgOrderStatusRepo(pgClient);
+const orderStatusService = new OrderStatusService(orderStatusRepo);
+const orderStatusController = new OrderStatusController(orderStatusService);
+
+app.post("/order/status/create", (req, res) => {
+  console.log(req.body);
+  orderStatusController.createOrderStatus(req, res);
+});
+
+app.post("/order/status/update", (req, res) => {
+  console.log(req.body);
+  orderStatusController.updateOrderStatus(req, res);
+});
+
+app.post("/order/status/delete", (req, res) => {
+  console.log(req.body);
+  orderStatusController.deleteOrderStatus(req, res);
+});
+
+app.post("/order/status/get", (req, res) => {
+  console.log(req.body);
+  orderStatusController.getOrderStatus(req, res);
+});
+
+app.post("/order/status/get/list", (req, res) => {
+  console.log(req.body);
+  orderStatusController.getOrderStatusList(req, res);
 });
 
 app.listen(port);
