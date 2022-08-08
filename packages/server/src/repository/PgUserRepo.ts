@@ -73,13 +73,13 @@ export default class PgUserRepo implements IUserRepo {
       login: userFields.login,
       password: userFields.password,
       worker: userFields.worker,
-      firstName: userFields.firstName,
-      lastName: userFields.lastName,
-      middleName: userFields.middleName,
+      firstName: userFields.first_name,
+      lastName: userFields.last_name,
+      middleName: userFields.middle_name,
       birthday: userFields.birthday,
-      email: userFields.birthday,
+      email: userFields.email,
       phone: userFields.phone,
-      personalDiscount: userFields.personalDiscount,
+      personalDiscount: userFields.personal_discount,
     });
 
     return user;
