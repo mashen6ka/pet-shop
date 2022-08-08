@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "../service";
-import { CompanyEntity, UserEntity } from "../entity";
+import { CompanyEntity, UserEntity, OrderEntity } from "../entity";
 import { validateOrReject } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import _ from "lodash";
@@ -82,6 +82,24 @@ export default class UserController {
       }
       const companyList = await this.service.getUserCompanyList(userId);
       res.status(200).json({ success: true, data: companyList });
+      return;
+    } catch (err) {
+      res.status(502).json({ success: false, error: new Error(err).message });
+      return;
+    }
+  }
+
+  async getUserOrderList(
+    req: Request,
+    res: Response
+  ): Promise<Array<OrderEntity>> {
+    try {
+      const userId = req.body.userId;
+      if (!Number.isInteger(userId)) {
+        throw "Invalid data: userId must be an int value";
+      }
+      const orderList = await this.service.getUserOrderList(userId);
+      res.status(200).json({ success: true, data: orderList });
       return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });

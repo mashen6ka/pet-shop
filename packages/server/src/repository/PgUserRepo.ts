@@ -1,4 +1,4 @@
-import { CompanyEntity, UserEntity } from "../entity";
+import { CompanyEntity, OrderEntity, UserEntity } from "../entity";
 import IUserRepo from "./IUserRepo";
 import { Client as pgConn } from "pg";
 
@@ -105,6 +105,30 @@ export default class PgUserRepo implements IUserRepo {
       );
     }
     return companyList;
+  }
+
+  async getUserOrderList(userId: number): Promise<Array<OrderEntity>> {
+    const res = await this.conn.query(
+      `SELECT * FROM "order" o
+       WHERE o.user_id = $1`,
+      [userId]
+    );
+    let orderList: Array<OrderEntity> = [];
+    for (let orderFields of res.rows) {
+      orderList.push(
+        new OrderEntity({
+          id: orderFields.id,
+          userId: orderFields.userId,
+          companyId: orderFields.companyId,
+          statusId: orderFields.statusId,
+          createdAt: orderFields.createdAt,
+          completedAt: orderFields.completedAt,
+          shopId: orderFields.shopId,
+          price: orderFields.price,
+        })
+      );
+    }
+    return orderList;
   }
 
   // добавить верификацию компаний, чтоб потом убрать дубли
