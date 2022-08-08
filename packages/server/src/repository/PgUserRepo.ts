@@ -76,7 +76,7 @@ export default class PgUserRepo implements IUserRepo {
       firstName: userFields.first_name,
       lastName: userFields.last_name,
       middleName: userFields.middle_name,
-      birthday: userFields.birthday,
+      birthday: userFields.birthday.toLocaleDateString(),
       email: userFields.email,
       phone: userFields.phone,
       personalDiscount: userFields.personal_discount,
