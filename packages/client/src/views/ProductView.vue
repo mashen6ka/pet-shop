@@ -22,8 +22,14 @@
         <b-card-text align="left">
           <p>Название: {{ this.product.name }}</p>
           <p>Описание: {{ this.product.description }}</p>
-          <!-- <p>Страна производства: {{ this.product. }}</p> -->
-          <!-- <p>Производитель: {{ this.product. }}</p> -->
+          <p>
+            Страна производства:
+            {{ this.productCountry ? this.productCountry.name : "-" }}
+          </p>
+          <p>
+            Производитель:
+            {{ this.productManufacturer ? this.productManufacturer.name : "-" }}
+          </p>
           <p>Стоимость: {{ this.product.initialPrice / 100 }} ₽</p>
 
           <b-row>
@@ -90,12 +96,38 @@ export default {
     BCol,
   },
   computed: {
+    productManufacturer() {
+      return this.manufacturerList.find(
+        (manufacturer) => manufacturer.id === this.product.manufacturerId
+      );
+    },
+    productCountry() {
+      return this.countryList.find(
+        (country) => country.id === this.product.countryId
+      );
+    },
     productId() {
-      return this.$route.params.id;
+      return Number(this.$route.params.id);
     },
     product() {
-      return this.getProductInfo(this.productId);
+      return this.$store.getters["product/PRODUCT"];
     },
+    manufacturerList() {
+      return this.$store.getters["manufacturer/MANUFACTURER_LIST"];
+    },
+    countryList() {
+      return this.$store.getters["country/COUNTRY_LIST"];
+    },
+  },
+  mounted() {
+    // добавить mapGetters
+    Promise.all([
+      this.$store.dispatch("product/GET_PRODUCT", {
+        id: this.productId,
+      }),
+      this.$store.dispatch("manufacturer/GET_MANUFACTURER_LIST"),
+      this.$store.dispatch("country/GET_COUNTRY_LIST"),
+    ]);
   },
   data() {
     return {
@@ -104,19 +136,6 @@ export default {
     };
   },
   methods: {
-    getProductInfo(id) {
-      //
-      return {
-        id: id,
-        name: `Puk-${id}`,
-        description: `pupupu-${id}`,
-        countryId: 1,
-        manufacturerId: 1,
-        initialPrice: 10000,
-        discount: 15,
-        imgUrl: "https://placekitten.com/300/300",
-      };
-    },
     addProductToCart(product) {
       this.$store.dispatch("cart/ADD_CART_ITEM", {
         product: product,

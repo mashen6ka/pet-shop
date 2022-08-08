@@ -26,7 +26,7 @@
         :current-page="currentPage"
       >
         <b-card
-          v-for="product in productsByPage"
+          v-for="product in productListByPage"
           :key="product.id"
           class="text-center mx-auto my-2"
           img-top
@@ -82,42 +82,30 @@ export default {
     BPagination,
   },
   computed: {
-    rows() {
-      return this.products.length;
+    productList() {
+      return this.$store.getters["product/PRODUCT_LIST"];
     },
-    productsByPage() {
+    rows() {
+      return this.productList.length;
+    },
+    productListByPage() {
       const end = this.perPage * this.currentPage;
       const start = end - this.perPage;
 
-      return this.products.slice(start, end);
+      return this.productList.slice(start, end);
     },
+  },
+  mounted() {
+    Promise.all([this.$store.dispatch("product/GET_PRODUCT_LIST")]);
   },
   data() {
     return {
-      products: this.getProductList(100),
       perPage: 20,
       currentPage: 1,
       showAddedProductToCart: false,
     };
   },
   methods: {
-    getProductList(count) {
-      const productList = [];
-      for (let i = 0; i < count; i++) {
-        productList.push({
-          id: i,
-          name: `Puk-${i}`,
-          description: `pupupu-${i}`,
-          countryId: 1,
-          manufacturerId: 1,
-          initialPrice: 10000,
-          discount: 15,
-          imgUrl: "https://placekitten.com/300/300",
-        });
-      }
-      return productList;
-    },
-
     addProductToCart(product) {
       this.$store.dispatch("cart/ADD_CART_ITEM", {
         product: product,

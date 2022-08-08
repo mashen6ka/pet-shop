@@ -7,7 +7,7 @@
           img-alt="Card image"
           img-left
           class="m-3"
-          v-for="item in items"
+          v-for="item in itemList"
           :key="item.product.id"
           style="max-height: 8rem; min-height: 8rem"
         >
@@ -113,6 +113,7 @@
   </div>
 </template>
 
+<!-- вынести окно оформления заказа в компоненты -->
 <script>
 import {
   BListGroup,
@@ -139,22 +140,22 @@ export default {
     BCol,
   },
   computed: {
-    items() {
+    itemList() {
       return this.$store.getters["cart/CART"];
     },
     itemsQuantity() {
-      return this.items.length;
+      return this.itemList.length;
     },
     totalPrice() {
       let price = 0;
-      this.items.forEach(
+      this.itemList.forEach(
         (item) => (price += item.product.initialPrice * item.quantity)
       );
       return price;
     },
     totalQuantity() {
       let quantity = 0;
-      this.items.forEach((item) => (quantity += item.quantity));
+      this.itemList.forEach((item) => (quantity += item.quantity));
       return quantity;
     },
   },
