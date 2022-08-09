@@ -96,7 +96,7 @@
             style="max-width: 12rem; min-width: 12rem"
             class="p-0 text-center"
           >
-            <h4 class="mb-0 text-center">{{ totalPrice }} ₽</h4>
+            <h4 class="mb-0 text-center">{{ totalPrice / 100 }} ₽</h4>
           </b-col>
 
           <b-col
@@ -122,7 +122,7 @@
               >Name: {{ this.user.lastName }} {{ this.user.firstName }}</b-col
             >
             <b-col class="text-right"
-              >Total Price: {{ this.totalPrice }} ₽</b-col
+              >Total Price: {{ this.totalPrice / 100 }} ₽</b-col
             >
           </b-row>
         </b-list-group-item>
