@@ -144,10 +144,22 @@
                   </label>
                 </b-col>
                 <b-col>
-                  <label>{{ order.createdAt || "-" }} </label>
+                  <label
+                    >{{
+                      order.createdAt
+                        ? new Date(order.createdAt).toLocaleDateString()
+                        : "-"
+                    }}
+                  </label>
                 </b-col>
                 <b-col>
-                  <label>{{ order.completedAt || "-" }} </label>
+                  <label
+                    >{{
+                      order.completedAt
+                        ? new Date(order.completedAt).toLocaleDateString()
+                        : "-"
+                    }}
+                  </label>
                 </b-col>
                 <b-col>
                   <label>{{ getShopAddress(order.shopId) || "-" }} </label>
@@ -282,6 +294,8 @@
 
 <script>
 // наверное стоит разбить табы на отдельные компоненты
+
+// добавить время в даты completedAt и createdAt
 import {
   BListGroup,
   BButton,
