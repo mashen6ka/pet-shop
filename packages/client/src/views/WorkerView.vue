@@ -54,9 +54,19 @@
                   <label>{{ getUser(order.userId)?.phone || "-" }} </label>
                 </b-col>
                 <b-col>
-                  <label
-                    >{{ getOrderStatusName(order.statusId) || "-" }}
-                  </label>
+                  <b-form-group>
+                    <b-form-select
+                      v-model="order.statusId"
+                      @change="changeOrderStatus(order)"
+                    >
+                      <b-form-select-option
+                        v-for="orderStatus in orderStatusList"
+                        :key="orderStatus.id"
+                        :value="orderStatus.id"
+                        >{{ orderStatus.name }}</b-form-select-option
+                      >
+                    </b-form-select>
+                  </b-form-group>
                 </b-col>
                 <b-col>
                   <label
@@ -220,6 +230,27 @@ export default {
     },
     getUser(id) {
       return this.userList.find((user) => user.id === id);
+    },
+    changeOrderStatus(order) {
+      const orderStatusId = Number(event.target.value);
+      let completedAt;
+      if (orderStatusId === 6 || orderStatusId === 7) {
+        completedAt = new Date(Date.now()).toISOString();
+      } else {
+        completedAt = null;
+      }
+
+      const orderNew = {
+        id: order.id,
+        userId: order.userId,
+        companyId: order.companyId,
+        statusId: orderStatusId,
+        createdAt: order.createdAt,
+        completedAt: completedAt,
+        shopId: order.shopId,
+        price: order.price,
+      };
+      this.$store.dispatch("order/UPDATE_ORDER", orderNew);
     },
   },
 };
