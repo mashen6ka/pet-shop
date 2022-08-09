@@ -30,20 +30,19 @@
           :key="product.id"
           class="text-center mx-auto my-2"
           img-top
-          style="max-width: 20rem; min-width: 20rem"
+          img-height="250"
+          style="max-width: 15rem; min-width: 15rem"
           :img-src="product.imgUrl"
         >
-          <b-card-title
+          <b-card-text style="max-height: 8rem; min-height: 8rem"
             ><b-link :to="{ name: 'product', params: { id: product.id } }">{{
               product.name
-            }}</b-link></b-card-title
+            }}</b-link></b-card-text
           >
-          <b-card-text>
-            <b-button @click="addProductToCart(product)">
-              {{ product.initialPrice / 100 }} ₽
-              <b-icon-cart></b-icon-cart>
-            </b-button>
-          </b-card-text>
+          <b-button @click="addProductToCart(product)">
+            {{ product.initialPrice / 100 }} ₽
+            <b-icon-cart></b-icon-cart>
+          </b-button>
         </b-card>
       </b-card-group>
       <b-pagination
@@ -65,7 +64,6 @@ import {
   BIconCart,
   BAlert,
   BLink,
-  BCardTitle,
   BPagination,
 } from "bootstrap-vue";
 
@@ -78,7 +76,6 @@ export default {
     BIconCart,
     BAlert,
     BLink,
-    BCardTitle,
     BPagination,
   },
   computed: {
