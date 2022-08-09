@@ -89,6 +89,36 @@ const actions = {
     //   password: "qwerty",
     // });
   },
+  CREATE_ORDER: async (
+    context: {
+      commit: (arg0: string, arg1: any) => void;
+    },
+    payload: any
+  ) => {
+    const { data } = await axios.post("http://localhost:3000/order/create/", {
+      id: payload.id,
+      userId: payload.userId,
+      companyId: payload.companyId,
+      statusId: payload.statusId,
+      createdAt: payload.createdAt,
+      completedAt: payload.completedAt,
+      shopId: payload.shopId,
+      price: payload.price,
+    });
+    // пока пофиг на все проверки если что
+    const orderId = data.data.id;
+
+    for (const item of payload.itemList) {
+      const { data } = await axios.post(
+        "http://localhost:3000/order/create/item/",
+        {
+          orderId: orderId,
+          productId: item.product.id,
+          quantity: item.quantity,
+        }
+      );
+    }
+  },
 };
 
 export default {
