@@ -26,6 +26,11 @@ export default class OrderService {
     return order;
   }
 
+  async getOrderList(): Promise<Array<OrderEntity>> {
+    const orderList = await this.repo.getOrderList();
+    return orderList;
+  }
+
   async createOrderProduct(
     orderId: number,
     productId: number,

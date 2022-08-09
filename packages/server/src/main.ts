@@ -215,6 +215,11 @@ app.post("/order/get", (req, res) => {
   orderController.getOrder(req, res);
 });
 
+app.post("/order/get/list", (req, res) => {
+  console.log(req.body);
+  orderController.getOrderList(req, res);
+});
+
 app.post("/order/create/item", (req, res) => {
   console.log(req.body);
   orderController.createOrderItem(req, res);

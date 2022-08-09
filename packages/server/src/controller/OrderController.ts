@@ -71,6 +71,20 @@ export default class OrderController {
     }
   }
 
+  async getOrderList(req: Request, res: Response): Promise<OrderEntity> {
+    try {
+      const orderList = await this.service.getOrderList();
+      if (_.isEmpty(orderList)) {
+        throw "No orders avaliable";
+      }
+      res.status(200).json({ success: true, data: orderList });
+      return;
+    } catch (err) {
+      res.status(502).json({ success: false, error: new Error(err).message });
+      return;
+    }
+  }
+
   async createOrderItem(req: Request, res: Response): Promise<OrderEntity> {
     try {
       const orderId = req.body.orderId;

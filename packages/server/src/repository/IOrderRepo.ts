@@ -5,6 +5,7 @@ export default interface IOrderRepo {
   updateOrder: (order: OrderEntity) => Promise<void>;
   deleteOrder: (id: number) => Promise<void>;
   getOrder: (id: number) => Promise<OrderEntity>;
+  getOrderList: () => Promise<Array<OrderEntity>>;
   createOrderItem: (
     orderId: number,
     productId: number,

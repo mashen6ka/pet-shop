@@ -77,6 +77,27 @@ export default class PgOrderRepo implements IOrderRepo {
     return order;
   }
 
+  async getOrderList(): Promise<Array<OrderEntity>> {
+    const res = await this.conn.query(`SELECT * FROM "order"`, []);
+
+    const orderList: Array<OrderEntity> = [];
+    for (let orderFields of res.rows) {
+      const order = new OrderEntity({
+        id: orderFields.id,
+        userId: orderFields.user_id,
+        companyId: orderFields.company_id,
+        statusId: orderFields.status_id,
+        createdAt: orderFields.created_at,
+        completedAt: orderFields.completed_at,
+        shopId: orderFields.shop_id,
+        price: orderFields.price,
+      });
+      orderList.push(order);
+    }
+
+    return orderList;
+  }
+
   async getOrderItemList(orderId: number): Promise<Array<OrderItemEntity>> {
     const res = await this.conn.query(
       `SELECT id, name, description, country_id, manufacturer_id,
