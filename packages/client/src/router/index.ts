@@ -6,6 +6,7 @@ import ContactsView from "../views/ContactsView.vue";
 import ProductView from "../views/ProductView.vue";
 import CartView from "../views/CartView.vue";
 import AccountView from "../views/AccountView.vue";
+import WorkerView from "../views/WorkerView.vue";
 
 Vue.use(VueRouter);
 
@@ -39,6 +40,11 @@ const routes: Array<RouteConfig> = [
     path: "/account",
     name: "account",
     component: AccountView,
+  },
+  {
+    path: "/worker",
+    name: "worker",
+    component: WorkerView,
   },
 ];
 
