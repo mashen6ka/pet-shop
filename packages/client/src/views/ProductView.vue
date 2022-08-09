@@ -20,17 +20,17 @@
         class="m-3"
       >
         <b-card-text align="left">
-          <p>Название: {{ this.product.name }}</p>
-          <p>Описание: {{ this.product.description }}</p>
+          <p><b>Name:</b> {{ this.product.name }}</p>
+          <p><b>Description:</b> {{ this.product.description }}</p>
           <p>
-            Страна производства:
+            <b>Country:</b>
             {{ this.productCountry ? this.productCountry.name : "-" }}
           </p>
           <p>
-            Производитель:
+            <b>Manufacturer:</b>
             {{ this.productManufacturer ? this.productManufacturer.name : "-" }}
           </p>
-          <p>Стоимость: {{ this.product.initialPrice / 100 }} ₽</p>
+          <p><b>Price:</b> {{ this.product.initialPrice / 100 }} ₽</p>
 
           <b-row>
             <b-col style="max-width: 12rem; min-width: 12rem">
