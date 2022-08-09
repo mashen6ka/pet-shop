@@ -131,15 +131,13 @@
         <b-list-group-item>
           <b-form>
             <b-form-group label="Shop:">
-              <b-form-select
-                required
-                v-model="form.shopId"
-                v-for="shop of shopList"
-                :key="shop.id"
-              >
-                <b-form-select-option :value="shop.id">{{
-                  shop.address
-                }}</b-form-select-option>
+              <b-form-select required v-model="form.shopId">
+                <b-form-select-option
+                  v-for="shop of shopList"
+                  :key="shop.id"
+                  :value="shop.id"
+                  >{{ shop.address }}</b-form-select-option
+                >
               </b-form-select>
               <b-form-invalid-feedback :state="isValidShopId">
                 Please choose a shop to take order from!
@@ -147,13 +145,11 @@
             </b-form-group>
 
             <b-form-group label="Company (optional):">
-              <b-form-select
-                required
-                v-model="form.companyId"
-                v-for="company of userCompanyList"
-                :key="company.id"
-              >
-                <b-form-select-option :value="null"
+              <b-form-select required v-model="form.companyId">
+                <b-form-select-option
+                  v-for="company of userCompanyList"
+                  :key="company.id"
+                  :value="null"
                   >No company</b-form-select-option
                 >
                 <b-form-select-option :value="company.id">{{
