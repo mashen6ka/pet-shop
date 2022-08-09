@@ -13,18 +13,17 @@
     </div>
 
     <div>
-      <b-pagination
-        v-model="currentPage"
-        :total-rows="rows"
-        :per-page="perPage"
-        align="center"
-      ></b-pagination>
       <b-card-group
         deck
         class="m-1"
         :per-page="perPage"
         :current-page="currentPage"
       >
+        <b-form-input
+          v-model="searchValue"
+          placeholder="Type something"
+          class="m-3"
+        ></b-form-input>
         <b-card
           v-for="product in productListByPage"
           :key="product.id"
@@ -65,6 +64,7 @@ import {
   BAlert,
   BLink,
   BPagination,
+  BFormInput,
 } from "bootstrap-vue";
 
 export default {
@@ -77,19 +77,29 @@ export default {
     BAlert,
     BLink,
     BPagination,
+    BFormInput,
   },
   computed: {
     productList() {
       return this.$store.getters["product/PRODUCT_LIST"];
     },
     rows() {
-      return this.productList.length;
+      return this.productListFiltered.length;
     },
     productListByPage() {
       const end = this.perPage * this.currentPage;
       const start = end - this.perPage;
 
-      return this.productList.slice(start, end);
+      return this.productListFiltered.slice(start, end);
+    },
+    productListFiltered() {
+      if (this.searchValue !== "") {
+        return this.productList.filter((product) =>
+          product.name.toLowerCase().includes(this.searchValue.toLowerCase())
+        );
+      } else {
+        return this.productList;
+      }
     },
   },
   mounted() {
@@ -100,6 +110,7 @@ export default {
       perPage: 20,
       currentPage: 1,
       showAddedProductToCart: false,
+      searchValue: "",
     };
   },
   methods: {
