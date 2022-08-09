@@ -36,6 +36,17 @@ const actions = {
         );
         order.itemList = data.data;
       }
+      orderList.sort(function (item1: any, item2: any) {
+        const date1 = new Date(item1.createdAt).getTime();
+        const date2 = new Date(item2.createdAt).getTime();
+        if (date1 < date2) {
+          return 1;
+        } else if (date1 > date2) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
 
       context.commit("SET_ORDER_LIST", orderList);
     }
