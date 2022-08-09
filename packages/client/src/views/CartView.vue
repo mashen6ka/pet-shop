@@ -146,15 +146,15 @@
 
             <b-form-group label="Company (optional):">
               <b-form-select required v-model="form.companyId">
+                <b-form-select-option :value="null"
+                  >No company</b-form-select-option
+                >
                 <b-form-select-option
                   v-for="company of userCompanyList"
                   :key="company.id"
-                  :value="null"
-                  >No company</b-form-select-option
+                  :value="company.id"
+                  >{{ company.name }}</b-form-select-option
                 >
-                <b-form-select-option :value="company.id">{{
-                  company.name
-                }}</b-form-select-option>
               </b-form-select>
             </b-form-group>
           </b-form>
