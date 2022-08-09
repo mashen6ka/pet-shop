@@ -40,6 +40,18 @@ const actions = {
       context.commit("SET_ORDER_LIST", orderList);
     }
   },
+  UPDATE_ORDER: async (context: any, payload: any) => {
+    const res = await axios.post("http://localhost:3000/order/update", payload);
+    // наверн сюда еще апдейт айтемов надо вынести
+    const orderList = context?.state?.orderList?.map((order: any) => {
+      if (order.id === payload.id) {
+        order = payload;
+      }
+      return order;
+    });
+
+    context.commit("SET_ORDER_LIST", orderList);
+  },
 };
 
 export default {
