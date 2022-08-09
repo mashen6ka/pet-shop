@@ -60,7 +60,7 @@ const actions = {
       }
       return order;
     });
-
+    // не очень хорошо, что в запрос улетает еще список товаров
     context.commit("SET_ORDER_LIST", orderList);
   },
 };

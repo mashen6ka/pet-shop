@@ -249,6 +249,7 @@ export default {
         completedAt: completedAt,
         shopId: order.shopId,
         price: order.price,
+        itemList: order.itemList,
       };
       this.$store.dispatch("order/UPDATE_ORDER", orderNew);
     },
