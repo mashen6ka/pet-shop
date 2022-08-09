@@ -85,6 +85,29 @@ export default class PgUserRepo implements IUserRepo {
     return user;
   }
 
+  async getUserList(): Promise<Array<UserEntity>> {
+    const res = await this.conn.query(`SELECT * from "user"`, []);
+    const userList: Array<UserEntity> = [];
+    for (let userFields of res.rows) {
+      const user = new UserEntity({
+        id: userFields.id,
+        login: userFields.login,
+        password: userFields.password,
+        worker: userFields.worker,
+        firstName: userFields.first_name,
+        lastName: userFields.last_name,
+        middleName: userFields.middle_name,
+        birthday: userFields.birthday.toLocaleDateString(),
+        email: userFields.email,
+        phone: userFields.phone,
+        personalDiscount: userFields.personal_discount,
+      });
+      userList.push(user);
+    }
+
+    return userList;
+  }
+
   async getUserCompanyList(userId: number): Promise<Array<CompanyEntity>> {
     const res = await this.conn.query(
       `SELECT id, name, "KPP", "INN", address

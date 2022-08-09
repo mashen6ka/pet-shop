@@ -71,6 +71,20 @@ export default class UserController {
     }
   }
 
+  async getUserList(req: Request, res: Response): Promise<UserEntity> {
+    try {
+      const userList = await this.service.getUserList();
+      if (_.isEmpty(userList)) {
+        throw "No users avaliable";
+      }
+      res.status(200).json({ success: true, data: userList });
+      return;
+    } catch (err) {
+      res.status(502).json({ success: false, error: new Error(err).message });
+      return;
+    }
+  }
+
   async getUserCompanyList(
     req: Request,
     res: Response

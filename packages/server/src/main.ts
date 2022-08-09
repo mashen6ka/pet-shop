@@ -84,6 +84,11 @@ app.post("/user/get", (req, res) => {
   userController.getUser(req, res);
 });
 
+app.post("/user/get/list", (req, res) => {
+  console.log(req.body);
+  userController.getUserList(req, res);
+});
+
 app.post("/user/get/company/list", (req, res) => {
   console.log(req.body);
   userController.getUserCompanyList(req, res);

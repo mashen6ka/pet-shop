@@ -28,6 +28,11 @@ export default class UserService {
     return user;
   }
 
+  async getUserList(): Promise<Array<UserEntity>> {
+    const userList = await this.repo.getUserList();
+    return userList;
+  }
+
   async getUserCompanyList(userId: number): Promise<Array<CompanyEntity>> {
     const companyList = await this.repo.getUserCompanyList(userId);
     return companyList;
