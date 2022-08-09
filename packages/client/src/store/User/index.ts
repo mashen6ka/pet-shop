@@ -2,6 +2,7 @@ import axios from "axios";
 
 const state = {
   user: {},
+  userList: [],
   orderList: [],
   companyList: [],
   accessToken: null,
@@ -12,6 +13,7 @@ const getters = {
   USER: (state: { user: any }) => state.user,
   USER_ORDER_LIST: (state: { orderList: any }) => state.orderList,
   USER_COMPANY_LIST: (state: { companyList: any }) => state.companyList,
+  USER_LIST: (state: { userList: any }) => state.userList,
 };
 
 const mutations = {
@@ -20,6 +22,8 @@ const mutations = {
     (state.orderList = orderList),
   SET_USER_COMPANY_LIST: (state: { companyList: any }, companyList: any) =>
     (state.companyList = companyList),
+  SET_USER_LIST: (state: { userList: any }, userList: any) =>
+    (state.userList = userList),
 };
 
 const actions = {
@@ -89,6 +93,15 @@ const actions = {
     //   password: "qwerty",
     // });
   },
+  GET_USER_LIST: async (context: {
+    commit: (arg0: string, arg1: any) => void;
+  }) => {
+    const { data } = await axios.post("http://localhost:3000/user/get/list");
+    if (data.success) {
+      context.commit("SET_USER_LIST", data.data);
+    }
+  },
+  // вынести в store/order - нафиг это тут
   CREATE_ORDER: async (
     context: {
       commit: (arg0: string, arg1: any) => void;

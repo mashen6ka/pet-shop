@@ -9,6 +9,7 @@ import Company from "./Company";
 import Manufacturer from "./Manufacturer";
 import Country from "./Country";
 import OrderStatus from "./OrderStatus";
+import Order from "./Order";
 
 Vue.use(Vuex);
 
@@ -21,6 +22,7 @@ export default new Vuex.Store({
     country: Country,
     manufacturer: Manufacturer,
     user: User,
-    orderStatus: OrderStatus,
+    orderStatus: OrderStatus, // ренейм на просто status
+    order: Order,
   },
 });
