@@ -125,12 +125,8 @@
                 </b-col> </b-row
             ></b-list-group-item>
           </b-list-group>
-          <b-list-group
-            class="m-3"
-            v-for="order in userOrderList"
-            :key="order.id"
-          >
-            <b-list-group-item>
+          <b-list-group class="m-3">
+            <b-list-group-item v-for="order in userOrderList" :key="order.id">
               <b-row align-v="center" class="m-1">
                 <b-col>
                   <label>{{ order.id }} </label>
@@ -219,12 +215,11 @@
                 ></b-col> </b-row
             ></b-list-group-item>
           </b-list-group>
-          <b-list-group
-            class="m-3"
-            v-for="company in userCompanyList"
-            :key="company.id"
-          >
-            <b-list-group-item>
+          <b-list-group class="m-3">
+            <b-list-group-item
+              v-for="company in userCompanyList"
+              :key="company.id"
+            >
               <b-row align-v="center" class="m-1">
                 <b-col>
                   <label>{{ company.name || "-" }}</label>
