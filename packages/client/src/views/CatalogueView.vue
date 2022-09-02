@@ -103,7 +103,10 @@ export default {
     },
   },
   mounted() {
-    Promise.all([this.$store.dispatch("product/GET_PRODUCT_LIST")]);
+    Promise.all([
+      this.$store.dispatch("product/GET_PRODUCT_LIST"),
+      this.$store.dispatch("cart/SET_CART", JSON.parse(localStorage.cart)),
+    ]);
   },
   data() {
     return {
@@ -119,6 +122,11 @@ export default {
         product: product,
         quantity: 1,
       });
+
+      // синхронизируем localStorage и vuex
+      const cartCurrent = this.$store.getters["cart/CART"];
+      localStorage.setItem("cart", JSON.stringify(cartCurrent));
+
       this.showAddedProductToCart = true;
     },
   },

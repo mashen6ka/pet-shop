@@ -268,6 +268,7 @@ export default {
         userId: this.userId,
       }),
       this.$store.dispatch("shop/GET_SHOP_LIST"),
+      this.$store.dispatch("cart/SET_CART", JSON.parse(localStorage.cart)),
     ]);
   },
   data() {
@@ -287,6 +288,11 @@ export default {
     updateCartItem(itemId, quantity) {
       this.disableInput = false;
       this.$store.dispatch("cart/UPDATE_CART_ITEM", { itemId, quantity });
+
+      // синхронизируем localStorage и vuex
+      const cartCurrent = this.$store.getters["cart/CART"];
+      localStorage.setItem("cart", JSON.stringify(cartCurrent));
+
       this.disableInput = true;
     },
     showOrderModal() {
@@ -314,6 +320,10 @@ export default {
       // обработка ошибок блин
       this.showOrderSuccess = true;
       this.$store.dispatch("cart/CLEAR_CART");
+
+      // синхронизируем localStorage и vuex
+      const cartCurrent = this.$store.getters["cart/CART"];
+      localStorage.setItem("cart", JSON.stringify(cartCurrent));
     },
   },
 };

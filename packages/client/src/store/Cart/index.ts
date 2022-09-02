@@ -7,7 +7,7 @@ const getters = {
 };
 
 const mutations = {
-  SET_CART: (state: { cart: any }, cart: any) => (state.cart = cart),
+  SET_CART: (state: { cart: any }, cart: any) => (state.cart = cart || []),
   ADD_CART_ITEM: (state: { cart: any[] }, itemNew: any) => {
     let isInCart = false;
     state.cart = state.cart.map((item: { product: any; quantity: any }) => {
@@ -44,6 +44,12 @@ const mutations = {
 };
 
 const actions = {
+  SET_CART: (
+    context: { commit: (arg0: string, arg1: never[]) => void },
+    cart: any
+  ) => {
+    context.commit("SET_CART", cart);
+  },
   CLEAR_CART: (context: { commit: (arg0: string, arg1: never[]) => void }) => {
     context.commit("SET_CART", []);
   },

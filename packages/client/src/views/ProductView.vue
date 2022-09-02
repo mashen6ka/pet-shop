@@ -127,6 +127,7 @@ export default {
       }),
       this.$store.dispatch("manufacturer/GET_MANUFACTURER_LIST"),
       this.$store.dispatch("country/GET_COUNTRY_LIST"),
+      this.$store.dispatch("cart/SET_CART", JSON.parse(localStorage.cart)),
     ]);
   },
   data() {
@@ -141,6 +142,11 @@ export default {
         product: product,
         quantity: this.quantity,
       });
+
+      // синхронизируем localStorage и vuex
+      const cartCurrent = this.$store.getters["cart/CART"];
+      localStorage.setItem("cart", JSON.stringify(cartCurrent));
+
       this.showAddedProductToCart = true;
     },
   },
