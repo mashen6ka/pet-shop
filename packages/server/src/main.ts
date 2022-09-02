@@ -36,6 +36,7 @@ import {
 const port = 3000;
 const app = express();
 app.use(express.json());
+app.use("/img", express.static("../generator/img"));
 
 // app.use(
 //   bodyParser.urlencoded({
