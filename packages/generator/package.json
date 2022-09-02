@@ -12,5 +12,8 @@
   "dependencies": {
     "axios": "^0.27.2",
     "csv-writer": "^1.6.0"
+  },
+  "devDependencies": {
+    "cheerio": "^1.0.0-rc.12"
   }
 }
