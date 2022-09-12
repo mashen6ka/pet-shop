@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ProductService } from "../service";
-import { ProductEntity } from "../entity";
+import { ProductEntity, ShopEntity } from "../entity";
 import { validateOrReject } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import _ from "lodash";
@@ -81,6 +81,24 @@ export default class ProductController {
         throw "No products avaliable";
       }
       res.status(200).json({ success: true, data: productList });
+      return;
+    } catch (err) {
+      res.status(502).json({ success: false, error: new Error(err).message });
+      return;
+    }
+  }
+
+  async getProductShopList(
+    req: Request,
+    res: Response
+  ): Promise<Array<ShopEntity>> {
+    try {
+      const productId = req.body.productId;
+      if (!Number.isInteger(productId)) {
+        throw "Invalid data: productId must be an int value";
+      }
+      const shopList = await this.service.getProductShopList(productId);
+      res.status(200).json({ success: true, data: shopList });
       return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });

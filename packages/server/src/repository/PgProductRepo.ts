@@ -1,4 +1,4 @@
-import { ProductEntity } from "../entity";
+import { ProductEntity, ShopEntity } from "../entity";
 import IProductRepo from "./IProductRepo";
 import { Client as pgConn } from "pg";
 
@@ -97,5 +97,27 @@ export default class PgProductRepo implements IProductRepo {
     }
 
     return productList;
+  }
+
+  async getProductShopList(productId: number): Promise<Array<ShopEntity>> {
+    const res = await this.conn.query(
+      `SELECT id, address, working_hours, phone
+       FROM "shop" s JOIN product__shop ps ON s.id = ps.shop_id
+       WHERE ps.product_id = $1 AND not(ps.quantity = 0)`,
+      [productId]
+    );
+    let shopList: Array<ShopEntity> = [];
+    for (let shopFields of res.rows) {
+      shopList.push(
+        // мб стоит по аналогии с Order и OrderItem ввести новую сущность, чтоб еще кол-во хранить (но пока не надо)
+        new ShopEntity({
+          id: shopFields.id,
+          address: shopFields.address,
+          workingHours: shopFields.working_hours,
+          phone: shopFields.phone,
+        })
+      );
+    }
+    return shopList;
   }
 }

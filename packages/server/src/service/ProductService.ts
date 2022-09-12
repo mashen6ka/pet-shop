@@ -1,5 +1,5 @@
 import { identity } from "lodash";
-import { ProductEntity } from "../entity";
+import { ProductEntity, ShopEntity } from "../entity";
 import { IProductRepo } from "../repository";
 
 export default class ProductService {
@@ -30,5 +30,10 @@ export default class ProductService {
   async getProductList(): Promise<Array<ProductEntity>> {
     const productList = await this.repo.getProductList();
     return productList;
+  }
+
+  async getProductShopList(productId: number): Promise<Array<ShopEntity>> {
+    const shopList = await this.repo.getProductShopList(productId);
+    return shopList;
   }
 }

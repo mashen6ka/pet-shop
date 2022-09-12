@@ -148,6 +148,11 @@ app.post("/product/get/list", (req, res) => {
   productController.getProductList(req, res);
 });
 
+app.post("/product/get/shop/list", (req, res) => {
+  console.log(req.body);
+  productController.getProductShopList(req, res);
+});
+
 const shopRepo = new PgShopRepo(pgClient);
 const shopService = new ShopService(shopRepo);
 const shopController = new ShopController(shopService);
