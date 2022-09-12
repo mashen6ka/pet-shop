@@ -102,7 +102,7 @@
         </b-tab>
       </b-tabs>
     </b-card>
-    <p v-if="orderList.length === 0">Oops! No orders avaliable</p>
+    <p v-if="orderList.length === 0">Oops! No orders available</p>
     <b-modal v-model="isOrderModal" size="xl" hide-footer ok-variant="primary">
       <b-list-group class="m-3">
         <b-list-group-item variant="primary">

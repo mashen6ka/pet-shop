@@ -34,7 +34,7 @@
         </b-list-group-item>
       </b-list-group>
     </b-card>
-    <p v-if="shopList.length === 0">Oops! No shops avaliable</p>
+    <p v-if="shopList.length === 0">Oops! No shops available</p>
   </div>
 </template>
 

@@ -109,7 +109,7 @@
             </b-list-group>
           </b-card>
           <p v-if="productShopList.length === 0">
-            Oops! Product is not avaliable in offline shops :(
+            Oops! This product is not available in offline shops :(
           </p>
         </b-tab>
       </b-tabs>
