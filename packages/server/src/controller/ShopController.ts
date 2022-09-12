@@ -75,7 +75,7 @@ export default class ShopController {
     try {
       const shopList = await this.service.getShopList();
       if (_.isEmpty(shopList)) {
-        throw "No shops avaliable";
+        throw "No shops available";
       }
       res.status(200).json({ success: true, data: shopList });
       return;

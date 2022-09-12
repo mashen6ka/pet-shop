@@ -78,7 +78,7 @@ export default class ProductController {
     try {
       const productList = await this.service.getProductList();
       if (_.isEmpty(productList)) {
-        throw "No products avaliable";
+        throw "No products available";
       }
       res.status(200).json({ success: true, data: productList });
       return;

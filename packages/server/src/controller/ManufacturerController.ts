@@ -81,7 +81,7 @@ export default class ManufacturerController {
     try {
       const manufacturerList = await this.service.getManufacturerList();
       if (_.isEmpty(manufacturerList)) {
-        throw "No manufacturers avaliable";
+        throw "No manufacturers available";
       }
       res.status(200).json({ success: true, data: manufacturerList });
       return;

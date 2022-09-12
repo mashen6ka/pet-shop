@@ -75,7 +75,7 @@ export default class CompanyController {
     try {
       const companyList = await this.service.getCompanyList();
       if (_.isEmpty(companyList)) {
-        throw "No companies avaliable";
+        throw "No companies available";
       }
       res.status(200).json({ success: true, data: companyList });
       return;

@@ -78,7 +78,7 @@ export default class CountryController {
     try {
       const countryList = await this.service.getCountryList();
       if (_.isEmpty(countryList)) {
-        throw "No countrys avaliable";
+        throw "No countrys available";
       }
       res.status(200).json({ success: true, data: countryList });
       return;

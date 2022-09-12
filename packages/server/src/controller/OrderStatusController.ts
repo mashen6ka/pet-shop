@@ -81,7 +81,7 @@ export default class OrderStatusController {
     try {
       const orderStatusList = await this.service.getOrderStatusList();
       if (_.isEmpty(orderStatusList)) {
-        throw "No orderStatuss avaliable";
+        throw "No orderStatuss available";
       }
       res.status(200).json({ success: true, data: orderStatusList });
       return;

@@ -75,7 +75,7 @@ export default class UserController {
     try {
       const userList = await this.service.getUserList();
       if (_.isEmpty(userList)) {
-        throw "No users avaliable";
+        throw "No users available";
       }
       res.status(200).json({ success: true, data: userList });
       return;
