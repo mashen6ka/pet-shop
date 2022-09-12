@@ -10,7 +10,7 @@
                   <label>Login: </label>
                 </b-col>
                 <b-col>
-                  <b-form-input v-model="user.login"></b-form-input>
+                  <b-form-input v-model="user.login" disabled></b-form-input>
                 </b-col>
               </b-row>
             </b-list-group-item>
@@ -22,7 +22,8 @@
                 <b-col>
                   <b-form-input
                     type="password"
-                    v-model="user.password"
+                    v-model="form.password"
+                    placeholder="●●●●●"
                   ></b-form-input>
                 </b-col> </b-row
             ></b-list-group-item>
@@ -32,7 +33,10 @@
                   <label>First Name: </label>
                 </b-col>
                 <b-col>
-                  <b-form-input v-model="user.firstName"></b-form-input>
+                  <b-form-input
+                    v-model="form.firstName"
+                    :placeholder="user.firstName"
+                  ></b-form-input>
                 </b-col> </b-row
             ></b-list-group-item>
             <b-list-group-item>
@@ -41,7 +45,10 @@
                   <label>Last Name: </label>
                 </b-col>
                 <b-col>
-                  <b-form-input v-model="user.lastName"></b-form-input>
+                  <b-form-input
+                    v-model="form.lastName"
+                    :placeholder="user.lastName"
+                  ></b-form-input>
                 </b-col> </b-row
             ></b-list-group-item>
             <b-list-group-item>
@@ -50,7 +57,11 @@
                   <label>Middle Name: </label>
                 </b-col>
                 <b-col>
-                  <b-form-input v-model="user.middleName"></b-form-input>
+                  <b-form-input
+                    required
+                    v-model="form.middleName"
+                    :placeholder="user.middleName"
+                  ></b-form-input>
                 </b-col> </b-row
             ></b-list-group-item>
             <b-list-group-item>
@@ -61,7 +72,8 @@
                 <b-col>
                   <b-form-input
                     type="email"
-                    v-model="user.email"
+                    v-model="form.email"
+                    :placeholder="user.email"
                   ></b-form-input>
                 </b-col> </b-row
             ></b-list-group-item>
@@ -71,7 +83,20 @@
                   <label>Birthday: </label>
                 </b-col>
                 <b-col>
-                  <b-form-input v-model="user.birthday"></b-form-input>
+                  <b-input-group>
+                    <b-form-input
+                      v-model="form.birthday"
+                      :placeholder="user.birthday"
+                    ></b-form-input>
+                    <b-input-group-append>
+                      <b-form-datepicker
+                        v-model="birthdayRaw"
+                        button-only
+                        right
+                        @context="onContextBirthday"
+                      ></b-form-datepicker>
+                    </b-input-group-append>
+                  </b-input-group>
                 </b-col>
               </b-row>
             </b-list-group-item>
@@ -81,7 +106,11 @@
                   <label>Phone Number: </label>
                 </b-col>
                 <b-col>
-                  <b-form-input v-model="user.phone"></b-form-input>
+                  <b-form-input
+                    type="text"
+                    v-model="form.phone"
+                    :placeholder="user.phone"
+                  ></b-form-input>
                 </b-col> </b-row
             ></b-list-group-item>
             <b-list-group-item>
@@ -90,9 +119,20 @@
                   <label>Personal Discount: </label>
                 </b-col>
                 <b-col>
-                  <b-form-input v-model="user.personalDiscount"></b-form-input>
+                  <b-form-input
+                    disabled
+                    v-model="user.personalDiscount"
+                  ></b-form-input>
                 </b-col> </b-row
             ></b-list-group-item>
+          </b-list-group>
+          <b-list-group>
+            <b-row align-v="center" class="m-1">
+              <b-col></b-col>
+              <b-col class="d-flex justify-content-end">
+                <b-button @click="submitAccountChanges">Save</b-button>
+              </b-col>
+            </b-row>
           </b-list-group>
         </b-tab>
         <b-tab title="My Orders">
@@ -304,10 +344,17 @@ import {
   BRow,
   BCol,
   BFormInput,
+  BFormDatepicker,
+  BInputGroup,
+  BInputGroupAppend,
   BModal,
 } from "bootstrap-vue";
 
+import { validationMixin } from "vuelidate";
+import { minLength, maxLength, email, alpha } from "vuelidate/lib/validators";
+
 export default {
+  mixins: [validationMixin],
   components: {
     BListGroup,
     BButton,
@@ -321,6 +368,9 @@ export default {
     BRow,
     BCol,
     BFormInput,
+    BFormDatepicker,
+    BInputGroup,
+    BInputGroupAppend,
     BModal,
   },
   computed: {
@@ -363,6 +413,41 @@ export default {
     return {
       isOrderModal: false,
       currOrder: {},
+      birthdayRaw: "",
+      form: {
+        password: "",
+        firstName: "",
+        lastName: "",
+        middleName: "",
+        email: "",
+        birthday: "",
+        phone: "",
+      },
+      // валидация пока не юзается, надо потом сделать
+      validations: {
+        form: {
+          password: {
+            minLength: minLength(4),
+          },
+          firstName: { alpha, minLength: minLength(1) },
+          lastName: { alpha, minLength: minLength(1) },
+          middleName: { alpha, minLength: minLength(1) },
+          email: { email },
+          birthday: {
+            minValue(val) {
+              return new Date(val) > new Date();
+            },
+            maxValue(val) {
+              return new Date(val) > new Date();
+            },
+          },
+          // сделать норм проверку телефона
+          phone: {
+            minLength: minLength(12),
+            maxLength: maxLength(12),
+          },
+        },
+      },
     };
   },
   methods: {
@@ -391,6 +476,22 @@ export default {
     closeOrderModal() {
       this.currOrder = {};
       this.isOrderModal = false;
+    },
+    formatDate(value) {
+      const date = new Date(value);
+      return date.toLocaleDateString();
+    },
+    onContextBirthday(context) {
+      if (context.selectedDate) {
+        const date = new Date(context.selectedDate);
+        this.form.birthday = date.toLocaleDateString();
+      } else {
+        this.form.birthday = "";
+      }
+    },
+    submitAccountChanges() {
+      // потом чето сделаю
+      // console.log();
     },
   },
 };
