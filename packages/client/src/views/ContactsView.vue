@@ -20,15 +20,15 @@
         <b-list-group-item v-for="shop in shopList" :key="shop.id">
           <b-row align-v="center" class="m-1">
             <b-col>
-              <label>{{ shop?.address || "-" }} </label>
+              <label>{{ shop.address || "-" }} </label>
             </b-col>
             <b-col>
-              <div v-for="(hours, day) in shop.workingHours" :key="day">
-                {{ day }}: {{ hours.from }}.00 - {{ hours.to }}.00
-              </div>
+              <label>
+                {{ shop.workingHours.from }}.00 - {{ shop.workingHours.to }}.00
+              </label>
             </b-col>
             <b-col>
-              <label>{{ shop?.phone || "-" }} </label>
+              <label>{{ shop.phone || "-" }} </label>
             </b-col>
           </b-row>
         </b-list-group-item>
