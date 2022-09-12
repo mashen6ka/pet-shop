@@ -20,6 +20,7 @@
         :current-page="currentPage"
       >
         <b-form-input
+          type="search"
           v-model="searchValue"
           placeholder="Type something"
           class="m-3"
