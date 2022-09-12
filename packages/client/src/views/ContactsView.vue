@@ -1,5 +1,61 @@
 <template>
-  <div class="contacts">
-    <h1>This is an about page</h1>
+  <div>
+    <b-card class="m-3" v-if="shopList.length !== 0">
+      <b-list-group class="m-3">
+        <b-list-group-item variant="primary">
+          <b-row align-v="center" class="m-1">
+            <b-col>
+              <label> Address: </label>
+            </b-col>
+            <b-col>
+              <label> Working hours: </label>
+            </b-col>
+          </b-row>
+        </b-list-group-item>
+      </b-list-group>
+      <b-list-group class="m-3">
+        <b-list-group-item v-for="shop in shopList" :key="shop.id">
+          <b-row align-v="center" class="m-1">
+            <b-col>
+              <label>{{ shop?.address || "-" }} </label>
+            </b-col>
+            <b-col>
+              <div v-for="(hours, day) in shop.workingHours" :key="day">
+                {{ day }}: {{ hours.from }}.00 - {{ hours.to }}.00
+              </div>
+            </b-col>
+          </b-row>
+        </b-list-group-item>
+      </b-list-group>
+    </b-card>
+    <p v-if="shopList.length === 0">Oops! No shops avaliable</p>
   </div>
 </template>
+
+<script>
+import { BListGroup, BListGroupItem, BRow, BCol, BCard } from "bootstrap-vue";
+
+export default {
+  components: {
+    BListGroup,
+    BListGroupItem,
+    BRow,
+    BCol,
+    BCard,
+  },
+  computed: {
+    shopList() {
+      return this.$store.getters["shop/SHOP_LIST"];
+    },
+  },
+  mounted() {
+    Promise.all([this.$store.dispatch("shop/GET_SHOP_LIST")]);
+  },
+  data() {
+    return {};
+  },
+  methods: {
+    // добавить сортировку рабочий часов по дням недели (пока не успеваю)
+  },
+};
+</script>
