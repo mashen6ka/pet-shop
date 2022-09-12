@@ -10,6 +10,9 @@
             <b-col>
               <label> Working hours: </label>
             </b-col>
+            <b-col>
+              <label> Phone: </label>
+            </b-col>
           </b-row>
         </b-list-group-item>
       </b-list-group>
@@ -23,6 +26,9 @@
               <div v-for="(hours, day) in shop.workingHours" :key="day">
                 {{ day }}: {{ hours.from }}.00 - {{ hours.to }}.00
               </div>
+            </b-col>
+            <b-col>
+              <label>{{ shop?.phone || "-" }} </label>
             </b-col>
           </b-row>
         </b-list-group-item>
