@@ -11,6 +11,9 @@ export default class ShopEntity {
   // @IsJSON()
   workingHours: JSON;
 
+  @IsString()
+  phone: string;
+
   constructor(partial: Partial<ShopEntity>) {
     Object.assign(this, partial);
   }

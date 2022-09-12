@@ -11,10 +11,10 @@ export default class PgShopRepo implements IShopRepo {
 
   async createShop(shop: ShopEntity): Promise<Number> {
     const res = await this.conn.query(
-      `INSERT INTO shop (address, working_hours)
-       VALUES ($1, $2)
+      `INSERT INTO shop (address, working_hours, phone)
+       VALUES ($1, $2, $3)
        RETURNING id`,
-      [shop.address, shop.workingHours]
+      [shop.address, shop.workingHours, shop.phone]
     );
 
     return res?.rows?.[0]?.id;
@@ -22,10 +22,10 @@ export default class PgShopRepo implements IShopRepo {
 
   async updateShop(shop: ShopEntity): Promise<void> {
     await this.conn.query(
-      `UPDATE shop SET (address, working_hours) 
-       = ($1, $2)
-       WHERE id = $3`,
-      [shop.address, shop.workingHours, shop.id]
+      `UPDATE shop SET (address, working_hours, phone) 
+       = ($1, $2, $3)
+       WHERE id = $4`,
+      [shop.address, shop.workingHours, shop.phone, shop.id]
     );
   }
 
@@ -48,6 +48,7 @@ export default class PgShopRepo implements IShopRepo {
       id: shopFields.id,
       address: shopFields.address,
       workingHours: shopFields.working_hours,
+      phone: shopFields.phone,
     });
 
     return shop;
@@ -62,6 +63,7 @@ export default class PgShopRepo implements IShopRepo {
           id: shopFields.id,
           address: shopFields.address,
           workingHours: shopFields.working_hours,
+          phone: shopFields.phone,
         })
       );
     }

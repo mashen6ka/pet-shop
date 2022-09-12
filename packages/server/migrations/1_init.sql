@@ -6,7 +6,8 @@ CREATE TABLE "job" (
 CREATE TABLE "shop" (
   "id" SERIAL PRIMARY KEY,
   "address" text NOT NULL,
-  "working_hours" jsonb NOT NULL
+  "working_hours" jsonb NOT NULL,
+  "phone" varchar(16)
 );
 
 CREATE TABLE "user" (
