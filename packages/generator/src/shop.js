@@ -55,4 +55,6 @@ export default async function generateShop(count, folder, createCsvWriter) {
   csvWriter
     .writeRecords(data)
     .then(() => console.log("Shop successfully generated"));
+
+  return data;
 }
