@@ -69,10 +69,9 @@ async function getItemLinks(url) {
   return links;
 }
 
-async function getItemData(links, countryList) {
+async function getItemData(links, countryList, manufacturerList) {
   let items = [];
   for (const link of links) {
-    // const translatedLink = translate.prefix + link + translate.postfix;
     let response;
     try {
       response = await fetch(urlBase + link);
@@ -118,12 +117,13 @@ async function getItemData(links, countryList) {
 
     items.push({
       name: nameTranslated,
-      manufacturer: manufacturer,
+      manufacturer_id: getIdByName(manufacturer, manufacturerList),
       country_id: getIdByName(countryTranslated, countryList),
       description: descriptionTranslated,
       price: price,
       img: imgPath,
     });
+    console.log(items);
   }
   return items;
 }
@@ -137,12 +137,12 @@ function getIdByName(name, list) {
   );
 }
 
-export default async function generateProduct(countryList) {
+export default async function generateProduct(countryList, manufacturerList) {
   const data = [];
   for (const urlPage of urlPageArr) {
     const itemLinks = await getItemLinks(urlBase + urlPage);
     itemLinks.pop(); // последний айтем всегда - 'javascript:void(0);'
-    data.push(await getItemData(itemLinks, countryList));
+    data.push(await getItemData(itemLinks, countryList, manufacturerList));
     console.log("-- Generated a bunch of products --");
   }
 
