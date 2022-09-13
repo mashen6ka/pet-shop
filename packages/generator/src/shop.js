@@ -1,13 +1,13 @@
 import axios from "axios";
 
-function getShopHeader() {
+function getHeader() {
   return [
     { id: "address", title: "address" },
     { id: "working_hours", title: "working_hours" },
   ];
 }
 
-async function getShopData(count) {
+async function getData(count) {
   function randomHours() {
     const minFrom = 7;
     const maxFrom = 10;
@@ -47,10 +47,10 @@ async function getShopData(count) {
 export default async function generateShop(count, folder, createCsvWriter) {
   const csvWriter = createCsvWriter({
     path: folder + "shop.csv",
-    header: getShopHeader(),
+    header: getHeader(),
   });
 
-  const data = await getShopData(count);
+  const data = await getData(count);
 
   csvWriter
     .writeRecords(data)
