@@ -8,8 +8,9 @@ const dataFolder = "./data/";
 async function generate() {
   // await generateShop(10, dataFolder, createCsvWriter);
 
-  const countryList = await generateCountry(2, dataFolder, createCsvWriter);
-  await generateProduct(countryList);
+  const countryList = await generateCountry(null, dataFolder, createCsvWriter);
+
+  const productList = await generateProduct(countryList);
 }
 
 generate();

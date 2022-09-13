@@ -29,7 +29,8 @@ async function getShopData(count) {
 
   const url = "https://random-data-api.com/api/address/random_address";
   const data = [];
-  for (let i = 0; i < count; i++) {
+  const iter = count ? count : 15;
+  for (let i = 0; i < iter; i++) {
     try {
       const res = await axios.get(url);
       data.push({

@@ -9,7 +9,7 @@ async function getData(count) {
 
   try {
     const res = await axios.get(url);
-    const data = Object.values(res.data).slice(0, count);
+    const data = Object.values(res.data).slice(count);
     return data.map((elem) => ({
       name: elem,
     }));

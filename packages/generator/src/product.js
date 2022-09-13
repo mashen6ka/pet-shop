@@ -69,7 +69,7 @@ async function getItemLinks(url) {
   return links;
 }
 
-async function getItemData(links) {
+async function getItemData(links, countryList) {
   let items = [];
   for (const link of links) {
     // const translatedLink = translate.prefix + link + translate.postfix;
@@ -110,15 +110,17 @@ async function getItemData(links) {
 
     await downloadImg(urlBase + imgUrl, imgPath);
 
-    const nameTranslatedRes = await translate(name, { to: "en" });
-    const countryTranslatedRes = await translate(country, { to: "en" });
-    const descriptionTranslatedRes = await translate(description, { to: "en" });
+    const { text: nameTranslated } = await translate(name, { to: "en" });
+    const { text: countryTranslated } = await translate(country, { to: "en" });
+    const { text: descriptionTranslated } = await translate(description, {
+      to: "en",
+    });
 
     items.push({
-      name: nameTranslatedRes.text,
+      name: nameTranslated,
       manufacturer: manufacturer,
-      country: countryTranslatedRes.text,
-      description: descriptionTranslatedRes.text,
+      country_id: getIdByName(countryTranslated, countryList),
+      description: descriptionTranslated,
       price: price,
       img: imgPath,
     });
@@ -126,12 +128,21 @@ async function getItemData(links) {
   return items;
 }
 
+function getIdByName(name, list) {
+  const minId = 1;
+  const maxId = list.length;
+  return (
+    list?.map((e) => e.name)?.indexOf(name) + 1 ||
+    Math.floor(Math.random() * (maxId - minId + 1) + minId)
+  );
+}
+
 export default async function generateProduct(countryList) {
   const data = [];
   for (const urlPage of urlPageArr) {
     const itemLinks = await getItemLinks(urlBase + urlPage);
     itemLinks.pop(); // последний айтем всегда - 'javascript:void(0);'
-    data.push(await getItemData(itemLinks));
+    data.push(await getItemData(itemLinks, countryList));
     console.log("-- Generated a bunch of products --");
   }
 
@@ -143,4 +154,5 @@ export default async function generateProduct(countryList) {
   // csvWriter
   //   .writeRecords(data)
   //   .then(() => console.log("Product successfully generated"));
+  return data;
 }
