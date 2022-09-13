@@ -12,8 +12,8 @@ export default class PgOrderRepo implements IOrderRepo {
   async createOrder(order: OrderEntity): Promise<Number> {
     const res = await this.conn.query(
       `INSERT INTO "order" (user_id, company_id, status_id, 
-        created_at, completed_at, shop_id, price)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
+        created_at, completed_at, shop_id)
+       VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING id`,
       [
         order.userId,
@@ -22,7 +22,6 @@ export default class PgOrderRepo implements IOrderRepo {
         order.createdAt,
         order.completedAt,
         order.shopId,
-        order.price,
       ]
     );
 
@@ -32,9 +31,9 @@ export default class PgOrderRepo implements IOrderRepo {
   async updateOrder(order: OrderEntity): Promise<void> {
     await this.conn.query(
       `UPDATE "order" SET (user_id, company_id, status_id, 
-        created_at, completed_at, shop_id, price) 
-       = ($1, $2, $3, $4, $5, $6, $7)
-       WHERE id = $8`,
+        created_at, completed_at, shop_id) 
+       = ($1, $2, $3, $4, $5, $6)
+       WHERE id = $7`,
       [
         order.userId,
         order.companyId,
@@ -42,7 +41,6 @@ export default class PgOrderRepo implements IOrderRepo {
         order.createdAt,
         order.completedAt,
         order.shopId,
-        order.price,
         order.id,
       ]
     );
@@ -71,7 +69,6 @@ export default class PgOrderRepo implements IOrderRepo {
       createdAt: orderFields.created_at,
       completedAt: orderFields.completed_at,
       shopId: orderFields.shop_id,
-      price: orderFields.price,
     });
 
     return order;
@@ -90,7 +87,6 @@ export default class PgOrderRepo implements IOrderRepo {
         createdAt: orderFields.created_at,
         completedAt: orderFields.completed_at,
         shopId: orderFields.shop_id,
-        price: orderFields.price,
       });
       orderList.push(order);
     }

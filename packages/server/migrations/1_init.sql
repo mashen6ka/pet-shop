@@ -71,8 +71,7 @@ CREATE TABLE "order" (
   "status_id" int NOT NULL,
   "created_at" timestamp DEFAULT LOCALTIMESTAMP,
   "completed_at" timestamp,
-  "shop_id" int NOT NULL,
-  "price" int NOT NULL
+  "shop_id" int NOT NULL
 );
 
 CREATE TABLE "order_status" (

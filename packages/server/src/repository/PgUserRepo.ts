@@ -147,7 +147,6 @@ export default class PgUserRepo implements IUserRepo {
           createdAt: orderFields.created_at,
           completedAt: orderFields.completed_at,
           shopId: orderFields.shop_id,
-          price: orderFields.price,
         })
       );
     }

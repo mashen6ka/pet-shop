@@ -90,7 +90,7 @@
                   <label>{{ getShopAddress(order.shopId) || "-" }} </label>
                 </b-col>
                 <b-col>
-                  <label>{{ order.price / 100 }} ₽</label>
+                  <label>{{ countOrderPrice(order) / 100 }} ₽</label>
                 </b-col>
                 <b-col>
                   <b-button @click="showOrderModal(order)"
@@ -248,10 +248,16 @@ export default {
         createdAt: order.createdAt,
         completedAt: completedAt,
         shopId: order.shopId,
-        price: order.price,
         itemList: order.itemList,
       };
       this.$store.dispatch("order/UPDATE_ORDER", orderNew);
+    },
+    countOrderPrice(order) {
+      let price = 0;
+      order.itemList.forEach((item) => {
+        price += item.product.initialPrice * item.quantity;
+      });
+      return price;
     },
   },
 };

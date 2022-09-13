@@ -36,9 +36,6 @@ export default class OrderEntity {
   @IsInt()
   shopId: number;
 
-  @IsInt()
-  price: number;
-
   constructor(partial: Partial<OrderEntity>) {
     Object.assign(this, partial);
   }
