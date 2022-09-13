@@ -117,11 +117,12 @@ async function getItemData(links, countryList, manufacturerList) {
 
     items.push({
       name: nameTranslated,
-      manufacturer_id: getIdByName(manufacturer, manufacturerList),
-      country_id: getIdByName(countryTranslated, countryList),
       description: descriptionTranslated,
-      price: price,
-      img: imgPath,
+      country_id: getIdByName(countryTranslated, countryList),
+      manufacturer_id: getIdByName(manufacturer, manufacturerList),
+      initial_price: price,
+      discount: 0,
+      img_url: imgPath,
     });
     console.log(items);
   }
@@ -137,22 +138,29 @@ function getIdByName(name, list) {
   );
 }
 
-export default async function generateProduct(countryList, manufacturerList) {
-  const data = [];
+export default async function generateProduct(
+  count,
+  folder,
+  createCsvWriter,
+  { countryList, manufacturerList }
+) {
+  const dataRaw = [];
   for (const urlPage of urlPageArr) {
     const itemLinks = await getItemLinks(urlBase + urlPage);
     itemLinks.pop(); // последний айтем всегда - 'javascript:void(0);'
-    data.push(await getItemData(itemLinks, countryList, manufacturerList));
+    dataRaw.push(await getItemData(itemLinks, countryList, manufacturerList));
     console.log("-- Generated a bunch of products --");
   }
 
-  // const csvWriter = createCsvWriter({
-  //   path: folder + "product.csv",
-  //   header: getProductHeader(),
-  // });
+  const data = dataRaw.slice(count);
+  const csvWriter = createCsvWriter({
+    path: folder + "product.csv",
+    header: getProductHeader(),
+  });
 
-  // csvWriter
-  //   .writeRecords(data)
-  //   .then(() => console.log("Product successfully generated"));
+  csvWriter
+    .writeRecords(data)
+    .then(() => console.log("Product successfully generated"));
+
   return data;
 }

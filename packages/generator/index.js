@@ -13,7 +13,10 @@ async function generate() {
 
   const manufacturerList = await generateManufacturer(null, dataFolder, createCsvWriter); // prettier-ignore
 
-  const productList = await generateProduct(countryList, manufacturerList);
+  const productList = await generateProduct(null, dataFolder, createCsvWriter, {
+    countryList,
+    manufacturerList,
+  });
 }
 
 generate();
