@@ -6,6 +6,7 @@ import generateManufacturer from "./src/manufacturer.js";
 import generateOrder from "./src/order.js";
 import generateOrderProduct from "./src/order__product.js";
 import generateProduct from "./src/product.js";
+import generateProductShop from "./src/product__shop.js";
 import generateShop from "./src/shop.js";
 import generateStatus from "./src/status.js";
 import generateUser from "./src/user.js";
@@ -35,6 +36,8 @@ async function generate() {
   const productList = await generateProduct(null, dataFolder, createCsvWriter, { countryList, manufacturerList }); // prettier-ignore
 
   const orderProductList = await generateOrderProduct(null, dataFolder, createCsvWriter, { orderList, productList }); // prettier-ignore
+
+  const productShopList = await generateProductShop(null, dataFolder, createCsvWriter, { productList, shopList }); // prettier-ignore
 }
 
 generate();
