@@ -5,10 +5,13 @@ import generateJob from "./src/job.js";
 import generateManufacturer from "./src/manufacturer.js";
 import generateProduct from "./src/product.js";
 import generateShop from "./src/shop.js";
+import generateStatus from "./src/status.js";
 
 const dataFolder = "./data/";
 
 async function generate() {
+  const statusList = await generateStatus(null, dataFolder, createCsvWriter);
+
   const companyList = await generateCompany(null, dataFolder, createCsvWriter);
 
   const jobList = await generateJob(null, dataFolder, createCsvWriter);
