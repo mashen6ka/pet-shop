@@ -1,10 +1,12 @@
 import { load as _load } from "cheerio";
 import fs from "fs";
 import axios from "axios";
+import translate from "google-translate-api-x";
 
 const imgFolder = "./img";
 const load = _load;
 const urlBase = "https://4lapy.ru";
+
 // мб потом сделать нормально фул обход по категориям и по страницам, а пока сроки горят блин
 const urlPageArr = [
   "/catalog/gryzuny-i-khorki/korm-gryzuni/?section_id=374&sort=popular&page=1",
@@ -56,6 +58,7 @@ function getProductHeader() {
 async function getItemLinks(url) {
   const response = await fetch(url);
   const body = await response.text();
+
   const $ = load(body);
 
   let links = [];
@@ -69,7 +72,13 @@ async function getItemLinks(url) {
 async function getItemData(links) {
   let items = [];
   for (const link of links) {
-    const response = await fetch(urlBase + link);
+    // const translatedLink = translate.prefix + link + translate.postfix;
+    let response;
+    try {
+      response = await fetch(urlBase + link);
+    } catch (err) {
+      continue;
+    }
     const body = await response.text();
     const $ = load(body);
 
@@ -101,10 +110,15 @@ async function getItemData(links) {
 
     await downloadImg(urlBase + imgUrl, imgPath);
 
+    const nameTranslatedRes = await translate(name, { to: "en" });
+    const countryTranslatedRes = await translate(country, { to: "en" });
+    const descriptionTranslatedRes = await translate(description, { to: "en" });
+
     items.push({
-      name: name,
+      name: nameTranslatedRes.text,
       manufacturer: manufacturer,
-      description: description,
+      country: countryTranslatedRes.text,
+      description: descriptionTranslatedRes.text,
       price: price,
       img: imgPath,
     });
@@ -112,19 +126,21 @@ async function getItemData(links) {
   return items;
 }
 
-export default async function generateProduct(count, folder, createCsvWriter) {
+export default async function generateProduct(countryList) {
   const data = [];
   for (const urlPage of urlPageArr) {
     const itemLinks = await getItemLinks(urlBase + urlPage);
+    itemLinks.pop(); // последний айтем всегда - 'javascript:void(0);'
     data.push(await getItemData(itemLinks));
+    console.log("-- Generated a bunch of products --");
   }
 
-  const csvWriter = createCsvWriter({
-    path: folder + "product.csv",
-    header: getProductHeader(),
-  });
+  // const csvWriter = createCsvWriter({
+  //   path: folder + "product.csv",
+  //   header: getProductHeader(),
+  // });
 
-  csvWriter
-    .writeRecords(data)
-    .then(() => console.log("Product successfully generated"));
+  // csvWriter
+  //   .writeRecords(data)
+  //   .then(() => console.log("Product successfully generated"));
 }

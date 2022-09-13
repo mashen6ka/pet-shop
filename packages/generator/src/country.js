@@ -29,4 +29,5 @@ export default async function generateCountry(count, folder, createCsvWriter) {
   csvWriter
     .writeRecords(data)
     .then(() => console.log("Country successfully generated"));
+  return data;
 }
