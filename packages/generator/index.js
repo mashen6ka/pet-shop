@@ -7,15 +7,18 @@ import generateProduct from "./src/product.js";
 import generateShop from "./src/shop.js";
 import generateStatus from "./src/status.js";
 import generateUser from "./src/user.js";
+import generateUserCompany from "./src/user__company.js";
 
 const dataFolder = "./data/";
 
 async function generate() {
   const userList = await generateUser(null, dataFolder, createCsvWriter);
 
-  const statusList = await generateStatus(null, dataFolder, createCsvWriter);
-
   const companyList = await generateCompany(null, dataFolder, createCsvWriter);
+
+  const userCompanyList = await generateUserCompany(null, dataFolder, createCsvWriter, {userList, companyList}); // prettier-ignore
+
+  const statusList = await generateStatus(null, dataFolder, createCsvWriter);
 
   const jobList = await generateJob(null, dataFolder, createCsvWriter);
 
