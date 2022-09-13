@@ -3,6 +3,7 @@ import generateCompany from "./src/company.js";
 import generateCountry from "./src/country.js";
 import generateJob from "./src/job.js";
 import generateManufacturer from "./src/manufacturer.js";
+import generateOrder from "./src/order.js";
 import generateProduct from "./src/product.js";
 import generateShop from "./src/shop.js";
 import generateStatus from "./src/status.js";
@@ -16,13 +17,15 @@ async function generate() {
 
   const companyList = await generateCompany(null, dataFolder, createCsvWriter);
 
-  const userCompanyList = await generateUserCompany(null, dataFolder, createCsvWriter, {userList, companyList}); // prettier-ignore
+  const userCompanyList = await generateUserCompany(null, dataFolder, createCsvWriter, { userList, companyList }); // prettier-ignore
 
   const statusList = await generateStatus(null, dataFolder, createCsvWriter);
 
   const jobList = await generateJob(null, dataFolder, createCsvWriter);
 
   const shopList = await generateShop(null, dataFolder, createCsvWriter);
+
+  const orderList = await generateOrder(null, dataFolder, createCsvWriter, { userList, companyList, statusList, shopList }); // prettier-ignore
 
   const countryList = await generateCountry(null, dataFolder, createCsvWriter);
 
