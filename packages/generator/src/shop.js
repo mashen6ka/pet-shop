@@ -13,14 +13,17 @@ async function getShopData(count) {
     const maxFrom = 10;
     const minTo = 18;
     const maxTo = 23;
-    const weekdays = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+    // const weekdays = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 
     const data = {};
-    for (let day of weekdays) {
-      const from = Math.floor(Math.random() * (maxFrom - minFrom + 1) + minFrom); //prettier-ignore
-      const to = Math.floor(Math.random() * (maxTo - minTo + 1) + minTo);
-      data[day] = { from: from, to: to };
-    }
+    // for (let day of weekdays) {
+    const from = Math.floor(Math.random() * (maxFrom - minFrom + 1) + minFrom); //prettier-ignore
+    const to = Math.floor(Math.random() * (maxTo - minTo + 1) + minTo);
+    // data[day] = { from: from, to: to };
+    // }
+    data.from = from;
+    data.to = to;
+
     return JSON.stringify(data);
   }
 
