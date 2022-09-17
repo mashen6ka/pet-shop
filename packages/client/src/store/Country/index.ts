@@ -20,7 +20,9 @@ const actions = {
   GET_COUNTRY_LIST: async (context: {
     commit: (arg0: string, arg1: any) => void;
   }) => {
-    const { data } = await axios.post("http://localhost:3000/country/get/list");
+    const { data } = await axios.post(
+      process.env.VUE_APP_SERVER_ADDRESS + "/country/get/list"
+    );
     if (data.success) {
       context.commit("SET_COUNTRY_LIST", data.data);
     }
@@ -32,7 +34,7 @@ const actions = {
     payload: any
   ) => {
     const { data } = await axios.post(
-      "http://localhost:3000/country/get/",
+      process.env.VUE_APP_SERVER_ADDRESS + "/country/get/",
       payload
     );
     if (data.success) {

@@ -19,7 +19,9 @@ const actions = {
   GET_SHOP_LIST: async (context: {
     commit: (arg0: string, arg1: any) => void;
   }) => {
-    const { data } = await axios.post("http://localhost:3000/shop/get/list");
+    const { data } = await axios.post(
+      process.env.VUE_APP_SERVER_ADDRESS + "/shop/get/list"
+    );
     if (data.success) {
       context.commit("SET_SHOP_LIST", data.data);
     }
@@ -31,7 +33,7 @@ const actions = {
     payload: any
   ) => {
     const { data } = await axios.post(
-      "http://localhost:3000/shop/get/",
+      process.env.VUE_APP_SERVER_ADDRESS + "/shop/get/",
       payload
     );
     if (data.success) {

@@ -15,7 +15,7 @@
       <b-tabs card>
         <b-tab title="Info" content-class="m-3">
           <b-card
-            :img-src="this.product.imgUrl"
+            :img-src="serverAddress + this.product.imgUrl"
             img-alt="Card image"
             img-left
             class="m-3"
@@ -159,6 +159,9 @@ export default {
     // BDropdownItem,
   },
   computed: {
+    serverAddress() {
+      return process.env.VUE_APP_SERVER_ADDRESS;
+    },
     productManufacturer() {
       return this.manufacturerList.find(
         (manufacturer) => manufacturer.id === this.product.manufacturerId

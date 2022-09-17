@@ -20,7 +20,7 @@ const actions = {
     commit: (arg0: string, arg1: any) => void;
   }) => {
     const { data } = await axios.post(
-      "http://localhost:3000/order/status/get/list"
+      process.env.VUE_APP_SERVER_ADDRESS + "/order/status/get/list"
     );
     if (data.success) {
       context.commit("SET_ORDER_STATUS_LIST", data.data);

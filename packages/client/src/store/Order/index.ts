@@ -22,7 +22,7 @@ const actions = {
     payload: any
   ) => {
     const orderRes = await axios.post(
-      "http://localhost:3000/order/get/list",
+      process.env.VUE_APP_SERVER_ADDRESS + "/order/get/list",
       payload
     );
     const orderList = orderRes.data.data;
@@ -31,7 +31,7 @@ const actions = {
         // если в заказе нет айтемов, все сломается
         const orderId = order.id;
         const { data } = await axios.post(
-          "http://localhost:3000/order/get/item/list",
+          process.env.VUE_APP_SERVER_ADDRESS + "/order/get/item/list",
           { orderId: orderId }
         );
         order.itemList = data.data;
@@ -52,7 +52,10 @@ const actions = {
     }
   },
   UPDATE_ORDER: async (context: any, payload: any) => {
-    const res = await axios.post("http://localhost:3000/order/update", payload);
+    const res = await axios.post(
+      process.env.VUE_APP_SERVER_ADDRESS + "/order/update",
+      payload
+    );
     // наверн сюда еще апдейт айтемов надо вынести
     const orderList = context?.state?.orderList?.map((order: any) => {
       if (order.id === payload.id) {

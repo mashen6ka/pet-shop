@@ -3,7 +3,7 @@
     <b-list-group v-if="itemsQuantity !== 0" class="m-3">
       <b-list-group-item>
         <b-card
-          :img-src="item.product.imgUrl"
+          :img-src="serverAddress + item.product.imgUrl"
           img-alt="Card image"
           img-left
           img-width="150"
@@ -229,6 +229,9 @@ export default {
     BAlert,
   },
   computed: {
+    serverAddress() {
+      return process.env.VUE_APP_SERVER_ADDRESS;
+    },
     itemList() {
       return this.$store.getters["cart/CART"];
     },

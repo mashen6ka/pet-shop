@@ -35,7 +35,7 @@ const actions = {
     payload: any
   ) => {
     const orderRes = await axios.post(
-      "http://localhost:3000/user/get/order/list",
+      process.env.VUE_APP_SERVER_ADDRESS + "/user/get/order/list",
       payload
     );
     const orderList = orderRes.data.data;
@@ -44,7 +44,7 @@ const actions = {
         // если в заказе нет айтемов, все сломается
         const orderId = order.id;
         const { data } = await axios.post(
-          "http://localhost:3000/order/get/item/list",
+          process.env.VUE_APP_SERVER_ADDRESS + "/order/get/item/list",
           { orderId: orderId }
         );
         order.itemList = data.data;
@@ -70,7 +70,7 @@ const actions = {
     payload: any
   ) => {
     const { data } = await axios.post(
-      "http://localhost:3000/user/get/company/list",
+      process.env.VUE_APP_SERVER_ADDRESS + "/user/get/company/list",
       payload
     );
     if (data.success) {
@@ -84,7 +84,7 @@ const actions = {
     payload: any
   ) => {
     const { data } = await axios.post(
-      "http://localhost:3000/user/get/",
+      process.env.VUE_APP_SERVER_ADDRESS + "/user/get/",
       payload
     );
     if (data.success) {
@@ -106,7 +106,9 @@ const actions = {
   GET_USER_LIST: async (context: {
     commit: (arg0: string, arg1: any) => void;
   }) => {
-    const { data } = await axios.post("http://localhost:3000/user/get/list");
+    const { data } = await axios.post(
+      process.env.VUE_APP_SERVER_ADDRESS + "/user/get/list"
+    );
     if (data.success) {
       context.commit("SET_USER_LIST", data.data);
     }
@@ -118,22 +120,25 @@ const actions = {
     },
     payload: any
   ) => {
-    const { data } = await axios.post("http://localhost:3000/order/create/", {
-      id: payload.id,
-      userId: payload.userId,
-      companyId: payload.companyId,
-      statusId: payload.statusId,
-      createdAt: payload.createdAt,
-      completedAt: payload.completedAt,
-      shopId: payload.shopId,
-      price: payload.price,
-    });
+    const { data } = await axios.post(
+      process.env.VUE_APP_SERVER_ADDRESS + "/order/create/",
+      {
+        id: payload.id,
+        userId: payload.userId,
+        companyId: payload.companyId,
+        statusId: payload.statusId,
+        createdAt: payload.createdAt,
+        completedAt: payload.completedAt,
+        shopId: payload.shopId,
+        price: payload.price,
+      }
+    );
     // пока пофиг на все проверки если что
     const orderId = data.data.id;
 
     for (const item of payload.itemList) {
       const { data } = await axios.post(
-        "http://localhost:3000/order/create/item/",
+        process.env.VUE_APP_SERVER_ADDRESS + "/order/create/item/",
         {
           orderId: orderId,
           productId: item.product.id,

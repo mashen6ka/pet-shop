@@ -32,7 +32,7 @@
           img-top
           img-height="250"
           style="max-width: 15rem; min-width: 15rem"
-          :img-src="product.imgUrl"
+          :img-src="serverAddress + product.imgUrl"
         >
           <b-card-text style="max-height: 8rem; min-height: 8rem"
             ><b-link :to="{ name: 'product', params: { id: product.id } }">{{
@@ -81,6 +81,9 @@ export default {
     BFormInput,
   },
   computed: {
+    serverAddress() {
+      return process.env.VUE_APP_SERVER_ADDRESS;
+    },
     productList() {
       return this.$store.getters["product/PRODUCT_LIST"];
     },
