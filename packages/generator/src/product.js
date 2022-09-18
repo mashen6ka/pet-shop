@@ -27,6 +27,16 @@ const urlPageArr = [
   "/catalog/koshki/korm-koshki/?section_id=2&sort=popular&page=13",
   "/catalog/koshki/korm-koshki/?section_id=2&sort=popular&page=14",
   "/catalog/koshki/korm-koshki/?section_id=2&sort=popular&page=15",
+  "/catalog/koshki/lezhaki-i-domiki-koshki/?section_id=97&sort=popular&page=1",
+  "/catalog/koshki/lezhaki-i-domiki-koshki/?section_id=97&sort=popular&page=2",
+  "/catalog/koshki/lezhaki-i-domiki-koshki/?section_id=97&sort=popular&page=3",
+  "/catalog/koshki/lezhaki-i-domiki-koshki/?section_id=97&sort=popular&page=4",
+  "/catalog/koshki/lezhaki-i-domiki-koshki/?section_id=97&sort=popular&page=5",
+  "/catalog/sobaki/korm-sobaki/?section_id=165&sort=popular&page=1",
+  "/catalog/sobaki/korm-sobaki/?section_id=165&sort=popular&page=2",
+  "/catalog/sobaki/korm-sobaki/?section_id=165&sort=popular&page=3",
+  "/catalog/sobaki/korm-sobaki/?section_id=165&sort=popular&page=4",
+  "/catalog/sobaki/korm-sobaki/?section_id=165&sort=popular&page=5",
 ];
 
 const downloadImg = (url, imgPath) =>
@@ -116,13 +126,13 @@ async function getItemData(links, countryList, manufacturerList) {
     });
 
     items.push({
-      name: nameTranslated,
-      description: descriptionTranslated,
+      name: nameTranslated.replaceAll("\n", ""),
+      description: descriptionTranslated.replaceAll("\n", ""),
       country_id: getIdByName(countryTranslated, countryList),
       manufacturer_id: getIdByName(manufacturer, manufacturerList),
-      initial_price: price,
+      initial_price: parseInt(price * 100),
       discount: 0,
-      img_url: imgPath,
+      img_url: "/img/" + imgName + ".jpg", // накринжила аче.....
     });
     console.log(items);
   }
@@ -145,22 +155,29 @@ export default async function generateProduct(
   { countryList, manufacturerList }
 ) {
   const dataRaw = [];
-  for (const urlPage of urlPageArr) {
-    const itemLinks = await getItemLinks(urlBase + urlPage);
-    itemLinks.pop(); // последний айтем всегда - 'javascript:void(0);'
-    dataRaw.push(await getItemData(itemLinks, countryList, manufacturerList));
-    console.log("-- Generated a bunch of products --");
+  try {
+    for (const urlPage of urlPageArr) {
+      const itemLinks = await getItemLinks(urlBase + urlPage);
+      itemLinks.pop(); // последний айтем всегда - 'javascript:void(0);'
+      dataRaw.push(await getItemData(itemLinks, countryList, manufacturerList));
+      console.log("-- Generated a bunch of products --");
+    }
+  } catch (err) {
+    console.log(err);
+    return writeData(dataRaw);
   }
+  return writeData(dataRaw);
 
-  const data = dataRaw.slice(count);
-  const csvWriter = createCsvWriter({
-    path: folder + "product.csv",
-    header: getProductHeader(),
-  });
+  function writeData(dataRaw) {
+    const data = dataRaw.flat().slice(count);
+    const csvWriter = createCsvWriter({
+      path: folder + "product.csv",
+      header: getProductHeader(),
+    });
 
-  csvWriter
-    .writeRecords(data)
-    .then(() => console.log("Product successfully generated"));
-
-  return data;
+    csvWriter
+      .writeRecords(data)
+      .then(() => console.log("Product successfully generated"));
+    return data;
+  }
 }
