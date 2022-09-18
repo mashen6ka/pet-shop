@@ -19,16 +19,19 @@ async function getData(count, orderList, productList) {
   const maxQty = 4;
 
   const data = [];
-  const iter = count ? count : 15;
-  for (let i = 0; i < iter; i++) {
-    try {
-      data.push({
-        order_id: randomId(orderList),
-        product_id: randomId(productList),
-        quantity: Math.floor(Math.random() * (maxQty - minQty + 1) + minQty),
-      });
-    } catch (err) {
-      console.log("Error with getting order__product data");
+  for (let i = 1; i <= orderList.length; i++) {
+    const itemQty = Math.floor(Math.random() * (maxQty - minQty + 1) + minQty);
+    for (let j = 1; j <= itemQty; j++) {
+      try {
+        // if (data.length === count) break;
+        data.push({
+          order_id: i,
+          product_id: randomId(productList),
+          quantity: Math.floor(Math.random() * (maxQty - minQty + 1) + minQty),
+        });
+      } catch (err) {
+        console.log("Error with getting order__product data");
+      }
     }
   }
   return data;

@@ -10,7 +10,7 @@ import generateOrderProduct from "./src/order__product.js";
 import generateProduct from "./src/product.js";
 import generateProductShop from "./src/product__shop.js";
 import generateShop from "./src/shop.js";
-import generateStatus from "./src/status.js";
+import generateOrderStatus from "./src/order_status.js";
 import generateUser from "./src/user.js";
 import generateUserCompany from "./src/user__company.js";
 
@@ -26,8 +26,8 @@ async function generate() {
   await generateUserCompany(1500, dataFolder, createCsvWriter, { userList, companyList }); // prettier-ignore
   const userCompanyList = readData(dataFolder + "user__company.csv");
 
-  await generateStatus(null, dataFolder, createCsvWriter);
-  const statusList = readData(dataFolder + "status.csv");
+  await generateOrderStatus(null, dataFolder, createCsvWriter);
+  const statusList = readData(dataFolder + "order_status.csv");
 
   // unused!
   // await generateJob(null, dataFolder, createCsvWriter);
@@ -48,7 +48,7 @@ async function generate() {
   await generateProduct(null, dataFolder, createCsvWriter, { countryList, manufacturerList }); // prettier-ignore
   const productList = readData(dataFolder + "product.csv");
 
-  await generateOrderProduct(3000, dataFolder, createCsvWriter, { orderList, productList }); // prettier-ignore
+  await generateOrderProduct(null, dataFolder, createCsvWriter, { orderList, productList }); // prettier-ignore
   const orderProductList = readData(dataFolder + "order__product.csv");
 
   await generateProductShop(4000, dataFolder, createCsvWriter, { productList, shopList }); // prettier-ignore

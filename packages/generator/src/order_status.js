@@ -19,13 +19,17 @@ async function getData(count) {
       name: elem,
     }));
   } catch (err) {
-    console.log("Error with getting status data");
+    console.log("Error with getting order_status data");
   }
 }
 
-export default async function generateStatus(count, folder, createCsvWriter) {
+export default async function generateOrderStatus(
+  count,
+  folder,
+  createCsvWriter
+) {
   const csvWriter = createCsvWriter({
-    path: folder + "status.csv",
+    path: folder + "order_status.csv",
     header: getHeader(),
   });
 
@@ -33,6 +37,6 @@ export default async function generateStatus(count, folder, createCsvWriter) {
 
   csvWriter
     .writeRecords(data)
-    .then(() => console.log("Status successfully generated"));
+    .then(() => console.log("OrderStatus successfully generated"));
   return data;
 }
