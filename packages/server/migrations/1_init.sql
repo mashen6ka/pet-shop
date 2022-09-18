@@ -1,8 +1,3 @@
-CREATE TABLE "job" (
-  "id" SERIAL PRIMARY KEY,
-  "name" varchar(32) NOT NULL
-);
-
 CREATE TABLE "shop" (
   "id" SERIAL PRIMARY KEY,
   "address" text NOT NULL,
@@ -39,7 +34,7 @@ CREATE TABLE "user__company" (
 
 CREATE TABLE "product" (
   "id" SERIAL PRIMARY KEY,
-  "name" varchar(128) NOT NULL,
+  "name" text NOT NULL,
   "description" text NOT NULL,
   "country_id" int NOT NULL,
   "manufacturer_id" int NOT NULL,
@@ -56,7 +51,7 @@ CREATE TABLE "product__shop" (
 
 CREATE TABLE "country" (
   "id" SERIAL PRIMARY KEY,
-  "name" varchar(32) NOT NULL
+  "name" varchar(64) NOT NULL
 );
 
 CREATE TABLE "manufacturer" (
