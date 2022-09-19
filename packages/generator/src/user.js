@@ -30,7 +30,7 @@ async function getData(count) {
         worker: Math.floor(Math.random() * 3) % 2 !== 0 ? true : false,
         first_name: item.first_name,
         last_name: item.last_name,
-        middle_name: item.first_name, // мидл нэйма там нет
+        middle_name: "-", // мидл нэйма там нет
         birthday: item.date_of_birth,
         email: item.email,
         phone: item.phone_number

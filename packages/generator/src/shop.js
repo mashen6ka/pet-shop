@@ -4,6 +4,7 @@ function getHeader() {
   return [
     { id: "address", title: "address" },
     { id: "working_hours", title: "working_hours" },
+    // { id: "phone", title: "phone" }, // добавить телефон блинб
   ];
 }
 
@@ -36,6 +37,7 @@ async function getData(count) {
       data.push({
         address: res.data.full_address,
         working_hours: randomHours(),
+        // phone:
       });
     } catch (err) {
       console.log("Error with getting shop data");
