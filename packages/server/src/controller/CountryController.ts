@@ -1,15 +1,17 @@
 import { Request, Response } from "express";
-import { CountryService } from "../service";
+import BaseController from "./BaseController";
+import { CountryService, AuthService } from "../service";
 import { CountryEntity } from "../entity";
 import { validateOrReject } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import _ from "lodash";
 
-export default class CountryController {
+export default class CountryController extends BaseController {
   private service: CountryService;
 
-  constructor(service: CountryService) {
-    this.service = service;
+  constructor(authService: AuthService, countryService: CountryService) {
+    super(authService);
+    this.service = countryService;
   }
 
   async createCountry(req: Request, res: Response): Promise<Number> {

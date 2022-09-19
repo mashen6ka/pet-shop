@@ -1,7 +1,14 @@
-import { CompanyEntity, UserEntity, OrderEntity } from "../entity";
+import { CompanyEntity, UserEntity, OrderEntity, AuthnEntity } from "../entity";
 
 export default interface IUserRepo {
-  createUser: (user: UserEntity) => Promise<Number>;
+  getUserIdByLoginAndPassword: (
+    login: string,
+    password: string
+  ) => Promise<number>;
+  createSession: (userId: number) => Promise<string>;
+  getUserIdByToken: (token: string) => Promise<number>;
+  getWorkerIdByToken: (token: string) => Promise<number>;
+  createUser: (user: UserEntity) => Promise<number>;
   updateUser: (user: UserEntity) => Promise<void>;
   deleteUser: (id: number) => Promise<void>;
   getUser: (id: number) => Promise<UserEntity>;

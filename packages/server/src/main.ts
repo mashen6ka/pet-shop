@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import express from "express";
+import cookieParser from "cookie-parser";
 import { Client } from "pg";
 import {
   UserController,
@@ -30,12 +31,14 @@ import {
   ManufacturerService,
   CountryService,
   OrderStatusService,
+  AuthService,
 } from "./service";
 // import bodyParser from "body-parser";
 
 const port = 3000;
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 app.use("/img", express.static("../generator/img"));
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -43,7 +46,7 @@ app.use((req, res, next) => {
 
   // Set to true if you need the website to include cookies in the requests sent
   // to the API (e.g. in case you use sessions)
-  // res.setHeader('Access-Control-Allow-Credentials', true);
+  // res.setHeader("Access-Control-Allow-Credentials", true);
   next();
 });
 
@@ -71,8 +74,14 @@ pgClient.connect((err) => {
 });
 
 const userRepo = new PgUserRepo(pgClient);
+const authService = new AuthService(userRepo);
 const userService = new UserService(userRepo);
-const userController = new UserController(userService);
+const userController = new UserController(authService, userService);
+
+app.post("/user/authn", (req, res) => {
+  console.log(req.body);
+  userController.authenticateUser(req, res);
+});
 
 app.post("/user/create", (req, res) => {
   console.log(req.body);
@@ -89,6 +98,7 @@ app.post("/user/delete", (req, res) => {
   userController.deleteUser(req, res);
 });
 
+// занулять пароль
 app.post("/user/get", (req, res) => {
   console.log(req.body);
   userController.getUser(req, res);
@@ -213,7 +223,7 @@ app.post("/company/get/list", (req, res) => {
 
 const orderRepo = new PgOrderRepo(pgClient);
 const orderService = new OrderService(orderRepo);
-const orderController = new OrderController(orderService);
+const orderController = new OrderController(authService, orderService);
 
 app.post("/order/create", (req, res) => {
   console.log(req.body);

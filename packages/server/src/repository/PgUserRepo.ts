@@ -1,4 +1,4 @@
-import { CompanyEntity, OrderEntity, UserEntity } from "../entity";
+import { CompanyEntity, OrderEntity, UserEntity, AuthnEntity } from "../entity";
 import IUserRepo from "./IUserRepo";
 import { Client as pgConn } from "pg";
 
@@ -9,7 +9,48 @@ export default class PgUserRepo implements IUserRepo {
     this.conn = conn;
   }
 
-  async createUser(user: UserEntity): Promise<Number> {
+  async getUserIdByLoginAndPassword(
+    login: string,
+    password: string
+  ): Promise<number> {
+    const res = await this.conn.query(
+      `SELECT u.id FROM "user" u
+       WHERE u.login = $1 and u.password = $2`,
+      [login, password]
+    );
+    return res?.rows?.[0]?.id;
+  }
+
+  async createSession(userId: number): Promise<string> {
+    const res = await this.conn.query(
+      `INSERT INTO "session" (user_id, token)
+       VALUES ($1, md5(random()::text))
+       RETURNING token`,
+      [userId]
+    );
+    return res?.rows?.[0]?.token;
+  }
+
+  async getUserIdByToken(token: string): Promise<number> {
+    const res = await this.conn.query(
+      `SELECT s.user_id FROM "session" s
+       WHERE s.token = $1`,
+      [token]
+    );
+    return res?.rows?.[0]?.user_id;
+  }
+
+  async getWorkerIdByToken(token: string): Promise<number> {
+    const res = await this.conn.query(
+      `SELECT s.user_id 
+       FROM "session" s LEFT JOIN "users" u ON s.user_id = u.id
+       WHERE s.token = $1 AND u.worker = TRUE`,
+      [token]
+    );
+    return res?.rows?.[0]?.user_id;
+  }
+
+  async createUser(user: UserEntity): Promise<number> {
     const res = await this.conn.query(
       `INSERT INTO "user" (login, password, first_name, last_name, 
        middle_name, birthday, email, phone, personal_discount, worker) 

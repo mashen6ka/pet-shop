@@ -1,19 +1,22 @@
 import { Request, Response } from "express";
-import { CompanyService } from "../service";
+import { CompanyService, AuthService } from "../service";
 import { CompanyEntity } from "../entity";
 import { validateOrReject } from "class-validator";
 import { plainToInstance } from "class-transformer";
+import BaseController from "./BaseController";
 import _ from "lodash";
 
-export default class CompanyController {
+export default class CompanyController extends BaseController {
   private service: CompanyService;
 
-  constructor(service: CompanyService) {
-    this.service = service;
+  constructor(authService: AuthService, companyService: CompanyService) {
+    super(authService);
+    this.service = companyService;
   }
 
   async createCompany(req: Request, res: Response): Promise<Number> {
     try {
+      await this.checkWorkerToken(req);
       const company = plainToInstance(CompanyEntity, req.body);
       await validateOrReject(company);
       const id = await this.service.createCompany(company);
@@ -27,6 +30,7 @@ export default class CompanyController {
 
   async updateCompany(req: Request, res: Response): Promise<void> {
     try {
+      await this.checkWorkerToken(req);
       const company = plainToInstance(CompanyEntity, req.body);
       await validateOrReject(company);
       await this.service.updateCompany(company);
@@ -40,6 +44,7 @@ export default class CompanyController {
 
   async deleteCompany(req: Request, res: Response): Promise<void> {
     try {
+      await this.checkWorkerToken(req);
       const id = req.body.id;
       if (!Number.isInteger(id)) {
         throw "Invalid data: id must be an int value";
@@ -55,6 +60,7 @@ export default class CompanyController {
 
   async getCompany(req: Request, res: Response): Promise<CompanyEntity> {
     try {
+      await this.checkWorkerToken(req);
       const id = req.body.id;
       if (!Number.isInteger(id)) {
         throw "Invalid data: id must be an int value";
@@ -73,6 +79,7 @@ export default class CompanyController {
 
   async getCompanyList(req: Request, res: Response): Promise<CompanyEntity> {
     try {
+      await this.checkWorkerToken(req);
       const companyList = await this.service.getCompanyList();
       if (_.isEmpty(companyList)) {
         throw "No companies available";

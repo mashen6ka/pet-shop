@@ -1,19 +1,25 @@
 import { Request, Response } from "express";
-import { ManufacturerService } from "../service";
+import BaseController from "./BaseController";
+import { ManufacturerService, AuthService } from "../service";
 import { ManufacturerEntity } from "../entity";
 import { validateOrReject } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import _ from "lodash";
 
-export default class ManufacturerController {
+export default class ManufacturerController extends BaseController {
   private service: ManufacturerService;
 
-  constructor(service: ManufacturerService) {
-    this.service = service;
+  constructor(
+    authService: AuthService,
+    manufacturerService: ManufacturerService
+  ) {
+    super(authService);
+    this.service = manufacturerService;
   }
 
   async createManufacturer(req: Request, res: Response): Promise<Number> {
     try {
+      await this.checkWorkerToken(req);
       const manufacturer = plainToInstance(ManufacturerEntity, req.body);
       await validateOrReject(manufacturer);
       const id = await this.service.createManufacturer(manufacturer);
@@ -27,6 +33,7 @@ export default class ManufacturerController {
 
   async updateManufacturer(req: Request, res: Response): Promise<void> {
     try {
+      await this.checkWorkerToken(req);
       const manufacturer = plainToInstance(ManufacturerEntity, req.body);
       await validateOrReject(manufacturer);
       await this.service.updateManufacturer(manufacturer);
@@ -40,6 +47,7 @@ export default class ManufacturerController {
 
   async deleteManufacturer(req: Request, res: Response): Promise<void> {
     try {
+      await this.checkWorkerToken(req);
       const id = req.body.id;
       if (!Number.isInteger(id)) {
         throw "Invalid data: id must be an int value";

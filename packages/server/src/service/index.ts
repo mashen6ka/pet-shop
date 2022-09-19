@@ -1,3 +1,4 @@
+import AuthService from "./AuthService";
 import UserService from "./UserService";
 import ProductService from "./ProductService";
 import ShopService from "./ShopService";
@@ -6,6 +7,8 @@ import OrderService from "./OrderService";
 import ManufacturerService from "./ManufacturerService";
 import CountryService from "./CountryService";
 import OrderStatusService from "./OrderStatusService";
+
+export { AuthService };
 
 export { UserService };
 

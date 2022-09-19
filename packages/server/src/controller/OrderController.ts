@@ -1,20 +1,24 @@
 import { Request, Response } from "express";
-import { OrderService } from "../service";
+import { AuthService, OrderService, UserService } from "../service";
 import { OrderEntity } from "../entity";
 import { validateOrReject } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import _ from "lodash";
+import BaseController from "./BaseController";
 
-export default class OrderController {
+export default class OrderController extends BaseController {
   private service: OrderService;
 
-  constructor(service: OrderService) {
+  constructor(authService: AuthService, service: OrderService) {
+    super(authService);
     this.service = service;
   }
 
   async createOrder(req: Request, res: Response): Promise<Number> {
     try {
+      const userId = await this.getUserIdByToken(req);
       const order = plainToInstance(OrderEntity, req.body);
+      order.userId = userId;
       await validateOrReject(order);
       const id = await this.service.createOrder(order);
       res.status(200).json({ success: true, data: { id } });
@@ -27,6 +31,7 @@ export default class OrderController {
 
   async updateOrder(req: Request, res: Response): Promise<void> {
     try {
+      await this.checkWorkerToken(req);
       const order = plainToInstance(OrderEntity, req.body);
       await validateOrReject(order);
       await this.service.updateOrder(order);
@@ -40,6 +45,7 @@ export default class OrderController {
 
   async deleteOrder(req: Request, res: Response): Promise<void> {
     try {
+      await this.checkWorkerToken(req);
       const id = req.body.id;
       if (!Number.isInteger(id)) {
         throw "Invalid data: id must be an int value";
@@ -55,6 +61,7 @@ export default class OrderController {
 
   async getOrder(req: Request, res: Response): Promise<OrderEntity> {
     try {
+      await this.checkWorkerToken(req);
       const id = req.body.id;
       if (!Number.isInteger(id)) {
         throw "Invalid data: id must be an int value";
@@ -73,6 +80,7 @@ export default class OrderController {
 
   async getOrderList(req: Request, res: Response): Promise<OrderEntity> {
     try {
+      await this.checkWorkerToken(req);
       const orderList = await this.service.getOrderList();
       if (_.isEmpty(orderList)) {
         throw "No orders available";

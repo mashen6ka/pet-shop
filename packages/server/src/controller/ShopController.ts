@@ -1,19 +1,22 @@
 import { Request, Response } from "express";
-import { ShopService } from "../service";
+import { ShopService, AuthService } from "../service";
 import { ShopEntity } from "../entity";
+import BaseController from "./BaseController";
 import { validateOrReject } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import _ from "lodash";
 
-export default class ShopController {
+export default class ShopController extends BaseController {
   private service: ShopService;
 
-  constructor(service: ShopService) {
-    this.service = service;
+  constructor(authService: AuthService, shopService: ShopService) {
+    super(authService);
+    this.service = shopService;
   }
 
   async createShop(req: Request, res: Response): Promise<Number> {
     try {
+      await this.checkWorkerToken(req);
       const shop = plainToInstance(ShopEntity, req.body);
       await validateOrReject(shop);
       const id = await this.service.createShop(shop);
@@ -27,6 +30,7 @@ export default class ShopController {
 
   async updateShop(req: Request, res: Response): Promise<void> {
     try {
+      await this.checkWorkerToken(req);
       const shop = plainToInstance(ShopEntity, req.body);
       await validateOrReject(shop);
       await this.service.updateShop(shop);
@@ -40,6 +44,7 @@ export default class ShopController {
 
   async deleteShop(req: Request, res: Response): Promise<void> {
     try {
+      await this.checkWorkerToken(req);
       const id = req.body.id;
       if (!Number.isInteger(id)) {
         throw "Invalid data: id must be an int value";

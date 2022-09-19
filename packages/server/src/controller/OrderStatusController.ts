@@ -1,19 +1,25 @@
 import { Request, Response } from "express";
-import { OrderStatusService } from "../service";
+import BaseController from "./BaseController";
+import { OrderStatusService, AuthService } from "../service";
 import { OrderStatusEntity } from "../entity";
 import { validateOrReject } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import _ from "lodash";
 
-export default class OrderStatusController {
+export default class OrderStatusController extends BaseController {
   private service: OrderStatusService;
 
-  constructor(service: OrderStatusService) {
-    this.service = service;
+  constructor(
+    authService: AuthService,
+    orderStatusService: OrderStatusService
+  ) {
+    super(authService);
+    this.service = orderStatusService;
   }
 
   async createOrderStatus(req: Request, res: Response): Promise<Number> {
     try {
+      await this.checkWorkerToken(req);
       const orderStatus = plainToInstance(OrderStatusEntity, req.body);
       await validateOrReject(orderStatus);
       const id = await this.service.createOrderStatus(orderStatus);
@@ -27,6 +33,7 @@ export default class OrderStatusController {
 
   async updateOrderStatus(req: Request, res: Response): Promise<void> {
     try {
+      await this.checkWorkerToken(req);
       const orderStatus = plainToInstance(OrderStatusEntity, req.body);
       await validateOrReject(orderStatus);
       await this.service.updateOrderStatus(orderStatus);
@@ -40,6 +47,7 @@ export default class OrderStatusController {
 
   async deleteOrderStatus(req: Request, res: Response): Promise<void> {
     try {
+      await this.checkWorkerToken(req);
       const id = req.body.id;
       if (!Number.isInteger(id)) {
         throw "Invalid data: id must be an int value";
