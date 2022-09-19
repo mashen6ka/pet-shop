@@ -8,7 +8,7 @@ CREATE TABLE "shop" (
 CREATE TABLE "user" (
   "id" SERIAL PRIMARY KEY,
   "login" varchar(32) UNIQUE NOT NULL,
-  "password" varchar(32) NOT NULL,
+  "password" bytea NOT NULL,
   "worker" boolean NOT NULL DEFAULT false,
   "first_name" varchar(32) NOT NULL,
   "last_name" varchar(32) NOT NULL,
@@ -82,10 +82,10 @@ CREATE TABLE "order__product" (
 
 CREATE TABLE "session" (
   "user_id" int NOT NULL,
-  "token" text NOT NULL
+  "token" text UNIQUE NOT NULL,
 );
 
-ALTER TABLE "session" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+ALTER TABLE "session" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id") ON DELETE CASCADE;
 
 ALTER TABLE "user__company" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
