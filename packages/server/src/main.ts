@@ -131,7 +131,7 @@ app.post("/user/delete/company", (req, res) => {
 
 const productRepo = new PgProductRepo(pgClient);
 const productService = new ProductService(productRepo);
-const productController = new ProductController(productService);
+const productController = new ProductController(authService, productService);
 
 app.post("/product/create", (req, res) => {
   console.log(req.body);
@@ -165,7 +165,7 @@ app.post("/product/get/shop/list", (req, res) => {
 
 const shopRepo = new PgShopRepo(pgClient);
 const shopService = new ShopService(shopRepo);
-const shopController = new ShopController(shopService);
+const shopController = new ShopController(authService, shopService);
 
 app.post("/shop/create", (req, res) => {
   console.log(req.body);
@@ -194,7 +194,7 @@ app.post("/shop/get/list", (req, res) => {
 
 const companyRepo = new PgCompanyRepo(pgClient);
 const companyService = new CompanyService(companyRepo);
-const companyController = new CompanyController(companyService);
+const companyController = new CompanyController(authService, companyService);
 
 app.post("/company/create", (req, res) => {
   console.log(req.body);
@@ -272,7 +272,10 @@ app.post("/order/get/item/list", (req, res) => {
 
 const manufacturerRepo = new PgManufacturerRepo(pgClient);
 const manufacturerService = new ManufacturerService(manufacturerRepo);
-const manufacturerController = new ManufacturerController(manufacturerService);
+const manufacturerController = new ManufacturerController(
+  authService,
+  manufacturerService
+);
 
 app.post("/manufacturer/create", (req, res) => {
   console.log(req.body);
@@ -301,7 +304,7 @@ app.post("/manufacturer/get/list", (req, res) => {
 
 const countryRepo = new PgCountryRepo(pgClient);
 const countryService = new CountryService(countryRepo);
-const countryController = new CountryController(countryService);
+const countryController = new CountryController(authService, countryService);
 
 app.post("/country/create", (req, res) => {
   console.log(req.body);
@@ -330,7 +333,10 @@ app.post("/country/get/list", (req, res) => {
 
 const orderStatusRepo = new PgOrderStatusRepo(pgClient);
 const orderStatusService = new OrderStatusService(orderStatusRepo);
-const orderStatusController = new OrderStatusController(orderStatusService);
+const orderStatusController = new OrderStatusController(
+  authService,
+  orderStatusService
+);
 
 app.post("/order/status/create", (req, res) => {
   console.log(req.body);
