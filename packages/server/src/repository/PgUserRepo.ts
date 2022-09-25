@@ -3,17 +3,19 @@ import IUserRepo from "./IUserRepo";
 import { Client as pgConn } from "pg";
 
 export default class PgUserRepo implements IUserRepo {
-  private conn: pgConn;
+  private connClient: pgConn;
+  private connWorker: pgConn;
 
-  constructor(conn: pgConn) {
-    this.conn = conn;
+  constructor(connClient: pgConn, connWorker: pgConn) {
+    this.connClient = connClient;
+    this.connWorker = connWorker;
   }
 
   async getUserIdByLoginAndPassword(
     login: string,
     password: string
   ): Promise<number> {
-    const res = await this.conn.query(
+    const res = await this.connClient.query(
       `SELECT u.id FROM "user" u
        WHERE u.login = $1 and u.password = $2`,
       [login, password]
@@ -22,7 +24,7 @@ export default class PgUserRepo implements IUserRepo {
   }
 
   async createSession(userId: number): Promise<string> {
-    const res = await this.conn.query(
+    const res = await this.connClient.query(
       `INSERT INTO "session" (user_id, token)
        VALUES ($1, md5(random()::text))
        RETURNING token`,
@@ -32,7 +34,7 @@ export default class PgUserRepo implements IUserRepo {
   }
 
   async getUserIdByToken(token: string): Promise<number> {
-    const res = await this.conn.query(
+    const res = await this.connClient.query(
       `SELECT s.user_id FROM "session" s
        WHERE s.token = $1`,
       [token]
@@ -41,7 +43,7 @@ export default class PgUserRepo implements IUserRepo {
   }
 
   async getWorkerIdByToken(token: string): Promise<number> {
-    const res = await this.conn.query(
+    const res = await this.connClient.query(
       `SELECT s.user_id 
        FROM "session" s LEFT JOIN "users" u ON s.user_id = u.id
        WHERE s.token = $1 AND u.worker = TRUE`,
@@ -51,7 +53,7 @@ export default class PgUserRepo implements IUserRepo {
   }
 
   async createUser(user: UserEntity): Promise<number> {
-    const res = await this.conn.query(
+    const res = await this.connClient.query(
       `INSERT INTO "user" (login, password, first_name, last_name, 
        middle_name, birthday, email, phone, personal_discount, worker) 
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
@@ -73,7 +75,7 @@ export default class PgUserRepo implements IUserRepo {
   }
 
   async updateUser(user: UserEntity): Promise<void> {
-    await this.conn.query(
+    await this.connClient.query(
       `UPDATE "user" SET (login, password, first_name, last_name, 
        middle_name, birthday, email, phone, personal_discount, worker) 
        = ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
@@ -95,7 +97,7 @@ export default class PgUserRepo implements IUserRepo {
   }
 
   async deleteUser(id: number): Promise<void> {
-    await this.conn.query(
+    await this.connWorker.query(
       `DELETE FROM "user"
        WHERE id = $1`,
       [id]
@@ -103,7 +105,7 @@ export default class PgUserRepo implements IUserRepo {
   }
 
   async getUser(id: number): Promise<UserEntity> {
-    const res = await this.conn.query(
+    const res = await this.connClient.query(
       `SELECT * from "user"
        WHERE id = $1`,
       [id]
@@ -127,7 +129,7 @@ export default class PgUserRepo implements IUserRepo {
   }
 
   async getUserList(): Promise<Array<UserEntity>> {
-    const res = await this.conn.query(`SELECT * from "user"`, []);
+    const res = await this.connWorker.query(`SELECT * from "user"`, []);
     const userList: Array<UserEntity> = [];
     for (let userFields of res.rows) {
       const user = new UserEntity({
@@ -150,7 +152,7 @@ export default class PgUserRepo implements IUserRepo {
   }
 
   async getUserCompanyList(userId: number): Promise<Array<CompanyEntity>> {
-    const res = await this.conn.query(
+    const res = await this.connClient.query(
       `SELECT id, name, "KPP", "INN", address
        FROM "company" c JOIN user__company uc ON c.id = uc.company_id
        WHERE uc.user_id = $1`,
@@ -172,7 +174,7 @@ export default class PgUserRepo implements IUserRepo {
   }
 
   async getUserOrderList(userId: number): Promise<Array<OrderEntity>> {
-    const res = await this.conn.query(
+    const res = await this.connClient.query(
       `SELECT * FROM "order" o
        WHERE o.user_id = $1`,
       [userId]
@@ -196,7 +198,7 @@ export default class PgUserRepo implements IUserRepo {
 
   // добавить верификацию компаний, чтоб потом убрать дубли
   async createUserCompany(userId: number, companyId: number): Promise<void> {
-    const res = await this.conn.query(
+    const res = await this.connWorker.query(
       `INSERT INTO "user__company" (user_id, company_id)
        VALUES ($1, $2)`,
       [userId, companyId]
@@ -204,7 +206,7 @@ export default class PgUserRepo implements IUserRepo {
   }
 
   async deleteUserCompany(userId: number, companyId: number): Promise<void> {
-    const res = await this.conn.query(
+    const res = await this.connWorker.query(
       `DELETE FROM "user__company"
        WHERE user_id = $1 AND company_id = $2`,
       [userId, companyId]

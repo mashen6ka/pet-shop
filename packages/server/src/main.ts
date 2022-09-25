@@ -56,24 +56,11 @@ app.use((req, res, next) => {
 //   })
 // );
 
-const pgConfig = {
-  host: "localhost",
-  port: 9999,
-  user: "postgres",
-  password: "postgres",
-  database: "main",
-};
-const pgClient = new Client(pgConfig);
+const connClient = connectDB("client", "sf2nce3");
+const connWorker = connectDB("worker", "1gjg5cjk");
+const connAdmin = connectDB("admin", "2jk493hs");
 
-pgClient.connect((err) => {
-  if (err) {
-    console.error("Failed to connect to DB", err.stack);
-  } else {
-    console.log("Connected to DB");
-  }
-});
-
-const userRepo = new PgUserRepo(pgClient);
+const userRepo = new PgUserRepo(connClient, connWorker);
 const authService = new AuthService(userRepo);
 const userService = new UserService(userRepo);
 const userController = new UserController(authService, userService);
@@ -129,7 +116,7 @@ app.post("/user/delete/company", (req, res) => {
   userController.deleteUserCompany(req, res);
 });
 
-const productRepo = new PgProductRepo(pgClient);
+const productRepo = new PgProductRepo(connClient, connAdmin);
 const productService = new ProductService(productRepo);
 const productController = new ProductController(authService, productService);
 
@@ -163,7 +150,7 @@ app.post("/product/get/shop/list", (req, res) => {
   productController.getProductShopList(req, res);
 });
 
-const shopRepo = new PgShopRepo(pgClient);
+const shopRepo = new PgShopRepo(connClient, connAdmin);
 const shopService = new ShopService(shopRepo);
 const shopController = new ShopController(authService, shopService);
 
@@ -192,7 +179,7 @@ app.post("/shop/get/list", (req, res) => {
   shopController.getShopList(req, res);
 });
 
-const companyRepo = new PgCompanyRepo(pgClient);
+const companyRepo = new PgCompanyRepo(connWorker);
 const companyService = new CompanyService(companyRepo);
 const companyController = new CompanyController(authService, companyService);
 
@@ -221,7 +208,7 @@ app.post("/company/get/list", (req, res) => {
   companyController.getCompanyList(req, res);
 });
 
-const orderRepo = new PgOrderRepo(pgClient);
+const orderRepo = new PgOrderRepo(connClient, connWorker);
 const orderService = new OrderService(orderRepo);
 const orderController = new OrderController(authService, orderService);
 
@@ -270,7 +257,7 @@ app.post("/order/get/item/list", (req, res) => {
   orderController.getOrderItemList(req, res);
 });
 
-const manufacturerRepo = new PgManufacturerRepo(pgClient);
+const manufacturerRepo = new PgManufacturerRepo(connAdmin);
 const manufacturerService = new ManufacturerService(manufacturerRepo);
 const manufacturerController = new ManufacturerController(
   authService,
@@ -302,7 +289,7 @@ app.post("/manufacturer/get/list", (req, res) => {
   manufacturerController.getManufacturerList(req, res);
 });
 
-const countryRepo = new PgCountryRepo(pgClient);
+const countryRepo = new PgCountryRepo(connAdmin);
 const countryService = new CountryService(countryRepo);
 const countryController = new CountryController(authService, countryService);
 
@@ -331,7 +318,7 @@ app.post("/country/get/list", (req, res) => {
   countryController.getCountryList(req, res);
 });
 
-const orderStatusRepo = new PgOrderStatusRepo(pgClient);
+const orderStatusRepo = new PgOrderStatusRepo(connAdmin);
 const orderStatusService = new OrderStatusService(orderStatusRepo);
 const orderStatusController = new OrderStatusController(
   authService,
@@ -365,3 +352,24 @@ app.post("/order/status/get/list", (req, res) => {
 
 app.listen(port);
 console.log(`App started. Listening to port ${port}`);
+
+function connectDB(user: string, password: string) {
+  const pgConfig = {
+    host: "localhost",
+    port: 9999,
+    user: user,
+    password: password,
+    database: "main",
+  };
+  const pgClient = new Client(pgConfig);
+
+  pgClient.connect((err) => {
+    if (err) {
+      console.error(`Failed to connect to DB as ${user}`, err.stack);
+    } else {
+      console.log(`Connected to DB as ${user}`);
+    }
+  });
+
+  return pgClient;
+}
