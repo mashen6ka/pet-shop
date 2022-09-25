@@ -3,7 +3,9 @@ create role worker with login inherit encrypted password '1gjg5cjk' connection l
 create role admin with login noinherit createdb createrole encrypted password '2jk493hs' connection limit -1;
 
 grant insert, update, select on table public.user to client;
+grant usage, select on sequence user_id_seq to client;
 grant insert, select on table public.order to client;
+grant usage, select on sequence order_id_seq to client;
 grant select on table public.order_status to client;
 grant insert, select on table public.order__product to client;
 grant select on table public.product to client;
@@ -19,11 +21,16 @@ grant client to worker;
 grant delete on table public.user to worker;
 grant update on table public.order to worker;
 grant insert, update, delete, select on table public.company to worker;
+grant usage, select on sequence company_id_seq to worker;
 grant insert, update, delete, select on table public.user__company to worker;
 grant update, delete  on table public.order__product to worker;
 grant insert, update, delete, select on table public.product__shop to worker;
 
 grant insert, update, delete, select on table public.country to admin;
+grant usage, select on sequence country_id_seq to admin;
 grant insert, update, delete, select on table public.manufacturer to admin;
-grant insert, update, delete, select on table public.order_status to admin;
+grant usage, select on sequence manufacturer_id_seq to admin;
 grant insert, update, delete, select on table public.shop to admin;
+grant usage, select on sequence shop_id_seq to admin;
+grant insert, update, delete, select on table public.order_status to admin;
+grant usage, select on sequence order_status_id_seq to admin;
