@@ -11,6 +11,7 @@ export default class PgUserRepo implements IUserRepo {
     this.connWorker = connWorker;
   }
 
+  // везде возвращать наллы и прочекать
   async getUserIdByLoginAndPassword(
     login: string,
     password: string
@@ -20,7 +21,7 @@ export default class PgUserRepo implements IUserRepo {
        WHERE u.login = $1 and u.password = $2`,
       [login, password]
     );
-    return res?.rows?.[0]?.id;
+    return res?.rows?.[0]?.id || null;
   }
 
   async createSession(userId: number): Promise<string> {

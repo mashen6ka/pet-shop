@@ -23,8 +23,8 @@ export default class UserController extends BaseController {
       if (token === null) {
         throw "User not found";
       }
-      res.cookie(cookieName, token, { httpOnly: true });
-      res.status(200).json({ success: true });
+      // res.cookie(cookieName, token, { httpOnly: true });
+      res.status(200).json({ success: true, data: { token } });
       return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
@@ -34,7 +34,7 @@ export default class UserController extends BaseController {
 
   async createUser(req: Request, res: Response): Promise<Number> {
     try {
-      await this.checkWorkerToken(req);
+      // await this.checkWorkerToken(req);
       const user = plainToInstance(UserEntity, req.body);
       await validateOrReject(user);
       const id = await this.service.createUser(user);
