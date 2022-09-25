@@ -21,7 +21,9 @@ const actions = {
     commit: (arg0: string, arg1: any) => void;
   }) => {
     const { data } = await axios.post(
-      process.env.VUE_APP_SERVER_ADDRESS + "/country/get/list"
+      process.env.VUE_APP_SERVER_ADDRESS + "/country/get/list",
+      {},
+      { withCredentials: true }
     );
     if (data.success) {
       context.commit("SET_COUNTRY_LIST", data.data);
@@ -35,7 +37,8 @@ const actions = {
   ) => {
     const { data } = await axios.post(
       process.env.VUE_APP_SERVER_ADDRESS + "/country/get/",
-      payload
+      payload,
+      { withCredentials: true }
     );
     if (data.success) {
       context.commit("SET_COUNTRY", data.data);

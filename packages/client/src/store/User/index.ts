@@ -5,8 +5,8 @@ const state = {
   userList: [],
   orderList: [],
   companyList: [],
-  accessToken: null,
-  isAuthorized: false,
+  token: "",
+  error: "",
 };
 
 const getters = {
@@ -14,6 +14,8 @@ const getters = {
   USER_ORDER_LIST: (state: { orderList: any }) => state.orderList,
   USER_COMPANY_LIST: (state: { companyList: any }) => state.companyList,
   USER_LIST: (state: { userList: any }) => state.userList,
+  USER_ERROR: (state: { error: any }) => state.error,
+  USER_TOKEN: (state: { token: any }) => state.token,
 };
 
 const mutations = {
@@ -24,9 +26,31 @@ const mutations = {
     (state.companyList = companyList),
   SET_USER_LIST: (state: { userList: any }, userList: any) =>
     (state.userList = userList),
+  SET_USER_ERROR: (state: { error: any }, error: any) => (state.error = error),
+  SET_USER_TOKEN: (state: { token: any }, token: any) => (state.token = token),
 };
 
 const actions = {
+  // надо норм переписать
+  AUTHORIZE_USER: async (
+    context: {
+      commit: (arg0: string, arg1: any) => void;
+    },
+    payload: any
+  ) => {
+    axios
+      .post(process.env.VUE_APP_SERVER_ADDRESS + "/user/authn", payload, {
+        withCredentials: false,
+      })
+      .then((res) => {
+        context.commit("SET_USER_ERROR", "");
+        context.commit("SET_USER_TOKEN", res.data.data.token);
+      })
+      .catch((err) => {
+        context.commit("SET_USER_ERROR", err.response.data.error);
+        context.commit("SET_USER_TOKEN", "");
+      });
+  },
   // переписать тут все вообще блин!
   GET_USER_ORDER_LIST: async (
     context: {
@@ -36,7 +60,8 @@ const actions = {
   ) => {
     const orderRes = await axios.post(
       process.env.VUE_APP_SERVER_ADDRESS + "/user/get/order/list",
-      payload
+      payload,
+      { withCredentials: true }
     );
     const orderList = orderRes.data.data;
     if (orderRes.data.success) {
@@ -45,7 +70,8 @@ const actions = {
         const orderId = order.id;
         const { data } = await axios.post(
           process.env.VUE_APP_SERVER_ADDRESS + "/order/get/item/list",
-          { orderId: orderId }
+          { orderId: orderId },
+          { withCredentials: true }
         );
         order.itemList = data.data;
       }
@@ -71,7 +97,8 @@ const actions = {
   ) => {
     const { data } = await axios.post(
       process.env.VUE_APP_SERVER_ADDRESS + "/user/get/company/list",
-      payload
+      payload,
+      { withCredentials: true }
     );
     if (data.success) {
       context.commit("SET_USER_COMPANY_LIST", data.data);
@@ -85,29 +112,20 @@ const actions = {
   ) => {
     const { data } = await axios.post(
       process.env.VUE_APP_SERVER_ADDRESS + "/user/get/",
-      payload
+      payload,
+      { withCredentials: true }
     );
     if (data.success) {
       context.commit("SET_USER", data.data);
     }
-    // context.commit("SET_USER", {
-    //   id: 1,
-    //   firstName: "Maria",
-    //   lastName: "Slepokurova",
-    //   middleName: "Fedorovna",
-    //   email: "mari@gmail.com",
-    //   phone: "+79998576939",
-    //   personalDiscount: 20,
-    //   birthday: "2001-11-05",
-    //   login: "mashenka",
-    //   password: "qwerty",
-    // });
   },
   GET_USER_LIST: async (context: {
     commit: (arg0: string, arg1: any) => void;
   }) => {
     const { data } = await axios.post(
-      process.env.VUE_APP_SERVER_ADDRESS + "/user/get/list"
+      process.env.VUE_APP_SERVER_ADDRESS + "/user/get/list",
+      {},
+      { withCredentials: true }
     );
     if (data.success) {
       context.commit("SET_USER_LIST", data.data);
@@ -131,7 +149,8 @@ const actions = {
         completedAt: payload.completedAt,
         shopId: payload.shopId,
         price: payload.price,
-      }
+      },
+      { withCredentials: true }
     );
     // пока пофиг на все проверки если что
     const orderId = data.data.id;
@@ -143,7 +162,8 @@ const actions = {
           orderId: orderId,
           productId: item.product.id,
           quantity: item.quantity,
-        }
+        },
+        { withCredentials: true }
       );
     }
   },

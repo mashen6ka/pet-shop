@@ -178,6 +178,9 @@ export default {
     BCard,
   },
   computed: {
+    user() {
+      return this.$store.getters["user/USER"];
+    },
     orderList() {
       return this.$store.getters["order/ORDER_LIST"];
     },
@@ -194,7 +197,23 @@ export default {
       return this.$store.getters["user/USER_LIST"];
     },
   },
+  // страница оч медленная, мб стоит получать айтемы заказа только при нажатии на кнопку просмотра для конкретного заказа
   mounted() {
+    const token = this.$cookies.get(process.env.VUE_APP_AUTH_COOKIE_NAME);
+    if (!token) {
+      this.$router.push("/login");
+    } else {
+      // тут траблы с хуками жизненного цикла мб, наверное можно решить, сохраняя юзера в локалсторэдж сразу после авторизации
+      // Promise.all([this.$store.dispatch("user/GET_USER", {})]);
+      // if (!this.user.worker) {
+      //   this.$store.commit(
+      //     "user/SET_USER_ERROR",
+      //     "Access denied for current user"
+      //   );
+      //   this.$router.push("/login");
+      // }
+    }
+
     Promise.all([
       this.$store.dispatch("order/GET_ORDER_LIST"),
       this.$store.dispatch("company/GET_COMPANY_LIST"),

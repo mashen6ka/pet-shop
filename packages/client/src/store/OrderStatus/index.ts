@@ -20,7 +20,9 @@ const actions = {
     commit: (arg0: string, arg1: any) => void;
   }) => {
     const { data } = await axios.post(
-      process.env.VUE_APP_SERVER_ADDRESS + "/order/status/get/list"
+      process.env.VUE_APP_SERVER_ADDRESS + "/order/status/get/list",
+      {},
+      { withCredentials: true }
     );
     if (data.success) {
       context.commit("SET_ORDER_STATUS_LIST", data.data);

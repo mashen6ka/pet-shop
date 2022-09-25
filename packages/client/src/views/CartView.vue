@@ -229,6 +229,9 @@ export default {
     BAlert,
   },
   computed: {
+    // надо норм проверку на авторизацию сделать везде, чтобы в консоль ошибки не летели
+    // еще норм обрабатывать пустой список айтемов (когда 0 заказов сделано)
+    // еще поймала баг при релоаде аккаунта слетает бейдж с кол-вом товаров в корзине (мб беды с синхронизацией локалсторэджа и вьюэкса)
     serverAddress() {
       return process.env.VUE_APP_SERVER_ADDRESS;
     },
@@ -250,10 +253,6 @@ export default {
       this.itemList.forEach((item) => (quantity += item.quantity));
       return quantity;
     },
-    userId() {
-      // ы
-      return 5;
-    },
     user() {
       return this.$store.getters["user/USER"];
     },
@@ -265,11 +264,14 @@ export default {
     },
   },
   mounted() {
+    const token = this.$cookies.get(process.env.VUE_APP_AUTH_COOKIE_NAME);
+    if (!token) {
+      this.$router.push("/login");
+    }
+
     Promise.all([
-      this.$store.dispatch("user/GET_USER", { id: this.userId }),
-      this.$store.dispatch("user/GET_USER_COMPANY_LIST", {
-        userId: this.userId,
-      }),
+      this.$store.dispatch("user/GET_USER", {}),
+      this.$store.dispatch("user/GET_USER_COMPANY_LIST", {}),
       this.$store.dispatch("shop/GET_SHOP_LIST"),
       this.$store.dispatch("cart/SET_CART", JSON.parse(localStorage.cart)),
     ]);

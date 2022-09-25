@@ -103,7 +103,7 @@ export default class PgProductRepo implements IProductRepo {
 
   async getProductShopList(productId: number): Promise<Array<ShopEntity>> {
     const res = await this.connClient.query(
-      `SELECT id, address, working_hours, phone
+      `SELECT DISTINCT id, address, working_hours, phone
        FROM "shop" s JOIN product__shop ps ON s.id = ps.shop_id
        WHERE ps.product_id = $1 AND not(ps.quantity = 0)`,
       [productId]

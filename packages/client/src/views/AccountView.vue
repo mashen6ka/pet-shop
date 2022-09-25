@@ -374,10 +374,7 @@ export default {
     BModal,
   },
   computed: {
-    userId() {
-      // ы
-      return 5;
-    },
+    // надо норм проверку на авторизацию сделать везде, чтобы в консоль ошибки не летели
     user() {
       return this.$store.getters["user/USER"];
     },
@@ -398,12 +395,16 @@ export default {
     },
   },
   mounted() {
+    const token = this.$cookies.get(process.env.VUE_APP_AUTH_COOKIE_NAME);
+    if (!token) {
+      this.$router.push("/login");
+    }
+
+    // мб юзера сохранять в локал сторэдж?
     Promise.all([
-      this.$store.dispatch("user/GET_USER", { id: this.userId }),
-      this.$store.dispatch("user/GET_USER_COMPANY_LIST", {
-        userId: this.userId,
-      }),
-      this.$store.dispatch("user/GET_USER_ORDER_LIST", { userId: this.userId }),
+      this.$store.dispatch("user/GET_USER", {}),
+      this.$store.dispatch("user/GET_USER_COMPANY_LIST", {}),
+      this.$store.dispatch("user/GET_USER_ORDER_LIST", {}),
       this.$store.dispatch("company/GET_COMPANY_LIST"),
       this.$store.dispatch("orderStatus/GET_ORDER_STATUS_LIST"),
       this.$store.dispatch("shop/GET_SHOP_LIST"),

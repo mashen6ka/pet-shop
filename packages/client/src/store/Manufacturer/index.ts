@@ -24,7 +24,9 @@ const actions = {
     commit: (arg0: string, arg1: any) => void;
   }) => {
     const { data } = await axios.post(
-      process.env.VUE_APP_SERVER_ADDRESS + "/manufacturer/get/list"
+      process.env.VUE_APP_SERVER_ADDRESS + "/manufacturer/get/list",
+      {},
+      { withCredentials: true }
     );
     if (data.success) {
       context.commit("SET_MANUFACTURER_LIST", data.data);
@@ -38,7 +40,8 @@ const actions = {
   ) => {
     const { data } = await axios.post(
       process.env.VUE_APP_SERVER_ADDRESS + "/manufacturer/get/",
-      payload
+      payload,
+      { withCredentials: true }
     );
     if (data.success) {
       context.commit("SET_MANUFACTURER", data.data);

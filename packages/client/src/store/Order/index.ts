@@ -23,7 +23,8 @@ const actions = {
   ) => {
     const orderRes = await axios.post(
       process.env.VUE_APP_SERVER_ADDRESS + "/order/get/list",
-      payload
+      payload,
+      { withCredentials: true }
     );
     const orderList = orderRes.data.data;
     if (orderRes.data.success) {
@@ -32,7 +33,8 @@ const actions = {
         const orderId = order.id;
         const { data } = await axios.post(
           process.env.VUE_APP_SERVER_ADDRESS + "/order/get/item/list",
-          { orderId: orderId }
+          { orderId: orderId },
+          { withCredentials: true }
         );
         order.itemList = data.data;
       }
@@ -54,7 +56,8 @@ const actions = {
   UPDATE_ORDER: async (context: any, payload: any) => {
     const res = await axios.post(
       process.env.VUE_APP_SERVER_ADDRESS + "/order/update",
-      payload
+      payload,
+      { withCredentials: true }
     );
     // наверн сюда еще апдейт айтемов надо вынести
     const orderList = context?.state?.orderList?.map((order: any) => {

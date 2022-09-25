@@ -27,7 +27,9 @@ const actions = {
     commit: (arg0: string, arg1: any) => void;
   }) => {
     const { data } = await axios.post(
-      process.env.VUE_APP_SERVER_ADDRESS + "/product/get/list"
+      process.env.VUE_APP_SERVER_ADDRESS + "/product/get/list",
+      {},
+      { withCredentials: true }
     );
     if (data.success) {
       context.commit("SET_PRODUCT_LIST", data.data);
@@ -41,7 +43,8 @@ const actions = {
   ) => {
     const { data } = await axios.post(
       process.env.VUE_APP_SERVER_ADDRESS + "/product/get/",
-      payload
+      payload,
+      { withCredentials: true }
     );
     if (data.success) {
       context.commit("SET_PRODUCT", data.data);
@@ -55,7 +58,8 @@ const actions = {
   ) => {
     const { data } = await axios.post(
       process.env.VUE_APP_SERVER_ADDRESS + "/product/get/shop/list",
-      payload
+      payload,
+      { withCredentials: true }
     );
     if (data.success) {
       context.commit("SET_PRODUCT_SHOP_LIST", data.data);
