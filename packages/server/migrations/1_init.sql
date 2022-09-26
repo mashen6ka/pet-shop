@@ -29,7 +29,8 @@ CREATE TABLE "company" (
 
 CREATE TABLE "user__company" (
   "user_id" int NOT NULL,
-  "company_id" int NOT NULL
+  "company_id" int NOT NULL,
+  PRIMARY KEY (user_id, company_id)
 );
 
 CREATE TABLE "product" (
@@ -46,7 +47,8 @@ CREATE TABLE "product" (
 CREATE TABLE "product__shop" (
   "product_id" int NOT NULL,
   "shop_id" int NOT NULL,
-  "quantity" int NOT NULL
+  "quantity" int NOT NULL,
+  PRIMARY KEY (product_id, shop_id)
 );
 
 CREATE TABLE "country" (
@@ -77,36 +79,38 @@ CREATE TABLE "order_status" (
 CREATE TABLE "order__product" (
   "order_id" int NOT NULL,
   "product_id" int NOT NULL,
-  "quantity" int NOT NULL DEFAULT 1
+  "quantity" int NOT NULL DEFAULT 1,
+  PRIMARY KEY (order_id, product_id)
 );
 
 CREATE TABLE "session" (
   "user_id" int NOT NULL,
   "token" text UNIQUE NOT NULL,
+  PRIMARY KEY (user_id, token)
 );
 
 ALTER TABLE "session" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "user__company" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+ALTER TABLE "user__company" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "user__company" ADD FOREIGN KEY ("company_id") REFERENCES "company" ("id");
+ALTER TABLE "user__company" ADD FOREIGN KEY ("company_id") REFERENCES "company" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "product__shop" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
+ALTER TABLE "product__shop" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "product__shop" ADD FOREIGN KEY ("shop_id") REFERENCES "shop" ("id");
+ALTER TABLE "product__shop" ADD FOREIGN KEY ("shop_id") REFERENCES "shop" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "product" ADD FOREIGN KEY ("country_id") REFERENCES "country" ("id");
+ALTER TABLE "product" ADD FOREIGN KEY ("country_id") REFERENCES "country" ("id") ON DELETE SET NULL;
 
-ALTER TABLE "product" ADD FOREIGN KEY ("manufacturer_id") REFERENCES "manufacturer" ("id");
+ALTER TABLE "product" ADD FOREIGN KEY ("manufacturer_id") REFERENCES "manufacturer" ("id") ON DELETE SET NULL;
 
-ALTER TABLE "order" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+ALTER TABLE "order" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id") ON DELETE SET NULL;
 
-ALTER TABLE "order" ADD FOREIGN KEY ("company_id") REFERENCES "company" ("id");
+ALTER TABLE "order" ADD FOREIGN KEY ("company_id") REFERENCES "company" ("id") ON DELETE SET NULL;
 
-ALTER TABLE "order" ADD FOREIGN KEY ("status_id") REFERENCES "order_status" ("id");
+ALTER TABLE "order" ADD FOREIGN KEY ("status_id") REFERENCES "order_status" ("id") ON DELETE SET NULL;
 
-ALTER TABLE "order" ADD FOREIGN KEY ("shop_id") REFERENCES "shop" ("id");
+ALTER TABLE "order" ADD FOREIGN KEY ("shop_id") REFERENCES "shop" ("id") ON DELETE SET NULL;
 
-ALTER TABLE "order__product" ADD FOREIGN KEY ("order_id") REFERENCES "order" ("id");
+ALTER TABLE "order__product" ADD FOREIGN KEY ("order_id") REFERENCES "order" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "order__product" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id");
+ALTER TABLE "order__product" ADD FOREIGN KEY ("product_id") REFERENCES "product" ("id")  ON DELETE SET NULL;
