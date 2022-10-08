@@ -8,7 +8,7 @@ export default class OrderService {
     this.repo = repo;
   }
 
-  async createOrder(order: OrderEntity): Promise<Number> {
+  async createOrder(order: OrderEntity): Promise<number> {
     const id = await this.repo.createOrder(order);
     return id;
   }

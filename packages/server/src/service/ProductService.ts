@@ -9,7 +9,7 @@ export default class ProductService {
     this.repo = repo;
   }
 
-  async createProduct(product: ProductEntity): Promise<Number> {
+  async createProduct(product: ProductEntity): Promise<number> {
     const id = await this.repo.createProduct(product);
     return id;
   }

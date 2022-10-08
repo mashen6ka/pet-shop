@@ -8,7 +8,7 @@ export default class CompanyService {
     this.repo = repo;
   }
 
-  async createCompany(company: CompanyEntity): Promise<Number> {
+  async createCompany(company: CompanyEntity): Promise<number> {
     const id = await this.repo.createCompany(company);
     return id;
   }

@@ -9,7 +9,7 @@ export default class PgShopRepo implements IShopRepo {
     this.conn = conn;
   }
 
-  async createShop(shop: ShopEntity): Promise<Number> {
+  async createShop(shop: ShopEntity): Promise<number> {
     const res = await this.conn.query(
       `INSERT INTO shop (address, working_hours, phone)
        VALUES ($1, $2, $3)

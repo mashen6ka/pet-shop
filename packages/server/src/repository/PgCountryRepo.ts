@@ -9,7 +9,7 @@ export default class PgCountryRepo implements ICountryRepo {
     this.conn = conn;
   }
 
-  async createCountry(country: CountryEntity): Promise<Number> {
+  async createCountry(country: CountryEntity): Promise<number> {
     const res = await this.conn.query(
       `INSERT INTO "country" (name)
        VALUES ($1)

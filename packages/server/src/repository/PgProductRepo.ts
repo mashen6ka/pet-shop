@@ -9,7 +9,7 @@ export default class PgProductRepo implements IProductRepo {
     this.conn = conn;
   }
 
-  async createProduct(product: ProductEntity): Promise<Number> {
+  async createProduct(product: ProductEntity): Promise<number> {
     const res = await this.conn.query(
       `INSERT INTO "product" (name, description, country_id, initial_price, 
         discount, manufacturer_id, img_url)

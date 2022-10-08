@@ -1,7 +1,7 @@
 import { ProductEntity, ShopEntity } from "../entity";
 
 export default interface IProductRepo {
-  createProduct: (product: ProductEntity) => Promise<Number>;
+  createProduct: (product: ProductEntity) => Promise<number>;
   updateProduct: (product: ProductEntity) => Promise<void>;
   deleteProduct: (id: number) => Promise<void>;
   getProduct: (id: number) => Promise<ProductEntity>;

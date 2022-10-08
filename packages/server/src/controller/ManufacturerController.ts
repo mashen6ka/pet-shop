@@ -17,7 +17,7 @@ export default class ManufacturerController extends BaseController {
     this.service = manufacturerService;
   }
 
-  async createManufacturer(req: Request, res: Response): Promise<Number> {
+  async createManufacturer(req: Request, res: Response): Promise<number> {
     try {
       await this.checkWorkerToken(req);
       const manufacturer = plainToInstance(ManufacturerEntity, req.body);

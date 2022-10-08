@@ -14,7 +14,7 @@ export default class CompanyController extends BaseController {
     this.service = companyService;
   }
 
-  async createCompany(req: Request, res: Response): Promise<Number> {
+  async createCompany(req: Request, res: Response): Promise<number> {
     try {
       await this.checkWorkerToken(req);
       const company = plainToInstance(CompanyEntity, req.body);

@@ -8,7 +8,7 @@ export default class CountryService {
     this.repo = repo;
   }
 
-  async createCountry(country: CountryEntity): Promise<Number> {
+  async createCountry(country: CountryEntity): Promise<number> {
     const id = await this.repo.createCountry(country);
     return id;
   }

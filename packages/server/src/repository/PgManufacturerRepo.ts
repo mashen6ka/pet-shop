@@ -9,7 +9,7 @@ export default class PgManufacturerRepo implements IManufacturerRepo {
     this.conn = conn;
   }
 
-  async createManufacturer(manufacturer: ManufacturerEntity): Promise<Number> {
+  async createManufacturer(manufacturer: ManufacturerEntity): Promise<number> {
     const res = await this.conn.query(
       `INSERT INTO "manufacturer" (name)
        VALUES ($1)

@@ -9,7 +9,7 @@ export default class ShopService {
     this.repo = repo;
   }
 
-  async createShop(shop: ShopEntity): Promise<Number> {
+  async createShop(shop: ShopEntity): Promise<number> {
     const id = await this.repo.createShop(shop);
     return id;
   }

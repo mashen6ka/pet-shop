@@ -17,7 +17,7 @@ export default class OrderStatusController extends BaseController {
     this.service = orderStatusService;
   }
 
-  async createOrderStatus(req: Request, res: Response): Promise<Number> {
+  async createOrderStatus(req: Request, res: Response): Promise<number> {
     try {
       await this.checkWorkerToken(req);
       const orderStatus = plainToInstance(OrderStatusEntity, req.body);

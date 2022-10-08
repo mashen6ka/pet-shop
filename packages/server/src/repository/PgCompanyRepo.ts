@@ -9,8 +9,7 @@ export default class PgCompanyRepo implements ICompanyRepo {
     this.conn = conn;
   }
 
-  async createCompany(company: CompanyEntity): Promise<Number> {
-    console.log(company);
+  async createCompany(company: CompanyEntity): Promise<number> {
     const res = await this.conn.query(
       `INSERT INTO company (name, "KPP", "INN", address) 
        VALUES ($1, $2, $3, $4)

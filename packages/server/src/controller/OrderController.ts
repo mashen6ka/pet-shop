@@ -14,7 +14,7 @@ export default class OrderController extends BaseController {
     this.service = service;
   }
 
-  async createOrder(req: Request, res: Response): Promise<Number> {
+  async createOrder(req: Request, res: Response): Promise<number> {
     try {
       const userId = await this.getUserIdByToken(req);
       const order = plainToInstance(OrderEntity, req.body);

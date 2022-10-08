@@ -14,7 +14,7 @@ export default class CountryController extends BaseController {
     this.service = countryService;
   }
 
-  async createCountry(req: Request, res: Response): Promise<Number> {
+  async createCountry(req: Request, res: Response): Promise<number> {
     try {
       const country = plainToInstance(CountryEntity, req.body);
       await validateOrReject(country);

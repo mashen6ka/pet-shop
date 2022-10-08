@@ -9,7 +9,7 @@ export default class ManufacturerService {
     this.repo = repo;
   }
 
-  async createManufacturer(manufacturer: ManufacturerEntity): Promise<Number> {
+  async createManufacturer(manufacturer: ManufacturerEntity): Promise<number> {
     const id = await this.repo.createManufacturer(manufacturer);
     return id;
   }

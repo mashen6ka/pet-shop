@@ -14,7 +14,7 @@ export default class ShopController extends BaseController {
     this.service = shopService;
   }
 
-  async createShop(req: Request, res: Response): Promise<Number> {
+  async createShop(req: Request, res: Response): Promise<number> {
     try {
       await this.checkWorkerToken(req);
       const shop = plainToInstance(ShopEntity, req.body);

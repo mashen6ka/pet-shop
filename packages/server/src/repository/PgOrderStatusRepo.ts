@@ -9,7 +9,7 @@ export default class PgOrderStatusRepo implements IOrderStatusRepo {
     this.conn = conn;
   }
 
-  async createOrderStatus(orderStatus: OrderStatusEntity): Promise<Number> {
+  async createOrderStatus(orderStatus: OrderStatusEntity): Promise<number> {
     const res = await this.conn.query(
       `INSERT INTO "order_status" (name)
        VALUES ($1)

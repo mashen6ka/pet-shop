@@ -15,7 +15,7 @@ export default class UserController extends BaseController {
     this.service = userService;
   }
 
-  async authenticateUser(req: Request, res: Response): Promise<Number> {
+  async authenticateUser(req: Request, res: Response): Promise<number> {
     try {
       const authn = plainToInstance(AuthnEntity, req.body);
       await validateOrReject(authn);
@@ -32,7 +32,7 @@ export default class UserController extends BaseController {
     }
   }
 
-  async createUser(req: Request, res: Response): Promise<Number> {
+  async createUser(req: Request, res: Response): Promise<number> {
     try {
       // await this.checkWorkerToken(req);
       const user = plainToInstance(UserEntity, req.body);

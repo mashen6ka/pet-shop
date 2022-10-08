@@ -8,7 +8,7 @@ export default class OrderStatusService {
     this.repo = repo;
   }
 
-  async createOrderStatus(orderStatus: OrderStatusEntity): Promise<Number> {
+  async createOrderStatus(orderStatus: OrderStatusEntity): Promise<number> {
     const id = await this.repo.createOrderStatus(orderStatus);
     return id;
   }

@@ -14,7 +14,7 @@ export default class ProductController extends BaseController {
     this.service = productService;
   }
 
-  async createProduct(req: Request, res: Response): Promise<Number> {
+  async createProduct(req: Request, res: Response): Promise<number> {
     try {
       await this.checkWorkerToken(req);
       const product = plainToInstance(ProductEntity, req.body);
