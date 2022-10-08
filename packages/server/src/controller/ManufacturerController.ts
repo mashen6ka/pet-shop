@@ -66,9 +66,9 @@ export default class ManufacturerController extends BaseController {
     res: Response
   ): Promise<ManufacturerEntity> {
     try {
-      const id = req.body.id;
-      if (!Number.isInteger(id)) {
-        throw "Invalid data: id must be an int value";
+      const id = Number(req.query.id);
+      if (!id) {
+        throw "Invalid data: no manufacturer id";
       }
       const manufacturer = await this.service.getManufacturer(id);
       if (_.isEmpty(manufacturer)) {

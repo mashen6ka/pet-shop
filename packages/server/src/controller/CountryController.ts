@@ -57,9 +57,9 @@ export default class CountryController extends BaseController {
 
   async getCountry(req: Request, res: Response): Promise<CountryEntity> {
     try {
-      const id = req.body.id;
-      if (!Number.isInteger(id)) {
-        throw "Invalid data: id must be an int value";
+      const id = Number(req.query.id);
+      if (!id) {
+        throw "Invalid data: no country id";
       }
       const country = await this.service.getCountry(id);
       if (_.isEmpty(country)) {

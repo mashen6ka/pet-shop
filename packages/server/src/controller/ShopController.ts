@@ -60,9 +60,9 @@ export default class ShopController extends BaseController {
 
   async getShop(req: Request, res: Response): Promise<ShopEntity> {
     try {
-      const id = req.body.id;
-      if (!Number.isInteger(id)) {
-        throw "Invalid data: id must be an int value";
+      const id = Number(req.query.id);
+      if (!id) {
+        throw "Invalid data: no shop id";
       }
       const shop = await this.service.getShop(id);
       if (_.isEmpty(shop)) {

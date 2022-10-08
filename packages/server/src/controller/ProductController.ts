@@ -60,9 +60,9 @@ export default class ProductController extends BaseController {
 
   async getProduct(req: Request, res: Response): Promise<ProductEntity> {
     try {
-      const id = req.body.id;
-      if (!Number.isInteger(id)) {
-        throw "Invalid data: id must be an int value";
+      const id = Number(req.query.id);
+      if (!id) {
+        throw "Invalid data: no product id";
       }
       const product = await this.service.getProduct(id);
       if (_.isEmpty(product)) {
@@ -98,9 +98,9 @@ export default class ProductController extends BaseController {
     res: Response
   ): Promise<Array<ShopEntity>> {
     try {
-      const productId = req.body.productId;
-      if (!Number.isInteger(productId)) {
-        throw "Invalid data: productId must be an int value";
+      const productId = Number(req.query.productId);
+      if (!productId) {
+        throw "Invalid data: no product id";
       }
       const shopList = await this.service.getProductShopList(productId);
       res.status(200).json({ success: true, data: shopList });

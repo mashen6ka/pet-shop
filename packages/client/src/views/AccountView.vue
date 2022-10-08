@@ -402,9 +402,9 @@ export default {
 
     // мб юзера сохранять в локал сторэдж?
     Promise.all([
-      this.$store.dispatch("user/GET_USER", {}),
-      this.$store.dispatch("user/GET_USER_COMPANY_LIST", {}),
-      this.$store.dispatch("user/GET_USER_ORDER_LIST", {}),
+      this.$store.dispatch("user/GET_USER"),
+      this.$store.dispatch("user/GET_USER_COMPANY_LIST"),
+      this.$store.dispatch("user/GET_USER_ORDER_LIST"),
       this.$store.dispatch("company/GET_COMPANY_LIST"),
       this.$store.dispatch("orderStatus/GET_ORDER_STATUS_LIST"),
       this.$store.dispatch("shop/GET_SHOP_LIST"),

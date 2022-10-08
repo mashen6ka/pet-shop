@@ -19,9 +19,8 @@ const actions = {
   GET_ORDER_STATUS_LIST: async (context: {
     commit: (arg0: string, arg1: any) => void;
   }) => {
-    const { data } = await axios.post(
+    const { data } = await axios.get(
       process.env.VUE_APP_SERVER_ADDRESS + "/order/status/get/list",
-      {},
       { withCredentials: true }
     );
     if (data.success) {

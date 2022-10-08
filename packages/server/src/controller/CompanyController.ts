@@ -61,9 +61,9 @@ export default class CompanyController extends BaseController {
   async getCompany(req: Request, res: Response): Promise<CompanyEntity> {
     try {
       await this.checkWorkerToken(req);
-      const id = req.body.id;
-      if (!Number.isInteger(id)) {
-        throw "Invalid data: id must be an int value";
+      const id = Number(req.query.id);
+      if (!id) {
+        throw "Invalid data: no company id";
       }
       const company = await this.service.getCompany(id);
       if (_.isEmpty(company)) {

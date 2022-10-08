@@ -62,9 +62,9 @@ export default class OrderController extends BaseController {
   async getOrder(req: Request, res: Response): Promise<OrderEntity> {
     try {
       await this.checkWorkerToken(req);
-      const id = req.body.id;
-      if (!Number.isInteger(id)) {
-        throw "Invalid data: id must be an int value";
+      const id = Number(req.query.id);
+      if (!id) {
+        throw "Invalid data: no order id";
       }
       const order = await this.service.getOrder(id);
       if (_.isEmpty(order)) {
@@ -166,9 +166,9 @@ export default class OrderController extends BaseController {
 
   async getOrderItemList(req: Request, res: Response): Promise<OrderEntity> {
     try {
-      const orderId = req.body.orderId;
-      if (!Number.isInteger(orderId)) {
-        throw "Invalid data: orderId must be an int value";
+      const orderId = Number(req.query.orderId);
+      if (!orderId) {
+        throw "Invalid data: no order id";
       }
       const orderItemList = await this.service.getOrderItemList(orderId);
       if (orderItemList.length === 0) {

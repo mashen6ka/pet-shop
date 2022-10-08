@@ -270,8 +270,8 @@ export default {
     }
 
     Promise.all([
-      this.$store.dispatch("user/GET_USER", {}),
-      this.$store.dispatch("user/GET_USER_COMPANY_LIST", {}),
+      this.$store.dispatch("user/GET_USER"),
+      this.$store.dispatch("user/GET_USER_COMPANY_LIST"),
       this.$store.dispatch("shop/GET_SHOP_LIST"),
       this.$store.dispatch("cart/SET_CART", JSON.parse(localStorage.cart)),
     ]);

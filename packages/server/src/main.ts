@@ -78,23 +78,23 @@ app.post("/user/delete", (req, res) => {
 });
 
 // занулять пароль
-app.post("/user/get", (req, res) => {
-  console.log(req.body);
+app.get("/user/get", (req, res) => {
+  console.log(req.query);
   userController.getUser(req, res);
 });
 
-app.post("/user/get/list", (req, res) => {
-  console.log(req.body);
+app.get("/user/get/list", (req, res) => {
+  console.log(req.query);
   userController.getUserList(req, res);
 });
 
-app.post("/user/get/company/list", (req, res) => {
-  console.log(req.body);
+app.get("/user/get/company/list", (req, res) => {
+  console.log(req.query);
   userController.getUserCompanyList(req, res);
 });
 
-app.post("/user/get/order/list", (req, res) => {
-  console.log(req.body);
+app.get("/user/get/order/list", (req, res) => {
+  console.log(req.query);
   userController.getUserOrderList(req, res);
 });
 
@@ -127,18 +127,18 @@ app.post("/product/delete", (req, res) => {
   productController.deleteProduct(req, res);
 });
 
-app.post("/product/get", (req, res) => {
-  console.log(req.body);
+app.get("/product/get", (req, res) => {
+  console.log(req.query);
   productController.getProduct(req, res);
 });
 
-app.post("/product/get/list", (req, res) => {
-  console.log(req.body);
+app.get("/product/get/list", (req, res) => {
+  console.log(req.query);
   productController.getProductList(req, res);
 });
 
-app.post("/product/get/shop/list", (req, res) => {
-  console.log(req.body);
+app.get("/product/get/shop/list", (req, res) => {
+  console.log(req.query);
   productController.getProductShopList(req, res);
 });
 
@@ -161,13 +161,13 @@ app.post("/shop/delete", (req, res) => {
   shopController.deleteShop(req, res);
 });
 
-app.post("/shop/get", (req, res) => {
-  console.log(req.body);
+app.get("/shop/get", (req, res) => {
+  console.log(req.query);
   shopController.getShop(req, res);
 });
 
-app.post("/shop/get/list", (req, res) => {
-  console.log(req.body);
+app.get("/shop/get/list", (req, res) => {
+  console.log(req.query);
   shopController.getShopList(req, res);
 });
 
@@ -190,13 +190,13 @@ app.post("/company/delete", (req, res) => {
   companyController.deleteCompany(req, res);
 });
 
-app.post("/company/get", (req, res) => {
-  console.log(req.body);
+app.get("/company/get", (req, res) => {
+  console.log(req.query);
   companyController.getCompany(req, res);
 });
 
-app.post("/company/get/list", (req, res) => {
-  console.log(req.body);
+app.get("/company/get/list", (req, res) => {
+  console.log(req.query);
   companyController.getCompanyList(req, res);
 });
 
@@ -219,13 +219,13 @@ app.post("/order/delete", (req, res) => {
   orderController.deleteOrder(req, res);
 });
 
-app.post("/order/get", (req, res) => {
-  console.log(req.body);
+app.get("/order/get", (req, res) => {
+  console.log(req.query);
   orderController.getOrder(req, res);
 });
 
-app.post("/order/get/list", (req, res) => {
-  console.log(req.body);
+app.get("/order/get/list", (req, res) => {
+  console.log(req.query);
   orderController.getOrderList(req, res);
 });
 
@@ -244,8 +244,8 @@ app.post("/order/update/item", (req, res) => {
   orderController.updateOrderItem(req, res);
 });
 
-app.post("/order/get/item/list", (req, res) => {
-  console.log(req.body);
+app.get("/order/get/item/list", (req, res) => {
+  console.log(req.query);
   orderController.getOrderItemList(req, res);
 });
 
@@ -271,13 +271,13 @@ app.post("/manufacturer/delete", (req, res) => {
   manufacturerController.deleteManufacturer(req, res);
 });
 
-app.post("/manufacturer/get", (req, res) => {
-  console.log(req.body);
+app.get("/manufacturer/get", (req, res) => {
+  console.log(req.query);
   manufacturerController.getManufacturer(req, res);
 });
 
-app.post("/manufacturer/get/list", (req, res) => {
-  console.log(req.body);
+app.get("/manufacturer/get/list", (req, res) => {
+  console.log(req.query);
   manufacturerController.getManufacturerList(req, res);
 });
 
@@ -300,13 +300,13 @@ app.post("/country/delete", (req, res) => {
   countryController.deleteCountry(req, res);
 });
 
-app.post("/country/get", (req, res) => {
-  console.log(req.body);
+app.get("/country/get", (req, res) => {
+  console.log(req.query);
   countryController.getCountry(req, res);
 });
 
-app.post("/country/get/list", (req, res) => {
-  console.log(req.body);
+app.get("/country/get/list", (req, res) => {
+  console.log(req.query);
   countryController.getCountryList(req, res);
 });
 
@@ -332,13 +332,13 @@ app.post("/order/status/delete", (req, res) => {
   orderStatusController.deleteOrderStatus(req, res);
 });
 
-app.post("/order/status/get", (req, res) => {
-  console.log(req.body);
+app.get("/order/status/get", (req, res) => {
+  console.log(req.query);
   orderStatusController.getOrderStatus(req, res);
 });
 
-app.post("/order/status/get/list", (req, res) => {
-  console.log(req.body);
+app.get("/order/status/get/list", (req, res) => {
+  console.log(req.query);
   orderStatusController.getOrderStatusList(req, res);
 });
 

@@ -15,15 +15,11 @@ const mutations = {
 
 // реорганизовать store/user и store/order
 const actions = {
-  GET_ORDER_LIST: async (
-    context: {
-      commit: (arg0: string, arg1: any) => void;
-    },
-    payload: any
-  ) => {
-    const orderRes = await axios.post(
+  GET_ORDER_LIST: async (context: {
+    commit: (arg0: string, arg1: any) => void;
+  }) => {
+    const orderRes = await axios.get(
       process.env.VUE_APP_SERVER_ADDRESS + "/order/get/list",
-      payload,
       { withCredentials: true }
     );
     const orderList = orderRes.data.data;
@@ -31,9 +27,9 @@ const actions = {
       for (const order of orderList) {
         // если в заказе нет айтемов, все сломается
         const orderId = order.id;
-        const { data } = await axios.post(
-          process.env.VUE_APP_SERVER_ADDRESS + "/order/get/item/list",
-          { orderId: orderId },
+        const { data } = await axios.get(
+          process.env.VUE_APP_SERVER_ADDRESS +
+            `/order/get/item/list/?orderId=${orderId}`,
           { withCredentials: true }
         );
         order.itemList = data.data;

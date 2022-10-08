@@ -66,9 +66,9 @@ export default class OrderStatusController extends BaseController {
     res: Response
   ): Promise<OrderStatusEntity> {
     try {
-      const id = req.body.id;
-      if (!Number.isInteger(id)) {
-        throw "Invalid data: id must be an int value";
+      const id = Number(req.query.id);
+      if (!id) {
+        throw "Invalid data: no order status id";
       }
       const orderStatus = await this.service.getOrderStatus(id);
       if (_.isEmpty(orderStatus)) {

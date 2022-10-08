@@ -39,7 +39,7 @@ const actions = {
     payload: any
   ) => {
     axios
-      .post(process.env.VUE_APP_SERVER_ADDRESS + "/user/authn", payload, {
+      .post(process.env.VUE_APP_SERVER_ADDRESS + "/user/authn/", payload, {
         withCredentials: false,
       })
       .then((res) => {
@@ -52,15 +52,11 @@ const actions = {
       });
   },
   // переписать тут все вообще блин!
-  GET_USER_ORDER_LIST: async (
-    context: {
-      commit: (arg0: string, arg1: any) => void;
-    },
-    payload: any
-  ) => {
-    const orderRes = await axios.post(
-      process.env.VUE_APP_SERVER_ADDRESS + "/user/get/order/list",
-      payload,
+  GET_USER_ORDER_LIST: async (context: {
+    commit: (arg0: string, arg1: any) => void;
+  }) => {
+    const orderRes = await axios.get(
+      process.env.VUE_APP_SERVER_ADDRESS + "/user/get/order/list/",
       { withCredentials: true }
     );
     const orderList = orderRes.data.data;
@@ -68,9 +64,9 @@ const actions = {
       for (const order of orderList) {
         // если в заказе нет айтемов, все сломается
         const orderId = order.id;
-        const { data } = await axios.post(
-          process.env.VUE_APP_SERVER_ADDRESS + "/order/get/item/list",
-          { orderId: orderId },
+        const { data } = await axios.get(
+          process.env.VUE_APP_SERVER_ADDRESS +
+            `/order/get/item/list/?orderId=${orderId}`,
           { withCredentials: true }
         );
         order.itemList = data.data;
@@ -89,30 +85,20 @@ const actions = {
       context.commit("SET_USER_ORDER_LIST", orderList);
     }
   },
-  GET_USER_COMPANY_LIST: async (
-    context: {
-      commit: (arg0: string, arg1: any) => void;
-    },
-    payload: any
-  ) => {
-    const { data } = await axios.post(
-      process.env.VUE_APP_SERVER_ADDRESS + "/user/get/company/list",
-      payload,
+  GET_USER_COMPANY_LIST: async (context: {
+    commit: (arg0: string, arg1: any) => void;
+  }) => {
+    const { data } = await axios.get(
+      process.env.VUE_APP_SERVER_ADDRESS + "/user/get/company/list/",
       { withCredentials: true }
     );
     if (data.success) {
       context.commit("SET_USER_COMPANY_LIST", data.data);
     }
   },
-  GET_USER: async (
-    context: {
-      commit: (arg0: string, arg1: any) => void;
-    },
-    payload: any
-  ) => {
-    const { data } = await axios.post(
+  GET_USER: async (context: { commit: (arg0: string, arg1: any) => void }) => {
+    const { data } = await axios.get(
       process.env.VUE_APP_SERVER_ADDRESS + "/user/get/",
-      payload,
       { withCredentials: true }
     );
     if (data.success) {
@@ -122,9 +108,8 @@ const actions = {
   GET_USER_LIST: async (context: {
     commit: (arg0: string, arg1: any) => void;
   }) => {
-    const { data } = await axios.post(
-      process.env.VUE_APP_SERVER_ADDRESS + "/user/get/list",
-      {},
+    const { data } = await axios.get(
+      process.env.VUE_APP_SERVER_ADDRESS + "/user/get/list/",
       { withCredentials: true }
     );
     if (data.success) {
