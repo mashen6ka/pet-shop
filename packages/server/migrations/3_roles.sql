@@ -26,6 +26,18 @@ grant insert, update, delete, select on table public.user__company to worker;
 grant update, delete  on table public.order__product to worker;
 grant insert, update, delete, select on table public.product__shop to worker;
 
+grant insert, update, delete, select on table public.user to admin;
+grant usage, select on sequence user_id_seq to admin;
+grant insert, update, delete, select on table public.order to admin;
+grant usage, select on sequence order_id_seq to admin;
+grant update, delete, select on table public.order__product to admin;
+grant insert, update, delete, select on table public.product to admin;
+grant usage, select on sequence product_id_seq to admin;
+grant insert, update, delete, select on table public.product__shop to admin;
+grant insert, delete, select on table public.session to admin;
+grant insert, update, delete, select on table public.company to admin;
+grant usage, select on sequence company_id_seq to worker;
+grant insert, update, delete, select on table public.user__company to admin;
 grant insert, update, delete, select on table public.country to admin;
 grant usage, select on sequence country_id_seq to admin;
 grant insert, update, delete, select on table public.manufacturer to admin;

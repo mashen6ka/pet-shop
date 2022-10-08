@@ -85,8 +85,7 @@ CREATE TABLE "order__product" (
 
 CREATE TABLE "session" (
   "user_id" int NOT NULL,
-  "token" text UNIQUE NOT NULL,
-  PRIMARY KEY (user_id, token)
+  "token" text UNIQUE NOT NULL
 );
 
 ALTER TABLE "session" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id") ON DELETE CASCADE;
