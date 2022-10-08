@@ -1,5 +1,3 @@
-import axios from "axios";
-
 function getHeader() {
   return [
     { id: "order_id", title: "order_id" },
@@ -21,12 +19,18 @@ async function getData(count, orderList, productList) {
   const data = [];
   for (let i = 1; i <= orderList.length; i++) {
     const itemQty = Math.floor(Math.random() * (maxQty - minQty + 1) + minQty);
+    const usedProductIds = [];
     for (let j = 1; j <= itemQty; j++) {
       try {
         // if (data.length === count) break;
+        let productId = randomId(productList);
+        while (usedProductIds.includes(productId)) {
+          productId = randomId(productList);
+        }
+        usedProductIds.push(productId);
         data.push({
           order_id: i,
-          product_id: randomId(productList),
+          product_id: productId,
           quantity: Math.floor(Math.random() * (maxQty - minQty + 1) + minQty),
         });
       } catch (err) {
@@ -49,7 +53,6 @@ export default async function generateOrderProduct(
   });
 
   const data = await getData(count, orderList, productList);
-
   csvWriter
     .writeRecords(data)
     .then(() => console.log("Order__product successfully generated"));

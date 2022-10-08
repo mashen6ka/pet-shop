@@ -26,7 +26,7 @@ async function getData(count) {
       const res = await axios.get(url);
       data.push({
         name: name,
-        address: res.data.full_address,
+        address: res.data.full_address.removeAll(","),
         KPP: Math.floor(Math.random() * 899999999) + 100000000, // 9 знаков
         INN: Math.floor(Math.random() * 899999999999) + 100000000000, // 12 знаков
       });

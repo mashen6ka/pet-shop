@@ -1,4 +1,5 @@
 import axios from "axios";
+import crypto from "crypto";
 
 function getHeader() {
   return [
@@ -24,9 +25,13 @@ async function getData(count) {
     try {
       const res = await axios.get(url);
       const item = res.data;
+      const rand = Math.floor(Math.random() * 899999999999) + 100000000000;
       data.push({
         login: item.username,
-        password: item.password,
+        password: crypto
+          .createHash("sha256")
+          .update("test" + rand)
+          .digest("base64"),
         worker: Math.floor(Math.random() * 3) % 2 !== 0 ? true : false,
         first_name: item.first_name,
         last_name: item.last_name,
@@ -42,7 +47,7 @@ async function getData(count) {
         personal_discount: 0, // впадлу пока реализовывать учет скидок
       });
     } catch (err) {
-      console.log("Error with getting user data");
+      console.log("Error with getting user data", err);
     }
   }
   return data;

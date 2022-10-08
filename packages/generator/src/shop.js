@@ -35,7 +35,7 @@ async function getData(count) {
     try {
       const res = await axios.get(url);
       data.push({
-        address: res.data.full_address,
+        address: res.data.full_address.removeAll(","),
         working_hours: randomHours(),
         // phone:
       });

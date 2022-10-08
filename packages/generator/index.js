@@ -1,5 +1,4 @@
 import { createObjectCsvWriter as createCsvWriter } from "csv-writer";
-import { parse } from "csv-parse";
 import fs from "fs";
 import generateCompany from "./src/company.js";
 import generateCountry from "./src/country.js";
@@ -17,7 +16,7 @@ import generateUserCompany from "./src/user__company.js";
 const dataFolder = "./data/";
 
 async function generate() {
-  await generateUser(1000, dataFolder, createCsvWriter);
+  await generateUser(2000, dataFolder, createCsvWriter);
   const userList = readData(dataFolder + "user.csv");
 
   await generateCompany(null, dataFolder, createCsvWriter);
@@ -54,10 +53,9 @@ async function generate() {
   await generateProductShop(4000, dataFolder, createCsvWriter, { productList, shopList }); // prettier-ignore
   const productShopList = readData(dataFolder + "product__shop.csv");
 }
-
 function readData(filePath) {
   function getList(listRaw) {
-    const header = listRaw.splice(0, 1)[0].split(",");
+    const header = listRaw.splice(0, 1)[0]?.split(",");
     const list = listRaw.map((item) => {
       const values = item.split(",");
       const entries = values.map((value, index) => {
@@ -69,7 +67,14 @@ function readData(filePath) {
     return list;
   }
   const data = fs.readFileSync(filePath, "utf-8");
-  return getList(data.split("\n"));
+  const lineList = data.split("\n");
+  return getList(
+    lineList.filter((line) => {
+      if (line !== "") {
+        return line;
+      }
+    })
+  );
 }
 
 generate();
