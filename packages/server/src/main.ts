@@ -50,18 +50,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use(
-//   bodyParser.urlencoded({
-//     extended: true,
-//   })
-// );
+const conn = connectDB("postgres", "postgres");
 
-const connClient = connectDB("client", "sf2nce3");
-const connWorker = connectDB("worker", "1gjg5cjk");
-const connAdmin = connectDB("admin", "2jk493hs");
-const connMashenka = connectDB("postgres", "postgres");
-
-const userRepo = new PgUserRepo(connClient, connWorker);
+const userRepo = new PgUserRepo(conn);
 const authService = new AuthService(userRepo);
 const userService = new UserService(userRepo);
 const userController = new UserController(authService, userService);
@@ -117,7 +108,7 @@ app.post("/user/delete/company", (req, res) => {
   userController.deleteUserCompany(req, res);
 });
 
-const productRepo = new PgProductRepo(connClient, connAdmin);
+const productRepo = new PgProductRepo(conn);
 const productService = new ProductService(productRepo);
 const productController = new ProductController(authService, productService);
 
@@ -151,7 +142,7 @@ app.post("/product/get/shop/list", (req, res) => {
   productController.getProductShopList(req, res);
 });
 
-const shopRepo = new PgShopRepo(connClient, connAdmin);
+const shopRepo = new PgShopRepo(conn);
 const shopService = new ShopService(shopRepo);
 const shopController = new ShopController(authService, shopService);
 
@@ -180,7 +171,7 @@ app.post("/shop/get/list", (req, res) => {
   shopController.getShopList(req, res);
 });
 
-const companyRepo = new PgCompanyRepo(connWorker);
+const companyRepo = new PgCompanyRepo(conn);
 const companyService = new CompanyService(companyRepo);
 const companyController = new CompanyController(authService, companyService);
 
@@ -209,7 +200,7 @@ app.post("/company/get/list", (req, res) => {
   companyController.getCompanyList(req, res);
 });
 
-const orderRepo = new PgOrderRepo(connClient, connWorker);
+const orderRepo = new PgOrderRepo(conn);
 const orderService = new OrderService(orderRepo);
 const orderController = new OrderController(authService, orderService);
 
@@ -258,7 +249,7 @@ app.post("/order/get/item/list", (req, res) => {
   orderController.getOrderItemList(req, res);
 });
 
-const manufacturerRepo = new PgManufacturerRepo(connAdmin);
+const manufacturerRepo = new PgManufacturerRepo(conn);
 const manufacturerService = new ManufacturerService(manufacturerRepo);
 const manufacturerController = new ManufacturerController(
   authService,
@@ -290,7 +281,7 @@ app.post("/manufacturer/get/list", (req, res) => {
   manufacturerController.getManufacturerList(req, res);
 });
 
-const countryRepo = new PgCountryRepo(connAdmin);
+const countryRepo = new PgCountryRepo(conn);
 const countryService = new CountryService(countryRepo);
 const countryController = new CountryController(authService, countryService);
 
@@ -319,7 +310,7 @@ app.post("/country/get/list", (req, res) => {
   countryController.getCountryList(req, res);
 });
 
-const orderStatusRepo = new PgOrderStatusRepo(connAdmin);
+const orderStatusRepo = new PgOrderStatusRepo(conn);
 const orderStatusService = new OrderStatusService(orderStatusRepo);
 const orderStatusController = new OrderStatusController(
   authService,
@@ -373,29 +364,4 @@ function connectDB(user: string, password: string) {
   });
 
   return pgClient;
-}
-
-async function testIndex() {
-  // await connWorker.query(`drop index if exists password_idx`, []);
-
-  // await connWorker.query(`CREATE INDEX password_idx on "user" (password);`, []);
-
-  const iter = 10000;
-  let time = 0;
-  for (let i = 0; i < iter; i += 1) {
-    const res: any = await connMashenka.query(
-      `explain analyze SELECT o.id
-       FROM "order" o
-       WHERE o.status_id = 1`,
-      []
-    );
-    const execTimeStr = res?.rows?.pop()["QUERY PLAN"].split(" ")[2];
-    const planTimeStr = res?.rows?.pop()["QUERY PLAN"].split(" ")[2];
-    const planTime = parseFloat(planTimeStr);
-    const execTime = parseFloat(execTimeStr);
-    // time += planTime + execTime;
-    time += execTime;
-  }
-  console.log("avg: ", time / iter);
-  // console.log(res?.rows?.[4]);
 }

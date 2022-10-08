@@ -3,14 +3,14 @@ import IManufacturerRepo from "./IManufacturerRepo";
 import { Client as pgConn } from "pg";
 
 export default class PgManufacturerRepo implements IManufacturerRepo {
-  private connAdmin: pgConn;
+  private conn: pgConn;
 
-  constructor(connAdmin: pgConn) {
-    this.connAdmin = connAdmin;
+  constructor(conn: pgConn) {
+    this.conn = conn;
   }
 
   async createManufacturer(manufacturer: ManufacturerEntity): Promise<Number> {
-    const res = await this.connAdmin.query(
+    const res = await this.conn.query(
       `INSERT INTO "manufacturer" (name)
        VALUES ($1)
        RETURNING id`,
@@ -21,7 +21,7 @@ export default class PgManufacturerRepo implements IManufacturerRepo {
   }
 
   async updateManufacturer(manufacturer: ManufacturerEntity): Promise<void> {
-    await this.connAdmin.query(
+    await this.conn.query(
       `UPDATE "manufacturer" SET name = $1
        WHERE id = $2`,
       [manufacturer.name, manufacturer.id]
@@ -29,7 +29,7 @@ export default class PgManufacturerRepo implements IManufacturerRepo {
   }
 
   async deleteManufacturer(id: number): Promise<void> {
-    await this.connAdmin.query(
+    await this.conn.query(
       `DELETE FROM "manufacturer"
        WHERE id = $1`,
       [id]
@@ -37,7 +37,7 @@ export default class PgManufacturerRepo implements IManufacturerRepo {
   }
 
   async getManufacturer(id: number): Promise<ManufacturerEntity> {
-    const res = await this.connAdmin.query(
+    const res = await this.conn.query(
       `SELECT * from "manufacturer"
        WHERE id = $1`,
       [id]
@@ -52,7 +52,7 @@ export default class PgManufacturerRepo implements IManufacturerRepo {
   }
 
   async getManufacturerList(): Promise<Array<ManufacturerEntity>> {
-    const res = await this.connAdmin.query(`SELECT * from "manufacturer"`, []);
+    const res = await this.conn.query(`SELECT * from "manufacturer"`, []);
     const manufacturerList: Array<ManufacturerEntity> = [];
 
     for (let manufacturerFields of res.rows) {

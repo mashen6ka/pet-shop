@@ -3,14 +3,14 @@ import ICountryRepo from "./ICountryRepo";
 import { Client as pgConn } from "pg";
 
 export default class PgCountryRepo implements ICountryRepo {
-  private connAdmin: pgConn;
+  private conn: pgConn;
 
-  constructor(connAdmin: pgConn) {
-    this.connAdmin = connAdmin;
+  constructor(conn: pgConn) {
+    this.conn = conn;
   }
 
   async createCountry(country: CountryEntity): Promise<Number> {
-    const res = await this.connAdmin.query(
+    const res = await this.conn.query(
       `INSERT INTO "country" (name)
        VALUES ($1)
        RETURNING id`,
@@ -21,7 +21,7 @@ export default class PgCountryRepo implements ICountryRepo {
   }
 
   async updateCountry(country: CountryEntity): Promise<void> {
-    await this.connAdmin.query(
+    await this.conn.query(
       `UPDATE "country" SET name = $1
        WHERE id = $2`,
       [country.name, country.id]
@@ -29,7 +29,7 @@ export default class PgCountryRepo implements ICountryRepo {
   }
 
   async deleteCountry(id: number): Promise<void> {
-    await this.connAdmin.query(
+    await this.conn.query(
       `DELETE FROM "country"
        WHERE id = $1`,
       [id]
@@ -37,7 +37,7 @@ export default class PgCountryRepo implements ICountryRepo {
   }
 
   async getCountry(id: number): Promise<CountryEntity> {
-    const res = await this.connAdmin.query(
+    const res = await this.conn.query(
       `SELECT * from "country"
        WHERE id = $1`,
       [id]
@@ -52,7 +52,7 @@ export default class PgCountryRepo implements ICountryRepo {
   }
 
   async getCountryList(): Promise<Array<CountryEntity>> {
-    const res = await this.connAdmin.query(`SELECT * from "country"`, []);
+    const res = await this.conn.query(`SELECT * from "country"`, []);
     const countryList: Array<CountryEntity> = [];
 
     for (let countryFields of res.rows) {

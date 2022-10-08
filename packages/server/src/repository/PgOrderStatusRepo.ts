@@ -3,14 +3,14 @@ import IOrderStatusRepo from "./IOrderStatusRepo";
 import { Client as pgConn } from "pg";
 
 export default class PgOrderStatusRepo implements IOrderStatusRepo {
-  private connAdmin: pgConn;
+  private conn: pgConn;
 
-  constructor(connAdmin: pgConn) {
-    this.connAdmin = connAdmin;
+  constructor(conn: pgConn) {
+    this.conn = conn;
   }
 
   async createOrderStatus(orderStatus: OrderStatusEntity): Promise<Number> {
-    const res = await this.connAdmin.query(
+    const res = await this.conn.query(
       `INSERT INTO "order_status" (name)
        VALUES ($1)
        RETURNING id`,
@@ -21,7 +21,7 @@ export default class PgOrderStatusRepo implements IOrderStatusRepo {
   }
 
   async updateOrderStatus(orderStatus: OrderStatusEntity): Promise<void> {
-    await this.connAdmin.query(
+    await this.conn.query(
       `UPDATE "order_status" SET name = $1
        WHERE id = $2`,
       [orderStatus.name, orderStatus.id]
@@ -29,7 +29,7 @@ export default class PgOrderStatusRepo implements IOrderStatusRepo {
   }
 
   async deleteOrderStatus(id: number): Promise<void> {
-    await this.connAdmin.query(
+    await this.conn.query(
       `DELETE FROM "order_status"
        WHERE id = $1`,
       [id]
@@ -37,7 +37,7 @@ export default class PgOrderStatusRepo implements IOrderStatusRepo {
   }
 
   async getOrderStatus(id: number): Promise<OrderStatusEntity> {
-    const res = await this.connAdmin.query(
+    const res = await this.conn.query(
       `SELECT * from "order_status"
        WHERE id = $1`,
       [id]
@@ -52,7 +52,7 @@ export default class PgOrderStatusRepo implements IOrderStatusRepo {
   }
 
   async getOrderStatusList(): Promise<Array<OrderStatusEntity>> {
-    const res = await this.connAdmin.query(`SELECT * from "order_status"`, []);
+    const res = await this.conn.query(`SELECT * from "order_status"`, []);
     const orderStatusList: Array<OrderStatusEntity> = [];
 
     for (let orderStatusFields of res.rows) {

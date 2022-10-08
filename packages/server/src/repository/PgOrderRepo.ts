@@ -3,16 +3,14 @@ import IOrderRepo from "./IOrderRepo";
 import { Client as pgConn } from "pg";
 
 export default class PgOrderRepo implements IOrderRepo {
-  private connClient: pgConn;
-  private connWorker: pgConn;
+  private conn: pgConn;
 
-  constructor(connClient: pgConn, connWorker: pgConn) {
-    this.connClient = connClient;
-    this.connWorker = connWorker;
+  constructor(conn: pgConn) {
+    this.conn = conn;
   }
 
   async createOrder(order: OrderEntity): Promise<Number> {
-    const res = await this.connClient.query(
+    const res = await this.conn.query(
       `INSERT INTO "order" (user_id, company_id, status_id, 
         created_at, completed_at, shop_id)
        VALUES ($1, $2, $3, $4, $5, $6)
@@ -31,7 +29,7 @@ export default class PgOrderRepo implements IOrderRepo {
   }
 
   async updateOrder(order: OrderEntity): Promise<void> {
-    await this.connWorker.query(
+    await this.conn.query(
       `UPDATE "order" SET (user_id, company_id, status_id, 
         created_at, completed_at, shop_id) 
        = ($1, $2, $3, $4, $5, $6)
@@ -49,7 +47,7 @@ export default class PgOrderRepo implements IOrderRepo {
   }
 
   async deleteOrder(id: number): Promise<void> {
-    await this.connWorker.query(
+    await this.conn.query(
       `DELETE FROM "order"
        WHERE id = $1`,
       [id]
@@ -57,7 +55,7 @@ export default class PgOrderRepo implements IOrderRepo {
   }
 
   async getOrder(id: number): Promise<OrderEntity> {
-    const res = await this.connClient.query(
+    const res = await this.conn.query(
       `SELECT * FROM "order"
        WHERE id = $1`,
       [id]
@@ -77,7 +75,7 @@ export default class PgOrderRepo implements IOrderRepo {
   }
 
   async getOrderList(): Promise<Array<OrderEntity>> {
-    const res = await this.connWorker.query(`SELECT * FROM "order"`, []);
+    const res = await this.conn.query(`SELECT * FROM "order"`, []);
 
     const orderList: Array<OrderEntity> = [];
     for (let orderFields of res.rows) {
@@ -97,7 +95,7 @@ export default class PgOrderRepo implements IOrderRepo {
   }
 
   async getOrderItemList(orderId: number): Promise<Array<OrderItemEntity>> {
-    const res = await this.connClient.query(
+    const res = await this.conn.query(
       `SELECT id, name, description, country_id, manufacturer_id,
        initial_price ,discount, img_url, quantity
        FROM product p 
@@ -131,7 +129,7 @@ export default class PgOrderRepo implements IOrderRepo {
     productId: Number,
     quantity: Number
   ): Promise<void> {
-    const res = await this.connClient.query(
+    const res = await this.conn.query(
       `INSERT INTO "order__product" (order_id, product_id, quantity)
        VALUES ($1, $2, $3)`,
       [orderId, productId, quantity]
@@ -139,7 +137,7 @@ export default class PgOrderRepo implements IOrderRepo {
   }
 
   async deleteOrderItem(orderId: number, productId: Number): Promise<void> {
-    const res = await this.connWorker.query(
+    const res = await this.conn.query(
       `DELETE FROM "order__product"
        WHERE order_id = $1 and product_id = $2`,
       [orderId, productId]
@@ -151,7 +149,7 @@ export default class PgOrderRepo implements IOrderRepo {
     productId: Number,
     quantity: Number
   ): Promise<void> {
-    const res = await this.connWorker.query(
+    const res = await this.conn.query(
       `UPDATE "order__product" SET quantity = $3
        WHERE order_id = $1 and product_id = $2`,
       [orderId, productId, quantity]

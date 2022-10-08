@@ -3,16 +3,14 @@ import IShopRepo from "./IShopRepo";
 import { Client as pgConn } from "pg";
 
 export default class PgShopRepo implements IShopRepo {
-  private connClient: pgConn;
-  private connAdmin: pgConn;
+  private conn: pgConn;
 
-  constructor(connClient: pgConn, connAdmin: pgConn) {
-    this.connClient = connClient;
-    this.connAdmin = connAdmin;
+  constructor(conn: pgConn) {
+    this.conn = conn;
   }
 
   async createShop(shop: ShopEntity): Promise<Number> {
-    const res = await this.connAdmin.query(
+    const res = await this.conn.query(
       `INSERT INTO shop (address, working_hours, phone)
        VALUES ($1, $2, $3)
        RETURNING id`,
@@ -23,7 +21,7 @@ export default class PgShopRepo implements IShopRepo {
   }
 
   async updateShop(shop: ShopEntity): Promise<void> {
-    await this.connAdmin.query(
+    await this.conn.query(
       `UPDATE shop SET (address, working_hours, phone) 
        = ($1, $2, $3)
        WHERE id = $4`,
@@ -32,7 +30,7 @@ export default class PgShopRepo implements IShopRepo {
   }
 
   async deleteShop(id: number): Promise<void> {
-    await this.connAdmin.query(
+    await this.conn.query(
       `DELETE FROM shop
        WHERE id = $1`,
       [id]
@@ -40,7 +38,7 @@ export default class PgShopRepo implements IShopRepo {
   }
 
   async getShop(id: number): Promise<ShopEntity> {
-    const res = await this.connClient.query(
+    const res = await this.conn.query(
       `SELECT * from shop
        WHERE id = $1`,
       [id]
@@ -57,7 +55,7 @@ export default class PgShopRepo implements IShopRepo {
   }
 
   async getShopList(): Promise<Array<ShopEntity>> {
-    const res = await this.connClient.query(`SELECT * from shop`, []);
+    const res = await this.conn.query(`SELECT * from shop`, []);
     let shopList = [];
     for (let shopFields of res.rows) {
       shopList.push(
