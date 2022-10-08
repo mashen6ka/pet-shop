@@ -126,8 +126,8 @@ export default class PgOrderRepo implements IOrderRepo {
 
   async createOrderItem(
     orderId: number,
-    productId: Number,
-    quantity: Number
+    productId: number,
+    quantity: number
   ): Promise<void> {
     const res = await this.conn.query(
       `INSERT INTO "order__product" (order_id, product_id, quantity)
@@ -146,8 +146,8 @@ export default class PgOrderRepo implements IOrderRepo {
 
   async updateOrderItem(
     orderId: number,
-    productId: Number,
-    quantity: Number
+    productId: number,
+    quantity: number
   ): Promise<void> {
     const res = await this.conn.query(
       `UPDATE "order__product" SET quantity = $3

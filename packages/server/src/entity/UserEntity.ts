@@ -11,7 +11,7 @@ import {
   IsOptional,
 } from "class-validator";
 
-export default class ClientEntity {
+export default class UserEntity {
   @IsOptional()
   @IsInt()
   id: number;
@@ -49,7 +49,7 @@ export default class ClientEntity {
   @Max(100)
   personalDiscount: number;
 
-  constructor(partial: Partial<ClientEntity>) {
+  constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);
   }
 }
