@@ -59,6 +59,7 @@ app.use((req, res, next) => {
 const connClient = connectDB("client", "sf2nce3");
 const connWorker = connectDB("worker", "1gjg5cjk");
 const connAdmin = connectDB("admin", "2jk493hs");
+const connMashenka = connectDB("postgres", "postgres");
 
 const userRepo = new PgUserRepo(connClient, connWorker);
 const authService = new AuthService(userRepo);
@@ -372,4 +373,29 @@ function connectDB(user: string, password: string) {
   });
 
   return pgClient;
+}
+
+async function testIndex() {
+  // await connWorker.query(`drop index if exists password_idx`, []);
+
+  // await connWorker.query(`CREATE INDEX password_idx on "user" (password);`, []);
+
+  const iter = 10000;
+  let time = 0;
+  for (let i = 0; i < iter; i += 1) {
+    const res: any = await connMashenka.query(
+      `explain analyze SELECT o.id
+       FROM "order" o
+       WHERE o.status_id = 1`,
+      []
+    );
+    const execTimeStr = res?.rows?.pop()["QUERY PLAN"].split(" ")[2];
+    const planTimeStr = res?.rows?.pop()["QUERY PLAN"].split(" ")[2];
+    const planTime = parseFloat(planTimeStr);
+    const execTime = parseFloat(execTimeStr);
+    // time += planTime + execTime;
+    time += execTime;
+  }
+  console.log("avg: ", time / iter);
+  // console.log(res?.rows?.[4]);
 }
