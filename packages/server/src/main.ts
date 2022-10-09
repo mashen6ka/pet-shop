@@ -2,6 +2,7 @@ import "reflect-metadata";
 import express from "express";
 import cookieParser from "cookie-parser";
 import { Client } from "pg";
+import { MongoClient } from "mongodb";
 import log from "npmlog";
 import { Request } from "express";
 import fs from "fs";
@@ -54,6 +55,7 @@ app.use((req, res, next) => {
 });
 
 const conn = connectDB("postgres", "postgres");
+// const connMongo
 
 const userRepo = new PgUserRepo(conn);
 const authService = new AuthService(userRepo);
