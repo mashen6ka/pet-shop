@@ -14,16 +14,14 @@ export default class CountryController extends BaseController {
     this.service = countryService;
   }
 
-  async createCountry(req: Request, res: Response): Promise<number> {
+  async createCountry(req: Request, res: Response): Promise<void> {
     try {
       const country = plainToInstance(CountryEntity, req.body);
       await validateOrReject(country);
       const id = await this.service.createCountry(country);
       res.status(200).json({ success: true, data: { id } });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
@@ -33,10 +31,8 @@ export default class CountryController extends BaseController {
       await validateOrReject(country);
       await this.service.updateCountry(country);
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
@@ -48,14 +44,12 @@ export default class CountryController extends BaseController {
       }
       await this.service.deleteCountry(id);
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async getCountry(req: Request, res: Response): Promise<CountryEntity> {
+  async getCountry(req: Request, res: Response): Promise<void> {
     try {
       const id = Number(req.query.id);
       if (!id) {
@@ -66,27 +60,20 @@ export default class CountryController extends BaseController {
         throw "Country not found";
       }
       res.status(200).json({ success: true, data: country });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async getCountryList(
-    req: Request,
-    res: Response
-  ): Promise<Array<CountryEntity>> {
+  async getCountryList(req: Request, res: Response): Promise<void> {
     try {
       const countryList = await this.service.getCountryList();
       if (_.isEmpty(countryList)) {
         throw "No countrys available";
       }
       res.status(200).json({ success: true, data: countryList });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 }

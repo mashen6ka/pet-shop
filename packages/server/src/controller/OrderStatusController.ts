@@ -17,17 +17,15 @@ export default class OrderStatusController extends BaseController {
     this.service = orderStatusService;
   }
 
-  async createOrderStatus(req: Request, res: Response): Promise<number> {
+  async createOrderStatus(req: Request, res: Response): Promise<void> {
     try {
       await this.checkWorkerToken(req);
       const orderStatus = plainToInstance(OrderStatusEntity, req.body);
       await validateOrReject(orderStatus);
       const id = await this.service.createOrderStatus(orderStatus);
       res.status(200).json({ success: true, data: { id } });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
@@ -38,10 +36,8 @@ export default class OrderStatusController extends BaseController {
       await validateOrReject(orderStatus);
       await this.service.updateOrderStatus(orderStatus);
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
@@ -54,17 +50,12 @@ export default class OrderStatusController extends BaseController {
       }
       await this.service.deleteOrderStatus(id);
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async getOrderStatus(
-    req: Request,
-    res: Response
-  ): Promise<OrderStatusEntity> {
+  async getOrderStatus(req: Request, res: Response): Promise<void> {
     try {
       const id = Number(req.query.id);
       if (!id) {
@@ -75,27 +66,20 @@ export default class OrderStatusController extends BaseController {
         throw "OrderStatus not found";
       }
       res.status(200).json({ success: true, data: orderStatus });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async getOrderStatusList(
-    req: Request,
-    res: Response
-  ): Promise<Array<OrderStatusEntity>> {
+  async getOrderStatusList(req: Request, res: Response): Promise<void> {
     try {
       const orderStatusList = await this.service.getOrderStatusList();
       if (_.isEmpty(orderStatusList)) {
         throw "No orderStatuss available";
       }
       res.status(200).json({ success: true, data: orderStatusList });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 }

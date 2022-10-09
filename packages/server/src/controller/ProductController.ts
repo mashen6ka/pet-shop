@@ -14,17 +14,15 @@ export default class ProductController extends BaseController {
     this.service = productService;
   }
 
-  async createProduct(req: Request, res: Response): Promise<number> {
+  async createProduct(req: Request, res: Response): Promise<void> {
     try {
       await this.checkWorkerToken(req);
       const product = plainToInstance(ProductEntity, req.body);
       await validateOrReject(product);
       const id = await this.service.createProduct(product);
       res.status(200).json({ success: true, data: { id } });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
@@ -35,10 +33,8 @@ export default class ProductController extends BaseController {
       await validateOrReject(product);
       await this.service.updateProduct(product);
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
@@ -51,14 +47,12 @@ export default class ProductController extends BaseController {
       }
       await this.service.deleteProduct(id);
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async getProduct(req: Request, res: Response): Promise<ProductEntity> {
+  async getProduct(req: Request, res: Response): Promise<void> {
     try {
       const id = Number(req.query.id);
       if (!id) {
@@ -69,34 +63,24 @@ export default class ProductController extends BaseController {
         throw "Product not found";
       }
       res.status(200).json({ success: true, data: product });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async getProductList(
-    req: Request,
-    res: Response
-  ): Promise<Array<ProductEntity>> {
+  async getProductList(req: Request, res: Response): Promise<void> {
     try {
       const productList = await this.service.getProductList();
       if (_.isEmpty(productList)) {
         throw "No products available";
       }
       res.status(200).json({ success: true, data: productList });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async getProductShopList(
-    req: Request,
-    res: Response
-  ): Promise<Array<ShopEntity>> {
+  async getProductShopList(req: Request, res: Response): Promise<void> {
     try {
       const productId = Number(req.query.productId);
       if (!productId) {
@@ -104,10 +88,8 @@ export default class ProductController extends BaseController {
       }
       const shopList = await this.service.getProductShopList(productId);
       res.status(200).json({ success: true, data: shopList });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 }

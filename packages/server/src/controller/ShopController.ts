@@ -14,17 +14,15 @@ export default class ShopController extends BaseController {
     this.service = shopService;
   }
 
-  async createShop(req: Request, res: Response): Promise<number> {
+  async createShop(req: Request, res: Response): Promise<void> {
     try {
       await this.checkWorkerToken(req);
       const shop = plainToInstance(ShopEntity, req.body);
       await validateOrReject(shop);
       const id = await this.service.createShop(shop);
       res.status(200).json({ success: true, data: { id } });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
@@ -35,10 +33,8 @@ export default class ShopController extends BaseController {
       await validateOrReject(shop);
       await this.service.updateShop(shop);
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
@@ -51,14 +47,12 @@ export default class ShopController extends BaseController {
       }
       await this.service.deleteShop(id);
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async getShop(req: Request, res: Response): Promise<ShopEntity> {
+  async getShop(req: Request, res: Response): Promise<void> {
     try {
       const id = Number(req.query.id);
       if (!id) {
@@ -69,24 +63,20 @@ export default class ShopController extends BaseController {
         throw "Shop not found";
       }
       res.status(200).json({ success: true, data: shop });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async getShopList(req: Request, res: Response): Promise<ShopEntity> {
+  async getShopList(req: Request, res: Response): Promise<void> {
     try {
       const shopList = await this.service.getShopList();
       if (_.isEmpty(shopList)) {
         throw "No shops available";
       }
       res.status(200).json({ success: true, data: shopList });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 }

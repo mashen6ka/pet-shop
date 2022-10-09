@@ -14,17 +14,15 @@ export default class CompanyController extends BaseController {
     this.service = companyService;
   }
 
-  async createCompany(req: Request, res: Response): Promise<number> {
+  async createCompany(req: Request, res: Response): Promise<void> {
     try {
       await this.checkWorkerToken(req);
       const company = plainToInstance(CompanyEntity, req.body);
       await validateOrReject(company);
       const id = await this.service.createCompany(company);
       res.status(200).json({ success: true, data: { id } });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
@@ -35,10 +33,8 @@ export default class CompanyController extends BaseController {
       await validateOrReject(company);
       await this.service.updateCompany(company);
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
@@ -51,14 +47,12 @@ export default class CompanyController extends BaseController {
       }
       await this.service.deleteCompany(id);
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async getCompany(req: Request, res: Response): Promise<CompanyEntity> {
+  async getCompany(req: Request, res: Response): Promise<void> {
     try {
       await this.checkWorkerToken(req);
       const id = Number(req.query.id);
@@ -70,14 +64,12 @@ export default class CompanyController extends BaseController {
         throw "Company not found";
       }
       res.status(200).json({ success: true, data: company });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async getCompanyList(req: Request, res: Response): Promise<CompanyEntity> {
+  async getCompanyList(req: Request, res: Response): Promise<void> {
     try {
       await this.checkWorkerToken(req);
       const companyList = await this.service.getCompanyList();
@@ -85,10 +77,8 @@ export default class CompanyController extends BaseController {
         throw "No companies available";
       }
       res.status(200).json({ success: true, data: companyList });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 }

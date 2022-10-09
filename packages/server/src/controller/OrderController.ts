@@ -14,7 +14,7 @@ export default class OrderController extends BaseController {
     this.service = service;
   }
 
-  async createOrder(req: Request, res: Response): Promise<number> {
+  async createOrder(req: Request, res: Response): Promise<void> {
     try {
       const userId = await this.getUserIdByToken(req);
       const order = plainToInstance(OrderEntity, req.body);
@@ -22,10 +22,8 @@ export default class OrderController extends BaseController {
       await validateOrReject(order);
       const id = await this.service.createOrder(order);
       res.status(200).json({ success: true, data: { id } });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
@@ -36,10 +34,8 @@ export default class OrderController extends BaseController {
       await validateOrReject(order);
       await this.service.updateOrder(order);
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
@@ -52,14 +48,12 @@ export default class OrderController extends BaseController {
       }
       await this.service.deleteOrder(id);
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async getOrder(req: Request, res: Response): Promise<OrderEntity> {
+  async getOrder(req: Request, res: Response): Promise<void> {
     try {
       await this.checkWorkerToken(req);
       const id = Number(req.query.id);
@@ -71,14 +65,12 @@ export default class OrderController extends BaseController {
         throw "Order not found";
       }
       res.status(200).json({ success: true, data: order });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async getOrderList(req: Request, res: Response): Promise<OrderEntity> {
+  async getOrderList(req: Request, res: Response): Promise<void> {
     try {
       await this.checkWorkerToken(req);
       const orderList = await this.service.getOrderList();
@@ -86,14 +78,12 @@ export default class OrderController extends BaseController {
         throw "No orders available";
       }
       res.status(200).json({ success: true, data: orderList });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async createOrderItem(req: Request, res: Response): Promise<OrderEntity> {
+  async createOrderItem(req: Request, res: Response): Promise<void> {
     try {
       const orderId = req.body.orderId;
       const productId = req.body.productId;
@@ -111,14 +101,12 @@ export default class OrderController extends BaseController {
       await this.service.createOrderProduct(orderId, productId, quantity);
 
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async deleteOrderItem(req: Request, res: Response): Promise<OrderEntity> {
+  async deleteOrderItem(req: Request, res: Response): Promise<void> {
     try {
       const orderId = req.body.orderId;
       const productId = req.body.productId;
@@ -132,14 +120,12 @@ export default class OrderController extends BaseController {
       await this.service.deleteOrderProduct(orderId, productId);
 
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async updateOrderItem(req: Request, res: Response): Promise<OrderEntity> {
+  async updateOrderItem(req: Request, res: Response): Promise<void> {
     try {
       const orderId = req.body.orderId;
       const productId = req.body.productId;
@@ -153,18 +139,14 @@ export default class OrderController extends BaseController {
       if (!Number.isInteger(quantity)) {
         throw "Invalid data: quantity must be an int value";
       }
-
       await this.service.updateOrderProduct(orderId, productId, quantity);
-
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async getOrderItemList(req: Request, res: Response): Promise<OrderEntity> {
+  async getOrderItemList(req: Request, res: Response): Promise<void> {
     try {
       const orderId = Number(req.query.orderId);
       if (!orderId) {
@@ -175,10 +157,8 @@ export default class OrderController extends BaseController {
         throw "Order is empty";
       }
       res.status(200).json({ success: true, data: orderItemList });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 }

@@ -15,7 +15,7 @@ export default class UserController extends BaseController {
     this.service = userService;
   }
 
-  async authenticateUser(req: Request, res: Response): Promise<number> {
+  async authenticateUser(req: Request, res: Response): Promise<void> {
     try {
       const authn = plainToInstance(AuthnEntity, req.body);
       await validateOrReject(authn);
@@ -25,24 +25,20 @@ export default class UserController extends BaseController {
       }
       // res.cookie(cookieName, token, { httpOnly: true });
       res.status(200).json({ success: true, data: { token } });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async createUser(req: Request, res: Response): Promise<number> {
+  async createUser(req: Request, res: Response): Promise<void> {
     try {
       // await this.checkWorkerToken(req);
       const user = plainToInstance(UserEntity, req.body);
       await validateOrReject(user);
       const id = await this.service.createUser(user);
       res.status(200).json({ success: true, data: { id } });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
@@ -54,10 +50,8 @@ export default class UserController extends BaseController {
       await validateOrReject(user);
       await this.service.updateUser(user);
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
@@ -66,14 +60,12 @@ export default class UserController extends BaseController {
       const id = await this.getUserIdByToken(req);
       await this.service.deleteUser(id);
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async getUser(req: Request, res: Response): Promise<UserEntity> {
+  async getUser(req: Request, res: Response): Promise<void> {
     try {
       const id = await this.getUserIdByToken(req);
       const user = await this.service.getUser(id);
@@ -81,14 +73,12 @@ export default class UserController extends BaseController {
         throw "User not found";
       }
       res.status(200).json({ success: true, data: user });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async getUserList(req: Request, res: Response): Promise<UserEntity> {
+  async getUserList(req: Request, res: Response): Promise<void> {
     try {
       await this.checkWorkerToken(req);
       const userList = await this.service.getUserList();
@@ -96,40 +86,28 @@ export default class UserController extends BaseController {
         throw "No users available";
       }
       res.status(200).json({ success: true, data: userList });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async getUserCompanyList(
-    req: Request,
-    res: Response
-  ): Promise<Array<CompanyEntity>> {
+  async getUserCompanyList(req: Request, res: Response): Promise<void> {
     try {
       const userId = await this.getUserIdByToken(req);
       const companyList = await this.service.getUserCompanyList(userId);
       res.status(200).json({ success: true, data: companyList });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
-  async getUserOrderList(
-    req: Request,
-    res: Response
-  ): Promise<Array<OrderEntity>> {
+  async getUserOrderList(req: Request, res: Response): Promise<void> {
     try {
       const userId = await this.getUserIdByToken(req);
       const orderList = await this.service.getUserOrderList(userId);
       res.status(200).json({ success: true, data: orderList });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
@@ -142,10 +120,8 @@ export default class UserController extends BaseController {
       }
       await this.service.createUserCompany(userId, companyId);
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 
@@ -158,10 +134,8 @@ export default class UserController extends BaseController {
       }
       await this.service.deleteUserCompany(userId, companyId);
       res.status(200).json({ success: true });
-      return;
     } catch (err) {
       res.status(502).json({ success: false, error: new Error(err).message });
-      return;
     }
   }
 }
