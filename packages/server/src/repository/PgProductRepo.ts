@@ -25,8 +25,7 @@ export default class PgProductRepo implements IProductRepo {
         product.imgUrl,
       ]
     );
-
-    return res?.rows?.[0]?.id;
+    return res?.rows?.[0]?.id || null;
   }
 
   async updateProduct(product: ProductEntity): Promise<void> {
@@ -62,26 +61,28 @@ export default class PgProductRepo implements IProductRepo {
        WHERE id = $1`,
       [id]
     );
-    const productFields = res.rows[0];
-    const product = new ProductEntity({
-      id: productFields.id,
-      name: productFields.name,
-      description: productFields.description,
-      countryId: productFields.country_id,
-      manufacturerId: productFields.manufacturer_id,
-      initialPrice: productFields.initial_price,
-      discount: productFields.discount,
-      imgUrl: productFields.img_url,
-    });
-
-    return product;
+    const productFields = res?.rows?.[0];
+    if (productFields) {
+      const product = new ProductEntity({
+        id: productFields.id,
+        name: productFields.name,
+        description: productFields.description,
+        countryId: productFields.country_id,
+        manufacturerId: productFields.manufacturer_id,
+        initialPrice: productFields.initial_price,
+        discount: productFields.discount,
+        imgUrl: productFields.img_url,
+      });
+      return product;
+    }
+    return null;
   }
 
   async getProductList(): Promise<Array<ProductEntity>> {
     const res = await this.conn.query(`SELECT * from "product"`, []);
     const productList: Array<ProductEntity> = [];
 
-    for (let productFields of res.rows) {
+    for (let productFields of res?.rows) {
       productList.push(
         new ProductEntity({
           id: productFields.id,
@@ -95,7 +96,6 @@ export default class PgProductRepo implements IProductRepo {
         })
       );
     }
-
     return productList;
   }
 
@@ -107,7 +107,7 @@ export default class PgProductRepo implements IProductRepo {
       [productId]
     );
     let shopList: Array<ShopEntity> = [];
-    for (let shopFields of res.rows) {
+    for (let shopFields of res?.rows) {
       shopList.push(
         // мб стоит по аналогии с Order и OrderItem ввести новую сущность, чтоб еще кол-во хранить (но пока не надо)
         new ShopEntity({

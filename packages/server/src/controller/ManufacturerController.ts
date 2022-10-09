@@ -5,6 +5,8 @@ import { ManufacturerEntity } from "../entity";
 import { validateOrReject } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import _ from "lodash";
+import { ErrorEntity } from "../entity/ErrorEntity";
+import { statusCode } from "../../test/common";
 
 export default class ManufacturerController extends BaseController {
   private service: ManufacturerService;
@@ -25,7 +27,7 @@ export default class ManufacturerController extends BaseController {
       const id = await this.service.createManufacturer(manufacturer);
       res.status(200).json({ success: true, data: { id } });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -37,7 +39,7 @@ export default class ManufacturerController extends BaseController {
       await this.service.updateManufacturer(manufacturer);
       res.status(200).json({ success: true });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -46,12 +48,15 @@ export default class ManufacturerController extends BaseController {
       await this.checkWorkerToken(req);
       const id = req.body.id;
       if (!Number.isInteger(id)) {
-        throw "Invalid data: id must be an int value";
+        throw new ErrorEntity(
+          "Manufacturer id must be a positive integer",
+          statusCode.badRequest
+        );
       }
       await this.service.deleteManufacturer(id);
       res.status(200).json({ success: true });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -59,15 +64,18 @@ export default class ManufacturerController extends BaseController {
     try {
       const id = Number(req.query.id);
       if (!id) {
-        throw "Invalid data: no manufacturer id";
+        throw new ErrorEntity(
+          "Manufacturer id must be a positive integer",
+          statusCode.badRequest
+        );
       }
       const manufacturer = await this.service.getManufacturer(id);
-      if (_.isEmpty(manufacturer)) {
-        throw "Manufacturer not found";
+      if (manufacturer === null) {
+        throw new ErrorEntity("Manufacturer not found", statusCode.notFound);
       }
       res.status(200).json({ success: true, data: manufacturer });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -75,12 +83,15 @@ export default class ManufacturerController extends BaseController {
     try {
       const manufacturerList = await this.service.getManufacturerList();
       if (_.isEmpty(manufacturerList)) {
-        throw "No manufacturers available";
+        throw new ErrorEntity(
+          "No manufacturers available",
+          statusCode.notFound
+        );
       }
       res.status(200).json({ success: true, data: manufacturerList });
       return;
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
       return;
     }
   }

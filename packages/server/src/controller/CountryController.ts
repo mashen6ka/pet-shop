@@ -5,6 +5,8 @@ import { CountryEntity } from "../entity";
 import { validateOrReject } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import _ from "lodash";
+import { ErrorEntity } from "../entity/ErrorEntity";
+import { statusCode } from "../../test/common";
 
 export default class CountryController extends BaseController {
   private service: CountryService;
@@ -21,7 +23,7 @@ export default class CountryController extends BaseController {
       const id = await this.service.createCountry(country);
       res.status(200).json({ success: true, data: { id } });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -32,7 +34,7 @@ export default class CountryController extends BaseController {
       await this.service.updateCountry(country);
       res.status(200).json({ success: true });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -40,12 +42,15 @@ export default class CountryController extends BaseController {
     try {
       const id = req.body.id;
       if (!Number.isInteger(id)) {
-        throw "Invalid data: id must be an int value";
+        throw new ErrorEntity(
+          "Country id must be a positive integer",
+          statusCode.badRequest
+        );
       }
       await this.service.deleteCountry(id);
       res.status(200).json({ success: true });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -53,15 +58,18 @@ export default class CountryController extends BaseController {
     try {
       const id = Number(req.query.id);
       if (!id) {
-        throw "Invalid data: no country id";
+        throw new ErrorEntity(
+          "Country id must be a positive integer",
+          statusCode.badRequest
+        );
       }
       const country = await this.service.getCountry(id);
-      if (_.isEmpty(country)) {
-        throw "Country not found";
+      if (country === null) {
+        throw new ErrorEntity("Country not found", statusCode.notFound);
       }
       res.status(200).json({ success: true, data: country });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -69,11 +77,11 @@ export default class CountryController extends BaseController {
     try {
       const countryList = await this.service.getCountryList();
       if (_.isEmpty(countryList)) {
-        throw "No countrys available";
+        throw new ErrorEntity("No countries available", statusCode.notFound);
       }
       res.status(200).json({ success: true, data: countryList });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 }

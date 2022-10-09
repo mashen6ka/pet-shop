@@ -16,8 +16,7 @@ export default class PgCountryRepo implements ICountryRepo {
        RETURNING id`,
       [country.name]
     );
-
-    return res?.rows?.[0]?.id;
+    return res?.rows?.[0]?.id || null;
   }
 
   async updateCountry(country: CountryEntity): Promise<void> {
@@ -42,20 +41,22 @@ export default class PgCountryRepo implements ICountryRepo {
        WHERE id = $1`,
       [id]
     );
-    const countryFields = res.rows[0];
-    const country = new CountryEntity({
-      id: countryFields.id,
-      name: countryFields.name,
-    });
-
-    return country;
+    const countryFields = res?.rows?.[0];
+    if (countryFields) {
+      const country = new CountryEntity({
+        id: countryFields.id,
+        name: countryFields.name,
+      });
+      return country;
+    }
+    return null;
   }
 
   async getCountryList(): Promise<Array<CountryEntity>> {
     const res = await this.conn.query(`SELECT * from "country"`, []);
     const countryList: Array<CountryEntity> = [];
 
-    for (let countryFields of res.rows) {
+    for (let countryFields of res?.rows) {
       countryList.push(
         new CountryEntity({
           id: countryFields.id,
@@ -63,7 +64,6 @@ export default class PgCountryRepo implements ICountryRepo {
         })
       );
     }
-
     return countryList;
   }
 }

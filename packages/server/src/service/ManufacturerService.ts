@@ -1,4 +1,3 @@
-import { identity } from "lodash";
 import { ManufacturerEntity } from "../entity";
 import { IManufacturerRepo } from "../repository";
 

@@ -2,6 +2,9 @@ import "reflect-metadata";
 import express from "express";
 import cookieParser from "cookie-parser";
 import { Client } from "pg";
+import log from "npmlog";
+import { Request } from "express";
+import fs from "fs";
 import {
   UserController,
   ProductController,
@@ -34,7 +37,7 @@ import {
   AuthService,
 } from "./service";
 // import bodyParser from "body-parser";
-
+log.stream = fs.createWriteStream("../log.txt", { flags: "a" });
 const port = 3000;
 const app = express();
 app.use(express.json());
@@ -58,53 +61,52 @@ const userService = new UserService(userRepo);
 const userController = new UserController(authService, userService);
 
 app.post("/user/authn", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   userController.authenticateUser(req, res);
 });
 
 app.post("/user/create", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   userController.createUser(req, res);
 });
 
 app.post("/user/update", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   userController.updateUser(req, res);
 });
 
 app.post("/user/delete", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   userController.deleteUser(req, res);
 });
 
-// занулять пароль
 app.get("/user/get", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   userController.getUser(req, res);
 });
 
 app.get("/user/get/list", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   userController.getUserList(req, res);
 });
 
 app.get("/user/get/company/list", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   userController.getUserCompanyList(req, res);
 });
 
 app.get("/user/get/order/list", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   userController.getUserOrderList(req, res);
 });
 
 app.post("/user/create/company", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   userController.createUserCompany(req, res);
 });
 
 app.post("/user/delete/company", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   userController.deleteUserCompany(req, res);
 });
 
@@ -113,32 +115,32 @@ const productService = new ProductService(productRepo);
 const productController = new ProductController(authService, productService);
 
 app.post("/product/create", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   productController.createProduct(req, res);
 });
 
 app.post("/product/update", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   productController.updateProduct(req, res);
 });
 
 app.post("/product/delete", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   productController.deleteProduct(req, res);
 });
 
 app.get("/product/get", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   productController.getProduct(req, res);
 });
 
 app.get("/product/get/list", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   productController.getProductList(req, res);
 });
 
 app.get("/product/get/shop/list", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   productController.getProductShopList(req, res);
 });
 
@@ -147,27 +149,27 @@ const shopService = new ShopService(shopRepo);
 const shopController = new ShopController(authService, shopService);
 
 app.post("/shop/create", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   shopController.createShop(req, res);
 });
 
 app.post("/shop/update", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   shopController.updateShop(req, res);
 });
 
 app.post("/shop/delete", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   shopController.deleteShop(req, res);
 });
 
 app.get("/shop/get", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   shopController.getShop(req, res);
 });
 
 app.get("/shop/get/list", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   shopController.getShopList(req, res);
 });
 
@@ -176,27 +178,27 @@ const companyService = new CompanyService(companyRepo);
 const companyController = new CompanyController(authService, companyService);
 
 app.post("/company/create", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   companyController.createCompany(req, res);
 });
 
 app.post("/company/update", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   companyController.updateCompany(req, res);
 });
 
 app.post("/company/delete", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   companyController.deleteCompany(req, res);
 });
 
 app.get("/company/get", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   companyController.getCompany(req, res);
 });
 
 app.get("/company/get/list", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   companyController.getCompanyList(req, res);
 });
 
@@ -205,47 +207,47 @@ const orderService = new OrderService(orderRepo);
 const orderController = new OrderController(authService, orderService);
 
 app.post("/order/create", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   orderController.createOrder(req, res);
 });
 
 app.post("/order/update", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   orderController.updateOrder(req, res);
 });
 
 app.post("/order/delete", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   orderController.deleteOrder(req, res);
 });
 
 app.get("/order/get", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   orderController.getOrder(req, res);
 });
 
 app.get("/order/get/list", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   orderController.getOrderList(req, res);
 });
 
 app.post("/order/create/item", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   orderController.createOrderItem(req, res);
 });
 
 app.post("/order/delete/item", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   orderController.deleteOrderItem(req, res);
 });
 
 app.post("/order/update/item", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   orderController.updateOrderItem(req, res);
 });
 
 app.get("/order/get/item/list", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   orderController.getOrderItemList(req, res);
 });
 
@@ -257,27 +259,27 @@ const manufacturerController = new ManufacturerController(
 );
 
 app.post("/manufacturer/create", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   manufacturerController.createManufacturer(req, res);
 });
 
 app.post("/manufacturer/update", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   manufacturerController.updateManufacturer(req, res);
 });
 
 app.post("/manufacturer/delete", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   manufacturerController.deleteManufacturer(req, res);
 });
 
 app.get("/manufacturer/get", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   manufacturerController.getManufacturer(req, res);
 });
 
 app.get("/manufacturer/get/list", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   manufacturerController.getManufacturerList(req, res);
 });
 
@@ -286,27 +288,27 @@ const countryService = new CountryService(countryRepo);
 const countryController = new CountryController(authService, countryService);
 
 app.post("/country/create", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   countryController.createCountry(req, res);
 });
 
 app.post("/country/update", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   countryController.updateCountry(req, res);
 });
 
 app.post("/country/delete", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   countryController.deleteCountry(req, res);
 });
 
 app.get("/country/get", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   countryController.getCountry(req, res);
 });
 
 app.get("/country/get/list", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   countryController.getCountryList(req, res);
 });
 
@@ -318,32 +320,43 @@ const orderStatusController = new OrderStatusController(
 );
 
 app.post("/order/status/create", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   orderStatusController.createOrderStatus(req, res);
 });
 
 app.post("/order/status/update", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   orderStatusController.updateOrderStatus(req, res);
 });
 
 app.post("/order/status/delete", (req, res) => {
-  console.log(req.body);
+  logRequest(req);
   orderStatusController.deleteOrderStatus(req, res);
 });
 
 app.get("/order/status/get", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   orderStatusController.getOrderStatus(req, res);
 });
 
 app.get("/order/status/get/list", (req, res) => {
-  console.log(req.query);
+  logRequest(req);
   orderStatusController.getOrderStatusList(req, res);
 });
 
 app.listen(port);
 console.log(`App started. Listening to port ${port}`);
+
+function logRequest(req: Request) {
+  log.info(
+    "req",
+    `dateTime: ${new Date().toLocaleString()}`,
+    `path: ${JSON.stringify(req.route.path)}`,
+    `body: ${JSON.stringify(req.body)}`,
+    `query: ${JSON.stringify(req.query)}`,
+    `cookies: ${JSON.stringify(req.cookies)}`
+  );
+}
 
 function connectDB(user: string, password: string) {
   const pgConfig = {

@@ -5,6 +5,8 @@ import { OrderStatusEntity } from "../entity";
 import { validateOrReject } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import _ from "lodash";
+import { ErrorEntity } from "../entity/ErrorEntity";
+import { statusCode } from "../../test/common";
 
 export default class OrderStatusController extends BaseController {
   private service: OrderStatusService;
@@ -25,7 +27,7 @@ export default class OrderStatusController extends BaseController {
       const id = await this.service.createOrderStatus(orderStatus);
       res.status(200).json({ success: true, data: { id } });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -37,7 +39,7 @@ export default class OrderStatusController extends BaseController {
       await this.service.updateOrderStatus(orderStatus);
       res.status(200).json({ success: true });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -46,12 +48,15 @@ export default class OrderStatusController extends BaseController {
       await this.checkWorkerToken(req);
       const id = req.body.id;
       if (!Number.isInteger(id)) {
-        throw "Invalid data: id must be an int value";
+        throw new ErrorEntity(
+          "OrderStatus id must be a positive integer",
+          statusCode.badRequest
+        );
       }
       await this.service.deleteOrderStatus(id);
       res.status(200).json({ success: true });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -59,15 +64,18 @@ export default class OrderStatusController extends BaseController {
     try {
       const id = Number(req.query.id);
       if (!id) {
-        throw "Invalid data: no order status id";
+        throw new ErrorEntity(
+          "OrderStatus id must be a positive integer",
+          statusCode.badRequest
+        );
       }
       const orderStatus = await this.service.getOrderStatus(id);
-      if (_.isEmpty(orderStatus)) {
-        throw "OrderStatus not found";
+      if (orderStatus === null) {
+        throw new ErrorEntity("OrderStatus not found", statusCode.notFound);
       }
       res.status(200).json({ success: true, data: orderStatus });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -75,11 +83,11 @@ export default class OrderStatusController extends BaseController {
     try {
       const orderStatusList = await this.service.getOrderStatusList();
       if (_.isEmpty(orderStatusList)) {
-        throw "No orderStatuss available";
+        throw new ErrorEntity("No orderStatus available", statusCode.notFound);
       }
       res.status(200).json({ success: true, data: orderStatusList });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 }

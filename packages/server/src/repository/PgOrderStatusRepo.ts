@@ -16,8 +16,7 @@ export default class PgOrderStatusRepo implements IOrderStatusRepo {
        RETURNING id`,
       [orderStatus.name]
     );
-
-    return res?.rows?.[0]?.id;
+    return res?.rows?.[0]?.id || null;
   }
 
   async updateOrderStatus(orderStatus: OrderStatusEntity): Promise<void> {
@@ -42,20 +41,22 @@ export default class PgOrderStatusRepo implements IOrderStatusRepo {
        WHERE id = $1`,
       [id]
     );
-    const orderStatusFields = res.rows[0];
-    const orderStatus = new OrderStatusEntity({
-      id: orderStatusFields.id,
-      name: orderStatusFields.name,
-    });
-
-    return orderStatus;
+    const orderStatusFields = res?.rows?.[0];
+    if (orderStatusFields) {
+      const orderStatus = new OrderStatusEntity({
+        id: orderStatusFields.id,
+        name: orderStatusFields.name,
+      });
+      return orderStatus;
+    }
+    return null;
   }
 
   async getOrderStatusList(): Promise<Array<OrderStatusEntity>> {
     const res = await this.conn.query(`SELECT * from "order_status"`, []);
     const orderStatusList: Array<OrderStatusEntity> = [];
 
-    for (let orderStatusFields of res.rows) {
+    for (let orderStatusFields of res?.rows) {
       orderStatusList.push(
         new OrderStatusEntity({
           id: orderStatusFields.id,
@@ -63,7 +64,6 @@ export default class PgOrderStatusRepo implements IOrderStatusRepo {
         })
       );
     }
-
     return orderStatusList;
   }
 }

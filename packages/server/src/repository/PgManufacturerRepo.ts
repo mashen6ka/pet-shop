@@ -16,8 +16,7 @@ export default class PgManufacturerRepo implements IManufacturerRepo {
        RETURNING id`,
       [manufacturer.name]
     );
-
-    return res?.rows?.[0]?.id;
+    return res?.rows?.[0]?.id || null;
   }
 
   async updateManufacturer(manufacturer: ManufacturerEntity): Promise<void> {
@@ -42,20 +41,22 @@ export default class PgManufacturerRepo implements IManufacturerRepo {
        WHERE id = $1`,
       [id]
     );
-    const manufacturerFields = res.rows[0];
-    const manufacturer = new ManufacturerEntity({
-      id: manufacturerFields.id,
-      name: manufacturerFields.name,
-    });
-
-    return manufacturer;
+    const manufacturerFields = res?.rows?.[0];
+    if (manufacturerFields) {
+      const manufacturer = new ManufacturerEntity({
+        id: manufacturerFields.id,
+        name: manufacturerFields.name,
+      });
+      return manufacturer;
+    }
+    return null;
   }
 
   async getManufacturerList(): Promise<Array<ManufacturerEntity>> {
     const res = await this.conn.query(`SELECT * from "manufacturer"`, []);
     const manufacturerList: Array<ManufacturerEntity> = [];
 
-    for (let manufacturerFields of res.rows) {
+    for (let manufacturerFields of res?.rows) {
       manufacturerList.push(
         new ManufacturerEntity({
           id: manufacturerFields.id,
@@ -63,7 +64,6 @@ export default class PgManufacturerRepo implements IManufacturerRepo {
         })
       );
     }
-
     return manufacturerList;
   }
 }

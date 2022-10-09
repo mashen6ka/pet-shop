@@ -19,15 +19,18 @@ export default class AuthService {
       authn.login,
       password
     );
-    if (userId === null) return null;
-    return await this.repo.createSession(userId);
+    if (!userId) return null;
+    const token = await this.repo.createSession(userId);
+    return token;
   }
 
   async getUserIdByToken(token: string): Promise<number> {
-    return await this.repo.getUserIdByToken(token);
+    const userId = await this.repo.getUserIdByToken(token);
+    return userId;
   }
 
   async getWorkerIdByToken(token: string): Promise<number> {
-    return await this.repo.getWorkerIdByToken(token);
+    const userId = await this.repo.getWorkerIdByToken(token);
+    return userId;
   }
 }

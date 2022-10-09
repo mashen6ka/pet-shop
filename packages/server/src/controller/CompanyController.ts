@@ -5,6 +5,8 @@ import { validateOrReject } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import BaseController from "./BaseController";
 import _ from "lodash";
+import { ErrorEntity } from "../entity/ErrorEntity";
+import { statusCode } from "../../test/common";
 
 export default class CompanyController extends BaseController {
   private service: CompanyService;
@@ -22,7 +24,7 @@ export default class CompanyController extends BaseController {
       const id = await this.service.createCompany(company);
       res.status(200).json({ success: true, data: { id } });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -34,7 +36,7 @@ export default class CompanyController extends BaseController {
       await this.service.updateCompany(company);
       res.status(200).json({ success: true });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -43,12 +45,15 @@ export default class CompanyController extends BaseController {
       await this.checkWorkerToken(req);
       const id = req.body.id;
       if (!Number.isInteger(id)) {
-        throw "Invalid data: id must be an int value";
+        throw new ErrorEntity(
+          "Company id must be a positive integer",
+          statusCode.badRequest
+        );
       }
       await this.service.deleteCompany(id);
       res.status(200).json({ success: true });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -57,15 +62,18 @@ export default class CompanyController extends BaseController {
       await this.checkWorkerToken(req);
       const id = Number(req.query.id);
       if (!id) {
-        throw "Invalid data: no company id";
+        throw new ErrorEntity(
+          "Company id must be a positive integer",
+          statusCode.badRequest
+        );
       }
       const company = await this.service.getCompany(id);
-      if (_.isEmpty(company)) {
-        throw "Company not found";
+      if (company === null) {
+        throw new ErrorEntity("Company not found", statusCode.notFound);
       }
       res.status(200).json({ success: true, data: company });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -74,11 +82,11 @@ export default class CompanyController extends BaseController {
       await this.checkWorkerToken(req);
       const companyList = await this.service.getCompanyList();
       if (_.isEmpty(companyList)) {
-        throw "No companies available";
+        throw new ErrorEntity("No companies available", statusCode.notFound);
       }
       res.status(200).json({ success: true, data: companyList });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 }

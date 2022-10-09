@@ -9,7 +9,6 @@ export default class PgUserRepo implements IUserRepo {
     this.conn = conn;
   }
 
-  // везде возвращать наллы и прочекать
   async getUserIdByLoginAndPassword(
     login: string,
     password: string
@@ -29,7 +28,7 @@ export default class PgUserRepo implements IUserRepo {
        RETURNING token`,
       [userId]
     );
-    return res?.rows?.[0]?.token;
+    return res?.rows?.[0]?.token || null;
   }
 
   async getUserIdByToken(token: string): Promise<number> {
@@ -38,7 +37,7 @@ export default class PgUserRepo implements IUserRepo {
        WHERE s.token = $1`,
       [token]
     );
-    return res?.rows?.[0]?.user_id;
+    return res?.rows?.[0]?.user_id || null;
   }
 
   async getWorkerIdByToken(token: string): Promise<number> {
@@ -48,7 +47,7 @@ export default class PgUserRepo implements IUserRepo {
        WHERE s.token = $1 AND u.worker = TRUE`,
       [token]
     );
-    return res?.rows?.[0]?.user_id;
+    return res?.rows?.[0]?.user_id || null;
   }
 
   async createUser(user: UserEntity): Promise<number> {
@@ -70,7 +69,7 @@ export default class PgUserRepo implements IUserRepo {
         user.worker,
       ]
     );
-    return res?.rows?.[0]?.id;
+    return res?.rows?.[0]?.id || null;
   }
 
   async updateUser(user: UserEntity): Promise<void> {
@@ -109,28 +108,30 @@ export default class PgUserRepo implements IUserRepo {
        WHERE id = $1`,
       [id]
     );
-    const userFields = res.rows[0];
-    const user = new UserEntity({
-      id: userFields.id,
-      login: userFields.login,
-      password: userFields.password,
-      worker: userFields.worker,
-      firstName: userFields.first_name,
-      lastName: userFields.last_name,
-      middleName: userFields.middle_name,
-      birthday: userFields.birthday.toLocaleDateString(),
-      email: userFields.email,
-      phone: userFields.phone,
-      personalDiscount: userFields.personal_discount,
-    });
-
-    return user;
+    const userFields = res?.rows?.[0];
+    if (userFields) {
+      const user = new UserEntity({
+        id: userFields.id,
+        login: userFields.login,
+        password: userFields.password,
+        worker: userFields.worker,
+        firstName: userFields.first_name,
+        lastName: userFields.last_name,
+        middleName: userFields.middle_name,
+        birthday: userFields.birthday.toLocaleDateString(),
+        email: userFields.email,
+        phone: userFields.phone,
+        personalDiscount: userFields.personal_discount,
+      });
+      return user;
+    }
+    return null;
   }
 
   async getUserList(): Promise<Array<UserEntity>> {
     const res = await this.conn.query(`SELECT * from "user"`, []);
     const userList: Array<UserEntity> = [];
-    for (let userFields of res.rows) {
+    for (let userFields of res?.rows) {
       const user = new UserEntity({
         id: userFields.id,
         login: userFields.login,
@@ -146,7 +147,6 @@ export default class PgUserRepo implements IUserRepo {
       });
       userList.push(user);
     }
-
     return userList;
   }
 
@@ -158,7 +158,7 @@ export default class PgUserRepo implements IUserRepo {
       [userId]
     );
     let companyList: Array<CompanyEntity> = [];
-    for (let companyFields of res.rows) {
+    for (let companyFields of res?.rows) {
       companyList.push(
         new CompanyEntity({
           id: companyFields.id,
@@ -179,7 +179,7 @@ export default class PgUserRepo implements IUserRepo {
       [userId]
     );
     let orderList: Array<OrderEntity> = [];
-    for (let orderFields of res.rows) {
+    for (let orderFields of res?.rows) {
       orderList.push(
         new OrderEntity({
           id: orderFields.id,

@@ -5,6 +5,8 @@ import BaseController from "./BaseController";
 import { validateOrReject } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import _ from "lodash";
+import { ErrorEntity } from "../entity/ErrorEntity";
+import { statusCode } from "../../test/common";
 
 export default class ShopController extends BaseController {
   private service: ShopService;
@@ -22,7 +24,7 @@ export default class ShopController extends BaseController {
       const id = await this.service.createShop(shop);
       res.status(200).json({ success: true, data: { id } });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -34,7 +36,7 @@ export default class ShopController extends BaseController {
       await this.service.updateShop(shop);
       res.status(200).json({ success: true });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -43,12 +45,15 @@ export default class ShopController extends BaseController {
       await this.checkWorkerToken(req);
       const id = req.body.id;
       if (!Number.isInteger(id)) {
-        throw "Invalid data: id must be an int value";
+        throw new ErrorEntity(
+          "Shop id must be a positive integer",
+          statusCode.badRequest
+        );
       }
       await this.service.deleteShop(id);
       res.status(200).json({ success: true });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -56,15 +61,18 @@ export default class ShopController extends BaseController {
     try {
       const id = Number(req.query.id);
       if (!id) {
-        throw "Invalid data: no shop id";
+        throw new ErrorEntity(
+          "Shop id must be a positive integer",
+          statusCode.badRequest
+        );
       }
       const shop = await this.service.getShop(id);
-      if (_.isEmpty(shop)) {
-        throw "Shop not found";
+      if (shop === null) {
+        throw new ErrorEntity("Shop not found", statusCode.notFound);
       }
       res.status(200).json({ success: true, data: shop });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -72,11 +80,11 @@ export default class ShopController extends BaseController {
     try {
       const shopList = await this.service.getShopList();
       if (_.isEmpty(shopList)) {
-        throw "No shops available";
+        throw new ErrorEntity("No shops available", statusCode.notFound);
       }
       res.status(200).json({ success: true, data: shopList });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 }

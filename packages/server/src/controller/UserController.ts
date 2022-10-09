@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
 import BaseController from "./BaseController";
 import { AuthService, UserService } from "../service";
-import { CompanyEntity, UserEntity, OrderEntity, AuthnEntity } from "../entity";
+import { UserEntity, AuthnEntity } from "../entity";
 import { validateOrReject } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import _ from "lodash";
-import { cookieName } from "../config";
+import { ErrorEntity } from "../entity/ErrorEntity";
+import { statusCode } from "../../test/common";
 
 export default class UserController extends BaseController {
   private service: UserService;
@@ -20,13 +21,13 @@ export default class UserController extends BaseController {
       const authn = plainToInstance(AuthnEntity, req.body);
       await validateOrReject(authn);
       const token = await this.service.authenticateUser(authn);
-      if (token === null) {
-        throw "User not found";
+      if (!token) {
+        throw new ErrorEntity("User not found", statusCode.notFound);
       }
       // res.cookie(cookieName, token, { httpOnly: true });
       res.status(200).json({ success: true, data: { token } });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -38,7 +39,7 @@ export default class UserController extends BaseController {
       const id = await this.service.createUser(user);
       res.status(200).json({ success: true, data: { id } });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -51,7 +52,7 @@ export default class UserController extends BaseController {
       await this.service.updateUser(user);
       res.status(200).json({ success: true });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -61,7 +62,7 @@ export default class UserController extends BaseController {
       await this.service.deleteUser(id);
       res.status(200).json({ success: true });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -69,12 +70,12 @@ export default class UserController extends BaseController {
     try {
       const id = await this.getUserIdByToken(req);
       const user = await this.service.getUser(id);
-      if (_.isEmpty(user)) {
-        throw "User not found";
+      if (user === null) {
+        throw new ErrorEntity("User not found", statusCode.notFound);
       }
       res.status(200).json({ success: true, data: user });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -83,11 +84,11 @@ export default class UserController extends BaseController {
       await this.checkWorkerToken(req);
       const userList = await this.service.getUserList();
       if (_.isEmpty(userList)) {
-        throw "No users available";
+        throw new ErrorEntity("No users available", statusCode.notFound);
       }
       res.status(200).json({ success: true, data: userList });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -97,7 +98,7 @@ export default class UserController extends BaseController {
       const companyList = await this.service.getUserCompanyList(userId);
       res.status(200).json({ success: true, data: companyList });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -107,7 +108,7 @@ export default class UserController extends BaseController {
       const orderList = await this.service.getUserOrderList(userId);
       res.status(200).json({ success: true, data: orderList });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -116,12 +117,15 @@ export default class UserController extends BaseController {
       const userId = await this.getUserIdByToken(req);
       const companyId = req.body.companyId;
       if (!Number.isInteger(companyId)) {
-        throw "Invalid data: companyId must be int value";
+        throw new ErrorEntity(
+          "Company id must be a positive integer",
+          statusCode.badRequest
+        );
       }
       await this.service.createUserCompany(userId, companyId);
       res.status(200).json({ success: true });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -130,12 +134,15 @@ export default class UserController extends BaseController {
       const userId = await this.getUserIdByToken(req);
       const companyId = req.body.companyId;
       if (!Number.isInteger(companyId)) {
-        throw "Invalid data: companyId must be int value";
+        throw new ErrorEntity(
+          "Company id must be a positive integer",
+          statusCode.badRequest
+        );
       }
       await this.service.deleteUserCompany(userId, companyId);
       res.status(200).json({ success: true });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 }

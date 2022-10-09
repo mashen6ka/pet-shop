@@ -24,8 +24,7 @@ export default class PgOrderRepo implements IOrderRepo {
         order.shopId,
       ]
     );
-
-    return res?.rows?.[0]?.id;
+    return res?.rows?.[0]?.id || null;
   }
 
   async updateOrder(order: OrderEntity): Promise<void> {
@@ -60,25 +59,27 @@ export default class PgOrderRepo implements IOrderRepo {
        WHERE id = $1`,
       [id]
     );
-    const orderFields = res.rows[0];
-    const order = new OrderEntity({
-      id: orderFields.id,
-      userId: orderFields.user_id,
-      companyId: orderFields.company_id,
-      statusId: orderFields.status_id,
-      createdAt: orderFields.created_at,
-      completedAt: orderFields.completed_at,
-      shopId: orderFields.shop_id,
-    });
-
-    return order;
+    const orderFields = res?.rows?.[0];
+    if (orderFields) {
+      const order = new OrderEntity({
+        id: orderFields.id,
+        userId: orderFields.user_id,
+        companyId: orderFields.company_id,
+        statusId: orderFields.status_id,
+        createdAt: orderFields.created_at,
+        completedAt: orderFields.completed_at,
+        shopId: orderFields.shop_id,
+      });
+      return order;
+    }
+    return null;
   }
 
   async getOrderList(): Promise<Array<OrderEntity>> {
     const res = await this.conn.query(`SELECT * FROM "order"`, []);
 
     const orderList: Array<OrderEntity> = [];
-    for (let orderFields of res.rows) {
+    for (let orderFields of res?.rows) {
       const order = new OrderEntity({
         id: orderFields.id,
         userId: orderFields.user_id,
@@ -90,7 +91,6 @@ export default class PgOrderRepo implements IOrderRepo {
       });
       orderList.push(order);
     }
-
     return orderList;
   }
 
@@ -105,7 +105,7 @@ export default class PgOrderRepo implements IOrderRepo {
     );
 
     const orderItemList: Array<OrderItemEntity> = [];
-    for (let orderItemFields of res.rows) {
+    for (let orderItemFields of res?.rows) {
       const quantity = orderItemFields.quantity;
       const product = new ProductEntity({
         id: orderItemFields.id,

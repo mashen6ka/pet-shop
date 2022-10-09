@@ -5,6 +5,8 @@ import { ProductEntity, ShopEntity } from "../entity";
 import { validateOrReject } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import _ from "lodash";
+import { ErrorEntity } from "../entity/ErrorEntity";
+import { statusCode } from "../../test/common";
 
 export default class ProductController extends BaseController {
   private service: ProductService;
@@ -22,7 +24,7 @@ export default class ProductController extends BaseController {
       const id = await this.service.createProduct(product);
       res.status(200).json({ success: true, data: { id } });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -34,7 +36,7 @@ export default class ProductController extends BaseController {
       await this.service.updateProduct(product);
       res.status(200).json({ success: true });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -43,12 +45,15 @@ export default class ProductController extends BaseController {
       await this.checkWorkerToken(req);
       const id = req.body.id;
       if (!Number.isInteger(id)) {
-        throw "Invalid data: id must be an int value";
+        throw new ErrorEntity(
+          "Product id must be a positive integer",
+          statusCode.badRequest
+        );
       }
       await this.service.deleteProduct(id);
       res.status(200).json({ success: true });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -56,15 +61,18 @@ export default class ProductController extends BaseController {
     try {
       const id = Number(req.query.id);
       if (!id) {
-        throw "Invalid data: no product id";
+        throw new ErrorEntity(
+          "Product id must be a positive integer",
+          statusCode.badRequest
+        );
       }
       const product = await this.service.getProduct(id);
-      if (_.isEmpty(product)) {
-        throw "Product not found";
+      if (product == null) {
+        throw new ErrorEntity("Product not found", statusCode.notFound);
       }
       res.status(200).json({ success: true, data: product });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -72,11 +80,11 @@ export default class ProductController extends BaseController {
     try {
       const productList = await this.service.getProductList();
       if (_.isEmpty(productList)) {
-        throw "No products available";
+        throw new ErrorEntity("No products available", statusCode.notFound);
       }
       res.status(200).json({ success: true, data: productList });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 
@@ -84,12 +92,15 @@ export default class ProductController extends BaseController {
     try {
       const productId = Number(req.query.productId);
       if (!productId) {
-        throw "Invalid data: no product id";
+        throw new ErrorEntity(
+          "Product id must be a positive integer",
+          statusCode.badRequest
+        );
       }
       const shopList = await this.service.getProductShopList(productId);
       res.status(200).json({ success: true, data: shopList });
     } catch (err) {
-      res.status(502).json({ success: false, error: new Error(err).message });
+      this.handleError(err, req, res);
     }
   }
 }
