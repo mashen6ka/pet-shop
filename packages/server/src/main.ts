@@ -1,8 +1,8 @@
 import "reflect-metadata";
 import express from "express";
 import cookieParser from "cookie-parser";
-import { Client } from "pg";
-import { MongoClient } from "mongodb";
+import { Client as PgClient } from "pg";
+import { MongoClient as MongoClient } from "mongodb";
 import log from "npmlog";
 import { Request } from "express";
 import fs from "fs";
@@ -37,8 +37,11 @@ import {
   OrderStatusService,
   AuthService,
 } from "./service";
+import { logLevel, dbCredentials, dbType } from "./config";
+
 // import bodyParser from "body-parser";
 log.stream = fs.createWriteStream("../log.txt", { flags: "a" });
+log.level = logLevel;
 const port = 3000;
 const app = express();
 app.use(express.json());
@@ -54,10 +57,9 @@ app.use((req, res, next) => {
   next();
 });
 
-const conn = connectDB("postgres", "postgres");
-// const connMongo
+const conn = connectDB(dbCredentials[dbType].config, dbType);
 
-const userRepo = new PgUserRepo(conn);
+const userRepo = new PgUserRepo(conn as PgClient);
 const authService = new AuthService(userRepo);
 const userService = new UserService(userRepo);
 const userController = new UserController(authService, userService);
@@ -112,7 +114,7 @@ app.post("/user/delete/company", (req, res) => {
   userController.deleteUserCompany(req, res);
 });
 
-const productRepo = new PgProductRepo(conn);
+const productRepo = new PgProductRepo(conn as PgClient);
 const productService = new ProductService(productRepo);
 const productController = new ProductController(authService, productService);
 
@@ -146,7 +148,7 @@ app.get("/product/get/shop/list", (req, res) => {
   productController.getProductShopList(req, res);
 });
 
-const shopRepo = new PgShopRepo(conn);
+const shopRepo = new PgShopRepo(conn as PgClient);
 const shopService = new ShopService(shopRepo);
 const shopController = new ShopController(authService, shopService);
 
@@ -175,7 +177,7 @@ app.get("/shop/get/list", (req, res) => {
   shopController.getShopList(req, res);
 });
 
-const companyRepo = new PgCompanyRepo(conn);
+const companyRepo = new PgCompanyRepo(conn as PgClient);
 const companyService = new CompanyService(companyRepo);
 const companyController = new CompanyController(authService, companyService);
 
@@ -204,7 +206,7 @@ app.get("/company/get/list", (req, res) => {
   companyController.getCompanyList(req, res);
 });
 
-const orderRepo = new PgOrderRepo(conn);
+const orderRepo = new PgOrderRepo(conn as PgClient);
 const orderService = new OrderService(orderRepo);
 const orderController = new OrderController(authService, orderService);
 
@@ -253,7 +255,7 @@ app.get("/order/get/item/list", (req, res) => {
   orderController.getOrderItemList(req, res);
 });
 
-const manufacturerRepo = new PgManufacturerRepo(conn);
+const manufacturerRepo = new PgManufacturerRepo(conn as PgClient);
 const manufacturerService = new ManufacturerService(manufacturerRepo);
 const manufacturerController = new ManufacturerController(
   authService,
@@ -285,7 +287,7 @@ app.get("/manufacturer/get/list", (req, res) => {
   manufacturerController.getManufacturerList(req, res);
 });
 
-const countryRepo = new PgCountryRepo(conn);
+const countryRepo = new PgCountryRepo(conn as PgClient);
 const countryService = new CountryService(countryRepo);
 const countryController = new CountryController(authService, countryService);
 
@@ -314,7 +316,7 @@ app.get("/country/get/list", (req, res) => {
   countryController.getCountryList(req, res);
 });
 
-const orderStatusRepo = new PgOrderStatusRepo(conn);
+const orderStatusRepo = new PgOrderStatusRepo(conn as PgClient);
 const orderStatusService = new OrderStatusService(orderStatusRepo);
 const orderStatusController = new OrderStatusController(
   authService,
@@ -360,23 +362,60 @@ function logRequest(req: Request) {
   );
 }
 
-function connectDB(user: string, password: string) {
-  const pgConfig = {
-    host: "localhost",
-    port: 9999,
-    user: user,
-    password: password,
-    database: "main",
-  };
-  const pgClient = new Client(pgConfig);
+function connectDB(
+  {
+    host,
+    port,
+    user,
+    password,
+    database,
+  }: {
+    host: string;
+    port: number;
+    user: string;
+    password: string;
+    database: string;
+  },
+  type: string
+) {
+  if (type === "postgres") return connectPgDB();
+  else if (type === "mongo") return connectMongoDB();
 
-  pgClient.connect((err) => {
-    if (err) {
-      console.error(`Failed to connect to DB as ${user}`, err.stack);
-    } else {
-      console.log(`Connected to DB as ${user}`);
-    }
-  });
+  function connectMongoDB() {
+    const mongoConfig = `mongodb://${host}:${port}/${database}`;
 
-  return pgClient;
+    const mongoClient = new MongoClient(mongoConfig);
+
+    mongoClient.connect((err) => {
+      if (err) {
+        console.error(`Failed to connect to DB as ${user}`, err.stack);
+      } else {
+        console.log(`Connected to DB as ${user}`);
+      }
+    });
+
+    return mongoClient;
+  }
+
+  function connectPgDB() {
+    const pgConfig = {
+      host: host,
+      port: port,
+      user: user,
+      password: password,
+      database: database,
+    };
+
+    const pgClient = new PgClient(pgConfig);
+
+    pgClient.connect((err) => {
+      if (err) {
+        console.error(`Failed to connect to DB as ${user}`, err.stack);
+      } else {
+        console.log(`Connected to DB as ${user}`);
+      }
+    });
+
+    return pgClient;
+  }
 }

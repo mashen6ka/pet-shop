@@ -1,6 +1,7 @@
 import { CompanyEntity } from "../entity";
 import ICompanyRepo from "./ICompanyRepo";
 import { MongoClient as mongoConn } from "mongodb";
+import { getNextSequence } from "./utils";
 
 export default class MongoCompanyRepo implements ICompanyRepo {
   private conn: mongoConn;
@@ -12,8 +13,15 @@ export default class MongoCompanyRepo implements ICompanyRepo {
   async createCompany(company: CompanyEntity): Promise<number> {
     const db = this.conn.db("main");
     const collection = db.collection("company");
-    const res = await collection.insertOne(company);
-    return Number(res?.insertedId) || null; //?
+    getNextSequence;
+    const res = await collection.insertOne({
+      _id: await getNextSequence(this.conn, "user"),
+      name: company.name,
+      KPP: company.KPP,
+      INN: company.INN,
+      address: company.address,
+    });
+    return Number(res?.insertedId) || null;
   }
 
   async updateCompany(company: CompanyEntity): Promise<void> {

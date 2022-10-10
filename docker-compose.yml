@@ -12,6 +12,16 @@ services:
     ports:
       - "9999:5432"
     restart: unless-stopped
+  mongodb:
+    image: mongo:5.0
+    ports:
+      - 27017:27017
+    volumes:
+      - ~/apps/mongo:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=mongo
 
 volumes:
   postgres:
+  mongodb:
