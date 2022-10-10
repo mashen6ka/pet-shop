@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { ShopEntity } from "../../src/entity";
 import { PgShopRepo } from "../../src/repository";
 import ShopService from "../../src/service/ShopService";
-import { connectDB } from "../common";
+import { connectDB } from "../../src/common";
 
 describe("Shop", () => {
   it("Repository", async () => {

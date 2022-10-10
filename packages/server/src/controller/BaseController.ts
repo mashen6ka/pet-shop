@@ -3,7 +3,7 @@ import { cookieName } from "../config";
 import { ErrorEntity } from "../entity/ErrorEntity";
 import { Response, Request } from "express";
 import log from "npmlog";
-import { statusCode } from "../../test/common";
+import { statusCode } from "../common";
 
 export default abstract class BaseController {
   private authService: AuthService;

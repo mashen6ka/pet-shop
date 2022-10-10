@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { OrderStatusEntity } from "../../src/entity";
 import { PgOrderStatusRepo } from "../../src/repository";
 import OrderStatusService from "../../src/service/OrderStatusService";
-import { connectDB } from "../common";
+import { connectDB } from "../../src/common";
 
 describe("OrderStatus", () => {
   it("Repository", async () => {

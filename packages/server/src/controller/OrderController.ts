@@ -6,7 +6,7 @@ import { plainToInstance } from "class-transformer";
 import _ from "lodash";
 import BaseController from "./BaseController";
 import { ErrorEntity } from "../entity/ErrorEntity";
-import { statusCode } from "../../test/common";
+import { statusCode } from "../common";
 
 export default class OrderController extends BaseController {
   private service: OrderService;

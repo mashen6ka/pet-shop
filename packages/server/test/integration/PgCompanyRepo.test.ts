@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { CompanyEntity } from "../../src/entity";
 import { PgCompanyRepo } from "../../src/repository";
 import CompanyService from "../../src/service/CompanyService";
-import { connectDB } from "../common";
+import { connectDB } from "../../src/common";
 
 describe("Company", () => {
   it("Repository", async () => {

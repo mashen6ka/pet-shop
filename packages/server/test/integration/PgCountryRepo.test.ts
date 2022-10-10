@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { CountryEntity } from "../../src/entity";
 import { PgCountryRepo } from "../../src/repository";
 import CountryService from "../../src/service/CountryService";
-import { connectDB } from "../common";
+import { connectDB } from "../../src/common";
 
 describe("Country", () => {
   it("Repository", async () => {

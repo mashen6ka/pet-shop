@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { ManufacturerEntity } from "../../src/entity";
 import { PgManufacturerRepo } from "../../src/repository";
 import ManufacturerService from "../../src/service/ManufacturerService";
-import { connectDB } from "../common";
+import { connectDB } from "../../src/common";
 
 describe("Manufacturer", () => {
   it("Repository", async () => {

@@ -6,7 +6,7 @@ import { validateOrReject } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import _ from "lodash";
 import { ErrorEntity } from "../entity/ErrorEntity";
-import { statusCode } from "../../test/common";
+import { statusCode } from "../common";
 
 export default class OrderStatusController extends BaseController {
   private service: OrderStatusService;
