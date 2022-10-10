@@ -1,29 +1,34 @@
 import axios from "axios";
+import { ActionContext } from "vuex";
+import { APIResponse, Order } from "../types";
 
-const state = {
+type orderState = {
+  orderList: Order[];
+};
+
+const state: orderState = {
   orderList: [],
 };
 
 const getters = {
-  ORDER_LIST: (state: { orderList: any }) => state.orderList,
+  ORDER_LIST: (state: orderState) => state.orderList,
 };
 
 const mutations = {
-  SET_ORDER_LIST: (state: { orderList: any }, orderList: any) =>
+  SET_ORDER_LIST: (state: orderState, orderList: Order[]) =>
     (state.orderList = orderList),
 };
 
 // реорганизовать store/user и store/order
 const actions = {
-  GET_ORDER_LIST: async (context: {
-    commit: (arg0: string, arg1: any) => void;
-  }) => {
-    const orderRes = await axios.get(
+  GET_ORDER_LIST: async (context: ActionContext<orderState, null>) => {
+    const orderRes = await axios.get<APIResponse<Order[]>>(
       process.env.VUE_APP_SERVER_ADDRESS + "/order/get/list",
       { withCredentials: true }
     );
-    const orderList = orderRes.data.data;
+    let orderList: Order[];
     if (orderRes.data.success) {
+      orderList = orderRes.data.data;
       for (const order of orderList) {
         // если в заказе нет айтемов, все сломается
         const orderId = order.id;
@@ -34,7 +39,7 @@ const actions = {
         );
         order.itemList = data.data;
       }
-      orderList.sort(function (item1: any, item2: any) {
+      orderList.sort((item1: Order, item2: Order) => {
         const date1 = new Date(item1.createdAt).getTime();
         const date2 = new Date(item2.createdAt).getTime();
         if (date1 < date2) {
@@ -49,14 +54,17 @@ const actions = {
       context.commit("SET_ORDER_LIST", orderList);
     }
   },
-  UPDATE_ORDER: async (context: any, payload: any) => {
-    const res = await axios.post(
+  UPDATE_ORDER: async (
+    context: ActionContext<orderState, null>,
+    payload: Order
+  ) => {
+    await axios.post(
       process.env.VUE_APP_SERVER_ADDRESS + "/order/update",
       payload,
       { withCredentials: true }
     );
     // наверн сюда еще апдейт айтемов надо вынести
-    const orderList = context?.state?.orderList?.map((order: any) => {
+    const orderList = context?.state?.orderList?.map((order: Order) => {
       if (order.id === payload.id) {
         order = payload;
       }

@@ -376,7 +376,7 @@ export default {
   computed: {
     // надо норм проверку на авторизацию сделать везде, чтобы в консоль ошибки не летели
     user() {
-      return this.$store.getters["user/USER"];
+      return this.$store.getters["user/USER"] ?? {};
     },
     userOrderList() {
       return this.$store.getters["user/USER_ORDER_LIST"];

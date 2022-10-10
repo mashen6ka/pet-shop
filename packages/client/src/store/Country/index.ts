@@ -1,25 +1,31 @@
 import axios from "axios";
-const state = {
+import { ActionContext } from "vuex";
+import { Country } from "../types";
+
+type countryState = {
+  countryList: Country[];
+  country: Country | null;
+};
+
+const state: countryState = {
   countryList: [],
-  country: {},
+  country: null,
 };
 
 const getters = {
-  COUNTRY_LIST: (state: { countryList: any }) => state.countryList,
-  COUNTRY: (state: { country: any }) => state.country,
+  COUNTRY_LIST: (state: countryState) => state.countryList,
+  COUNTRY: (state: countryState) => state.country,
 };
 
 const mutations = {
-  SET_COUNTRY_LIST: (state: { countryList: any }, countryList: any) =>
+  SET_COUNTRY_LIST: (state: countryState, countryList: Country[]) =>
     (state.countryList = countryList),
-  SET_COUNTRY: (state: { country: any }, country: any) =>
+  SET_COUNTRY: (state: countryState, country: Country) =>
     (state.country = country),
 };
 
 const actions = {
-  GET_COUNTRY_LIST: async (context: {
-    commit: (arg0: string, arg1: any) => void;
-  }) => {
+  GET_COUNTRY_LIST: async (context: ActionContext<countryState, null>) => {
     const { data } = await axios.get(
       process.env.VUE_APP_SERVER_ADDRESS + "/country/get/list",
       { withCredentials: true }
@@ -29,10 +35,8 @@ const actions = {
     }
   },
   GET_COUNTRY: async (
-    context: {
-      commit: (arg0: string, arg1: any) => void;
-    },
-    payload: any
+    context: ActionContext<countryState, null>,
+    payload: { [k: string]: unknown }
   ) => {
     const params = Object.entries(payload).map((e) => `${e[0]}=${e[1]}`);
     const { data } = await axios.get(

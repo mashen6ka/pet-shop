@@ -1,24 +1,30 @@
 import axios from "axios";
-const state = {
+import { ActionContext } from "vuex";
+import { Shop } from "../types";
+
+type shopState = {
+  shopList: Shop[];
+  shop: Shop | null;
+};
+
+const state: shopState = {
   shopList: [],
-  shop: {},
+  shop: null,
 };
 
 const getters = {
-  SHOP_LIST: (state: { shopList: any }) => state.shopList,
-  SHOP: (state: { shop: any }) => state.shop,
+  SHOP_LIST: (state: shopState) => state.shopList,
+  SHOP: (state: shopState) => state.shop,
 };
 
 const mutations = {
-  SET_SHOP_LIST: (state: { shopList: any }, shopList: any) =>
+  SET_SHOP_LIST: (state: shopState, shopList: Shop[]) =>
     (state.shopList = shopList),
-  SET_SHOP: (state: { shop: any }, shop: any) => (state.shop = shop),
+  SET_SHOP: (state: shopState, shop: Shop) => (state.shop = shop),
 };
 
 const actions = {
-  GET_SHOP_LIST: async (context: {
-    commit: (arg0: string, arg1: any) => void;
-  }) => {
+  GET_SHOP_LIST: async (context: ActionContext<shopState, null>) => {
     const { data } = await axios.get(
       process.env.VUE_APP_SERVER_ADDRESS + "/shop/get/list",
       { withCredentials: true }
@@ -28,10 +34,8 @@ const actions = {
     }
   },
   GET_SHOP: async (
-    context: {
-      commit: (arg0: string, arg1: any) => void;
-    },
-    payload: any
+    context: ActionContext<shopState, null>,
+    payload: { [k: string]: unknown }
   ) => {
     const params = Object.entries(payload).map((e) => `${e[0]}=${e[1]}`);
     const { data } = await axios.get(

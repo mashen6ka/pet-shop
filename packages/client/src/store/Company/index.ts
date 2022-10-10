@@ -1,25 +1,31 @@
 import axios from "axios";
-const state = {
+import { ActionContext } from "vuex";
+import { Company } from "../types";
+
+type companyState = {
+  companyList: Company[];
+  company: Company | null;
+};
+
+const state: companyState = {
   companyList: [],
-  company: {},
+  company: null,
 };
 
 const getters = {
-  COMPANY_LIST: (state: { companyList: any }) => state.companyList,
-  COMPANY: (state: { company: any }) => state.company,
+  COMPANY_LIST: (state: companyState) => state.companyList,
+  COMPANY: (state: companyState) => state.company,
 };
 
 const mutations = {
-  SET_COMPANY_LIST: (state: { companyList: any }, companyList: any) =>
+  SET_COMPANY_LIST: (state: companyState, companyList: Company[]) =>
     (state.companyList = companyList),
-  SET_COMPANY: (state: { company: any }, company: any) =>
+  SET_COMPANY: (state: companyState, company: Company) =>
     (state.company = company),
 };
 
 const actions = {
-  GET_COMPANY_LIST: async (context: {
-    commit: (arg0: string, arg1: any) => void;
-  }) => {
+  GET_COMPANY_LIST: async (context: ActionContext<companyState, null>) => {
     const { data } = await axios.get(
       process.env.VUE_APP_SERVER_ADDRESS + "/company/get/list",
       { withCredentials: true }
@@ -29,10 +35,8 @@ const actions = {
     }
   },
   GET_COMPANY: async (
-    context: {
-      commit: (arg0: string, arg1: any) => void;
-    },
-    payload: any
+    context: ActionContext<companyState, null>,
+    payload: { [k: string]: unknown }
   ) => {
     const params = Object.entries(payload).map((e) => `${e[0]}=${e[1]}`);
     const { data } = await axios.get(

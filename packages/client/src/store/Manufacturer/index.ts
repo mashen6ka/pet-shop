@@ -1,28 +1,35 @@
 import axios from "axios";
-const state = {
+import { ActionContext } from "vuex";
+import { Manufacturer } from "../types";
+
+type manufacturerState = {
+  manufacturerList: Manufacturer[];
+  manufacturer: Manufacturer | null;
+};
+
+const state: manufacturerState = {
   manufacturerList: [],
-  manufacturer: {},
+  manufacturer: null,
 };
 
 const getters = {
-  MANUFACTURER_LIST: (state: { manufacturerList: any }) =>
-    state.manufacturerList,
-  MANUFACTURER: (state: { manufacturer: any }) => state.manufacturer,
+  MANUFACTURER_LIST: (state: manufacturerState) => state.manufacturerList,
+  MANUFACTURER: (state: manufacturerState) => state.manufacturer,
 };
 
 const mutations = {
   SET_MANUFACTURER_LIST: (
-    state: { manufacturerList: any },
-    manufacturerList: any
+    state: manufacturerState,
+    manufacturerList: Manufacturer[]
   ) => (state.manufacturerList = manufacturerList),
-  SET_MANUFACTURER: (state: { manufacturer: any }, manufacturer: any) =>
+  SET_MANUFACTURER: (state: manufacturerState, manufacturer: Manufacturer) =>
     (state.manufacturer = manufacturer),
 };
 
 const actions = {
-  GET_MANUFACTURER_LIST: async (context: {
-    commit: (arg0: string, arg1: any) => void;
-  }) => {
+  GET_MANUFACTURER_LIST: async (
+    context: ActionContext<manufacturerState, null>
+  ) => {
     const { data } = await axios.get(
       process.env.VUE_APP_SERVER_ADDRESS + "/manufacturer/get/list",
       { withCredentials: true }
@@ -32,10 +39,8 @@ const actions = {
     }
   },
   GET_MANUFACTURER: async (
-    context: {
-      commit: (arg0: string, arg1: any) => void;
-    },
-    payload: any
+    context: ActionContext<manufacturerState, null>,
+    payload: { [k: string]: unknown }
   ) => {
     const params = Object.entries(payload).map((e) => `${e[0]}=${e[1]}`);
     const { data } = await axios.get(

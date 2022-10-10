@@ -1,31 +1,36 @@
 import axios from "axios";
-const state = {
+import { ActionContext } from "vuex";
+import { Product, Shop } from "../types";
+
+type productState = {
+  productList: Product[];
+  product: Product | null;
+  productShopList: Shop[];
+};
+
+const state: productState = {
   productList: [],
-  product: {},
-  productShopList: {},
+  product: null,
+  productShopList: [],
 };
 
 const getters = {
-  PRODUCT_LIST: (state: { productList: any }) => state.productList,
-  PRODUCT: (state: { product: any }) => state.product,
-  PRODUCT_SHOP_LIST: (state: { productShopList: any }) => state.productShopList,
+  PRODUCT_LIST: (state: productState) => state.productList,
+  PRODUCT: (state: productState) => state.product,
+  PRODUCT_SHOP_LIST: (state: productState) => state.productShopList,
 };
 
 const mutations = {
-  SET_PRODUCT_LIST: (state: { productList: any }, productList: any) =>
+  SET_PRODUCT_LIST: (state: productState, productList: Product[]) =>
     (state.productList = productList),
-  SET_PRODUCT: (state: { product: any }, product: any) =>
+  SET_PRODUCT: (state: productState, product: Product) =>
     (state.product = product),
-  SET_PRODUCT_SHOP_LIST: (
-    state: { productShopList: any },
-    productShopList: any
-  ) => (state.productShopList = productShopList),
+  SET_PRODUCT_SHOP_LIST: (state: productState, productShopList: Shop[]) =>
+    (state.productShopList = productShopList),
 };
 
 const actions = {
-  GET_PRODUCT_LIST: async (context: {
-    commit: (arg0: string, arg1: any) => void;
-  }) => {
+  GET_PRODUCT_LIST: async (context: ActionContext<productState, null>) => {
     const { data } = await axios.get(
       process.env.VUE_APP_SERVER_ADDRESS + "/product/get/list",
       { withCredentials: true }
@@ -35,10 +40,8 @@ const actions = {
     }
   },
   GET_PRODUCT: async (
-    context: {
-      commit: (arg0: string, arg1: any) => void;
-    },
-    payload: any
+    context: ActionContext<productState, null>,
+    payload: { [k: string]: unknown }
   ) => {
     const params = Object.entries(payload).map((e) => `${e[0]}=${e[1]}`);
     const { data } = await axios.get(
@@ -50,10 +53,8 @@ const actions = {
     }
   },
   GET_PRODUCT_SHOP_LIST: async (
-    context: {
-      commit: (arg0: string, arg1: any) => void;
-    },
-    payload: any
+    context: ActionContext<productState, null>,
+    payload: { [k: string]: unknown }
   ) => {
     const params = Object.entries(payload).map((e) => `${e[0]}=${e[1]}`);
     const { data } = await axios.get(

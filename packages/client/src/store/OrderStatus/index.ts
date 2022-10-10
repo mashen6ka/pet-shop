@@ -1,24 +1,32 @@
 import axios from "axios";
-const state = {
+import { ActionContext } from "vuex";
+import { OrderStatus } from "../types";
+
+type orderStatusState = {
+  orderStatusList: OrderStatus[];
+  orderStatus: OrderStatus | null;
+};
+
+const state: orderStatusState = {
   orderStatusList: [],
-  orderStatus: {},
+  orderStatus: null,
 };
 
 const getters = {
-  ORDER_STATUS_LIST: (state: { orderStatusList: any }) => state.orderStatusList,
+  ORDER_STATUS_LIST: (state: orderStatusState) => state.orderStatusList,
 };
 
 const mutations = {
   SET_ORDER_STATUS_LIST: (
-    state: { orderStatusList: any },
-    orderStatusList: any
+    state: orderStatusState,
+    orderStatusList: OrderStatus[]
   ) => (state.orderStatusList = orderStatusList),
 };
 
 const actions = {
-  GET_ORDER_STATUS_LIST: async (context: {
-    commit: (arg0: string, arg1: any) => void;
-  }) => {
+  GET_ORDER_STATUS_LIST: async (
+    context: ActionContext<orderStatusState, null>
+  ) => {
     const { data } = await axios.get(
       process.env.VUE_APP_SERVER_ADDRESS + "/order/status/get/list",
       { withCredentials: true }

@@ -176,7 +176,7 @@ export default {
       return Number(this.$route.params.id);
     },
     product() {
-      return this.$store.getters["product/PRODUCT"];
+      return this.$store.getters["product/PRODUCT"] ?? {};
     },
     productShopList() {
       return this.$store.getters["product/PRODUCT_SHOP_LIST"];

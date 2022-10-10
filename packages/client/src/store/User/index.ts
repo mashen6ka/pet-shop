@@ -1,7 +1,18 @@
 import axios from "axios";
+import { ActionContext } from "vuex";
+import { APIResponse, Company, Order, User } from "../types";
 
-const state = {
-  user: {},
+type userState = {
+  user: User | null;
+  userList: User[];
+  orderList: Order[];
+  companyList: Company[];
+  token: string;
+  error: string;
+};
+
+const state: userState = {
+  user: null,
   userList: [],
   orderList: [],
   companyList: [],
@@ -10,33 +21,31 @@ const state = {
 };
 
 const getters = {
-  USER: (state: { user: any }) => state.user,
-  USER_ORDER_LIST: (state: { orderList: any }) => state.orderList,
-  USER_COMPANY_LIST: (state: { companyList: any }) => state.companyList,
-  USER_LIST: (state: { userList: any }) => state.userList,
-  USER_ERROR: (state: { error: any }) => state.error,
-  USER_TOKEN: (state: { token: any }) => state.token,
+  USER: (state: userState) => state.user,
+  USER_ORDER_LIST: (state: userState) => state.orderList,
+  USER_COMPANY_LIST: (state: userState) => state.companyList,
+  USER_LIST: (state: userState) => state.userList,
+  USER_ERROR: (state: userState) => state.error,
+  USER_TOKEN: (state: userState) => state.token,
 };
 
 const mutations = {
-  SET_USER: (state: { user: any }, user: any) => (state.user = user),
-  SET_USER_ORDER_LIST: (state: { orderList: any }, orderList: any) =>
+  SET_USER: (state: userState, user: User) => (state.user = user),
+  SET_USER_ORDER_LIST: (state: userState, orderList: Order[]) =>
     (state.orderList = orderList),
-  SET_USER_COMPANY_LIST: (state: { companyList: any }, companyList: any) =>
+  SET_USER_COMPANY_LIST: (state: userState, companyList: Company[]) =>
     (state.companyList = companyList),
-  SET_USER_LIST: (state: { userList: any }, userList: any) =>
+  SET_USER_LIST: (state: userState, userList: User[]) =>
     (state.userList = userList),
-  SET_USER_ERROR: (state: { error: any }, error: any) => (state.error = error),
-  SET_USER_TOKEN: (state: { token: any }, token: any) => (state.token = token),
+  SET_USER_ERROR: (state: userState, error: string) => (state.error = error),
+  SET_USER_TOKEN: (state: userState, token: string) => (state.token = token),
 };
 
 const actions = {
   // надо норм переписать
   AUTHORIZE_USER: async (
-    context: {
-      commit: (arg0: string, arg1: any) => void;
-    },
-    payload: any
+    context: ActionContext<userState, null>,
+    payload: { login: string; password: string }
   ) => {
     axios
       .post(process.env.VUE_APP_SERVER_ADDRESS + "/user/authn/", payload, {
@@ -52,15 +61,14 @@ const actions = {
       });
   },
   // переписать тут все вообще блин!
-  GET_USER_ORDER_LIST: async (context: {
-    commit: (arg0: string, arg1: any) => void;
-  }) => {
-    const orderRes = await axios.get(
+  GET_USER_ORDER_LIST: async (context: ActionContext<userState, null>) => {
+    const orderRes = await axios.get<APIResponse<Order[]>>(
       process.env.VUE_APP_SERVER_ADDRESS + "/user/get/order/list/",
       { withCredentials: true }
     );
-    const orderList = orderRes.data.data;
+    let orderList: Order[];
     if (orderRes.data.success) {
+      orderList = orderRes.data.data;
       for (const order of orderList) {
         // если в заказе нет айтемов, все сломается
         const orderId = order.id;
@@ -71,7 +79,7 @@ const actions = {
         );
         order.itemList = data.data;
       }
-      orderList.sort(function (item1: any, item2: any) {
+      orderList.sort((item1: Order, item2: Order) => {
         const date1 = new Date(item1.createdAt).getTime();
         const date2 = new Date(item2.createdAt).getTime();
         if (date1 < date2) {
@@ -85,10 +93,8 @@ const actions = {
       context.commit("SET_USER_ORDER_LIST", orderList);
     }
   },
-  GET_USER_COMPANY_LIST: async (context: {
-    commit: (arg0: string, arg1: any) => void;
-  }) => {
-    const { data } = await axios.get(
+  GET_USER_COMPANY_LIST: async (context: ActionContext<userState, null>) => {
+    const { data } = await axios.get<APIResponse<Company[]>>(
       process.env.VUE_APP_SERVER_ADDRESS + "/user/get/company/list/",
       { withCredentials: true }
     );
@@ -96,8 +102,8 @@ const actions = {
       context.commit("SET_USER_COMPANY_LIST", data.data);
     }
   },
-  GET_USER: async (context: { commit: (arg0: string, arg1: any) => void }) => {
-    const { data } = await axios.get(
+  GET_USER: async (context: ActionContext<userState, null>) => {
+    const { data } = await axios.get<APIResponse<User>>(
       process.env.VUE_APP_SERVER_ADDRESS + "/user/get/",
       { withCredentials: true }
     );
@@ -105,10 +111,8 @@ const actions = {
       context.commit("SET_USER", data.data);
     }
   },
-  GET_USER_LIST: async (context: {
-    commit: (arg0: string, arg1: any) => void;
-  }) => {
-    const { data } = await axios.get(
+  GET_USER_LIST: async (context: ActionContext<userState, null>) => {
+    const { data } = await axios.get<APIResponse<User[]>>(
       process.env.VUE_APP_SERVER_ADDRESS + "/user/get/list/",
       { withCredentials: true }
     );
@@ -118,10 +122,8 @@ const actions = {
   },
   // вынести в store/order - нафиг это тут
   CREATE_ORDER: async (
-    context: {
-      commit: (arg0: string, arg1: any) => void;
-    },
-    payload: any
+    context: ActionContext<userState, null>,
+    payload: Order
   ) => {
     const { data } = await axios.post(
       process.env.VUE_APP_SERVER_ADDRESS + "/order/create/",
@@ -141,7 +143,7 @@ const actions = {
     const orderId = data.data.id;
 
     for (const item of payload.itemList) {
-      const { data } = await axios.post(
+      await axios.post(
         process.env.VUE_APP_SERVER_ADDRESS + "/order/create/item/",
         {
           orderId: orderId,
