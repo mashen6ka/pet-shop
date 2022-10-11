@@ -25,6 +25,11 @@ import {
   PgManufacturerRepo,
   PgCountryRepo,
   PgOrderStatusRepo,
+  MongoCompanyRepo,
+  MongoManufacturerRepo,
+  MongoCountryRepo,
+  MongoOrderStatusRepo,
+  MongoShopRepo,
 } from "./repository";
 import {
   UserService,
@@ -148,7 +153,9 @@ app.get("/product/get/shop/list", (req, res) => {
   productController.getProductShopList(req, res);
 });
 
-const shopRepo = new PgShopRepo(conn as PgClient);
+let shopRepo;
+if (dbType === "postgres") shopRepo = new PgShopRepo(conn as PgClient);
+else if (dbType === "mongo") shopRepo = new MongoShopRepo(conn as MongoClient);
 const shopService = new ShopService(shopRepo);
 const shopController = new ShopController(authService, shopService);
 
@@ -177,7 +184,10 @@ app.get("/shop/get/list", (req, res) => {
   shopController.getShopList(req, res);
 });
 
-const companyRepo = new PgCompanyRepo(conn as PgClient);
+let companyRepo;
+if (dbType === "postgres") companyRepo = new PgCompanyRepo(conn as PgClient);
+else if (dbType === "mongo")
+  companyRepo = new MongoCompanyRepo(conn as MongoClient);
 const companyService = new CompanyService(companyRepo);
 const companyController = new CompanyController(authService, companyService);
 
@@ -255,7 +265,11 @@ app.get("/order/get/item/list", (req, res) => {
   orderController.getOrderItemList(req, res);
 });
 
-const manufacturerRepo = new PgManufacturerRepo(conn as PgClient);
+let manufacturerRepo;
+if (dbType === "postgres")
+  manufacturerRepo = new PgManufacturerRepo(conn as PgClient);
+else if (dbType === "mongo")
+  manufacturerRepo = new MongoManufacturerRepo(conn as MongoClient);
 const manufacturerService = new ManufacturerService(manufacturerRepo);
 const manufacturerController = new ManufacturerController(
   authService,
@@ -287,7 +301,10 @@ app.get("/manufacturer/get/list", (req, res) => {
   manufacturerController.getManufacturerList(req, res);
 });
 
-const countryRepo = new PgCountryRepo(conn as PgClient);
+let countryRepo;
+if (dbType === "postgres") countryRepo = new PgCountryRepo(conn as PgClient);
+else if (dbType === "mongo")
+  manufacturerRepo = new MongoCountryRepo(conn as MongoClient);
 const countryService = new CountryService(countryRepo);
 const countryController = new CountryController(authService, countryService);
 
@@ -316,7 +333,11 @@ app.get("/country/get/list", (req, res) => {
   countryController.getCountryList(req, res);
 });
 
-const orderStatusRepo = new PgOrderStatusRepo(conn as PgClient);
+let orderStatusRepo;
+if (dbType === "postgres")
+  orderStatusRepo = new PgOrderStatusRepo(conn as PgClient);
+else if (dbType === "mongo")
+  orderStatusRepo = new MongoOrderStatusRepo(conn as MongoClient);
 const orderStatusService = new OrderStatusService(orderStatusRepo);
 const orderStatusController = new OrderStatusController(
   authService,
