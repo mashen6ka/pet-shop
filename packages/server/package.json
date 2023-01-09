@@ -5,8 +5,9 @@
   "type": "commonjs",
   "scripts": {
     "start": "ts-node src/main.ts",
+    "clear-report": "rm -rf allure-results",
     "dev": "nodemon src/main.ts",
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
+    "test": "npm run clear-report & NODE_OPTIONS=--experimental-vm-modules npx jest",
     "test:unit": "npm run test -- --testPathPattern=test/unit",
     "test:integration": "npm run test -- --testPathPattern=test/integration"
   },
