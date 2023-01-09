@@ -1,33 +1,115 @@
 import "reflect-metadata";
 import ProductService from "../../src/service/ProductService";
-import PgProductRepoMock from "../../src/test/PgProductRepoMock";
+import PgProductRepo from "../../src/repository/PgProductRepo";
+import { ProductBuilder, ShopBuilder } from "../builders";
 
-describe("Product", () => {
-  it("Service", async () => {
-    const productRepo = new PgProductRepoMock();
-    const productService = new ProductService(productRepo);
+let productRepo: PgProductRepo;
+let productService: ProductService;
 
-    const product = productRepo.product;
-    const shop = productRepo.shop;
+let productBuilder: ProductBuilder;
+let shopBuilder: ShopBuilder;
 
-    const createProductRes = await productService.createProduct(product);
-    expect(createProductRes).toEqual(product.id);
+describe("ProductService", () => {
+  beforeAll(() => {
+    productRepo = new PgProductRepo(null);
+    productService = new ProductService(productRepo);
+  });
+  beforeEach(() => {
+    productBuilder = new ProductBuilder();
+    shopBuilder = new ShopBuilder();
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+  it("createProduct", async () => {
+    const product = productBuilder.build();
 
-    const updateProductRes = await productService.updateProduct(product);
-    expect(updateProductRes).toEqual(undefined);
+    jest
+      .spyOn(PgProductRepo.prototype, "createProduct")
+      .mockResolvedValue(product.id);
 
-    const deleteProductRes = await productService.deleteProduct(product.id);
-    expect(deleteProductRes).toEqual(undefined);
+    const response = await productService.createProduct(product);
+    expect(productRepo.createProduct).toBeCalledTimes(1);
+    expect(response).toEqual(product.id);
+  });
+  it("updateProduct", async () => {
+    const product = productBuilder.build();
 
-    const getProductRes = await productService.getProduct(product.id);
-    expect(getProductRes).toEqual(product);
+    jest.spyOn(PgProductRepo.prototype, "updateProduct").mockResolvedValue();
 
-    const getProductListRes = await productService.getProductList();
-    expect(getProductListRes).toEqual([product]);
+    const response = await productService.updateProduct(product);
+    expect(productRepo.updateProduct).toBeCalledTimes(1);
+    expect(response).toEqual(undefined);
+  });
+  it("deleteProduct", async () => {
+    const product = productBuilder.build();
 
-    const getProductShopListRes = await productService.getProductShopList(
-      product.id
-    );
-    expect(getProductShopListRes).toEqual([shop]);
+    jest.spyOn(PgProductRepo.prototype, "deleteProduct").mockResolvedValue();
+
+    const response = await productService.deleteProduct(product.id);
+    expect(productRepo.deleteProduct).toBeCalledTimes(1);
+    expect(response).toEqual(undefined);
+  });
+  it("getProduct -- success", async () => {
+    const product = productBuilder.build();
+
+    jest
+      .spyOn(PgProductRepo.prototype, "getProduct")
+      .mockResolvedValue(product);
+
+    const response = await productService.getProduct(product.id);
+    expect(productRepo.getProduct).toBeCalledTimes(1);
+    expect(response).toEqual(product);
+  });
+  it("getProduct -- product not found", async () => {
+    const product = productBuilder.build();
+
+    jest.spyOn(PgProductRepo.prototype, "getProduct").mockResolvedValue(null);
+
+    const response = await productService.getProduct(product.id);
+    expect(productRepo.getProduct).toBeCalledTimes(1);
+    expect(response).toEqual(null);
+  });
+  it("getProductList -- non-empty list", async () => {
+    const productList = [];
+    for (let i = 0; i < 3; i++) productList.push(productBuilder.build());
+
+    jest
+      .spyOn(PgProductRepo.prototype, "getProductList")
+      .mockResolvedValue(productList);
+
+    const response = await productService.getProductList();
+    expect(productRepo.getProductList).toBeCalledTimes(1);
+    expect(response).toEqual(productList);
+  });
+  it("getProductList -- empty list", async () => {
+    jest.spyOn(PgProductRepo.prototype, "getProductList").mockResolvedValue([]);
+
+    const response = await productService.getProductList();
+    expect(productRepo.getProductList).toBeCalledTimes(1);
+    expect(response).toEqual([]);
+  });
+  it("getProductShopList -- non-empty list", async () => {
+    const product = productBuilder.build();
+    const shopList = [];
+    for (let i = 0; i < 3; i++) shopList.push(shopBuilder.build());
+
+    jest
+      .spyOn(PgProductRepo.prototype, "getProductShopList")
+      .mockResolvedValue(shopList);
+
+    const response = await productService.getProductShopList(product.id);
+    expect(productRepo.getProductShopList).toBeCalledTimes(1);
+    expect(response).toEqual(shopList);
+  });
+  it("getProductShopList -- empty list", async () => {
+    const product = productBuilder.build();
+    jest
+      .spyOn(PgProductRepo.prototype, "getProductShopList")
+      .mockResolvedValue([]);
+
+    const response = await productService.getProductShopList(product.id);
+    expect(productRepo.getProductShopList).toBeCalledTimes(1);
+    expect(response).toEqual([]);
   });
 });

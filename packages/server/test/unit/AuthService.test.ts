@@ -1,29 +1,103 @@
 import "reflect-metadata";
-import { AuthnEntity } from "../../src/entity";
+import Chance from "chance";
 import AuthService from "../../src/service/AuthService";
-import PgUserRepoMock from "../../src/test/PgUserRepoMock";
+import PgUserRepo from "../../src/repository/PgUserRepo";
+import { AuthnBuilder, UserBuilder } from "../builders";
 
-describe("Company", () => {
-  it("Service", async () => {
-    const userRepo = new PgUserRepoMock();
-    const authService = new AuthService(userRepo);
+let chance: Chance.Chance;
 
-    const user = userRepo.user;
-    const token = userRepo.token;
-    const company = userRepo.company;
-    const order = userRepo.order;
-    const authn = new AuthnEntity({
-      login: user.login,
-      password: user.password,
-    });
+let userRepo: PgUserRepo;
+let authService: AuthService;
 
-    const authenticateUserRes = await authService.authenticateUser(authn);
-    expect(authenticateUserRes).toEqual(token);
+let authnBuilder: AuthnBuilder;
+let userBuilder: UserBuilder;
 
-    const getUserIdByTokenRes = await authService.getUserIdByToken(token);
-    expect(getUserIdByTokenRes).toEqual(user.id);
+describe("AuthService", () => {
+  beforeAll(() => {
+    chance = Chance();
+    userRepo = new PgUserRepo(null);
+    authService = new AuthService(userRepo);
+  });
+  beforeEach(() => {
+    authnBuilder = new AuthnBuilder();
+    userBuilder = new UserBuilder();
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+  it("authenticateUser -- success", async () => {
+    const authn = authnBuilder.build();
+    const user = userBuilder.build();
+    const token = chance.string();
 
-    const getWorkerIdByTokenRes = await authService.getWorkerIdByToken(token);
-    expect(getWorkerIdByTokenRes).toEqual(user.id);
+    jest
+      .spyOn(PgUserRepo.prototype, "getUserIdByLoginAndPassword")
+      .mockResolvedValue(user.id);
+    jest.spyOn(PgUserRepo.prototype, "createSession").mockResolvedValue(token);
+
+    const response = await authService.authenticateUser(authn);
+    expect(userRepo.getUserIdByLoginAndPassword).toBeCalledTimes(1);
+    expect(userRepo.createSession).toBeCalledTimes(1);
+    expect(response).toEqual(token);
+  });
+  it("authenticateUser -- user not found", async () => {
+    const authn = authnBuilder.build();
+    const token = chance.string();
+
+    jest
+      .spyOn(PgUserRepo.prototype, "getUserIdByLoginAndPassword")
+      .mockResolvedValue(null);
+    jest.spyOn(PgUserRepo.prototype, "createSession").mockResolvedValue(token);
+
+    const response = await authService.authenticateUser(authn);
+    expect(userRepo.getUserIdByLoginAndPassword).toBeCalledTimes(1);
+    expect(userRepo.createSession).not.toBeCalled();
+    expect(response).toEqual(null);
+  });
+  it("getUserIdByToken -- success", async () => {
+    const user = userBuilder.build();
+    const token = chance.string();
+
+    jest
+      .spyOn(PgUserRepo.prototype, "getUserIdByToken")
+      .mockResolvedValue(user.id);
+
+    const response = await authService.getUserIdByToken(token);
+    expect(userRepo.getUserIdByToken).toBeCalledTimes(1);
+    expect(response).toEqual(user.id);
+  });
+  it("getUserIdByToken -- user not found", async () => {
+    const token = chance.string();
+
+    jest
+      .spyOn(PgUserRepo.prototype, "getUserIdByToken")
+      .mockResolvedValue(null);
+
+    const response = await authService.getUserIdByToken(token);
+    expect(userRepo.getUserIdByToken).toBeCalledTimes(1);
+    expect(response).toEqual(null);
+  });
+  it("getWorkerIdByToken -- success", async () => {
+    const worker = userBuilder.withWorker(true).build();
+    const token = chance.string();
+
+    jest
+      .spyOn(PgUserRepo.prototype, "getWorkerIdByToken")
+      .mockResolvedValue(worker.id);
+
+    const response = await authService.getWorkerIdByToken(token);
+    expect(userRepo.getWorkerIdByToken).toBeCalledTimes(1);
+    expect(response).toEqual(worker.id);
+  });
+  it("getWorkerIdByToken -- worker not found", async () => {
+    const token = chance.string();
+
+    jest
+      .spyOn(PgUserRepo.prototype, "getWorkerIdByToken")
+      .mockResolvedValue(null);
+
+    const response = await authService.getWorkerIdByToken(token);
+    expect(userRepo.getWorkerIdByToken).toBeCalledTimes(1);
+    expect(response).toEqual(null);
   });
 });

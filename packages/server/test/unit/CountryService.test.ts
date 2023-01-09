@@ -1,27 +1,90 @@
 import "reflect-metadata";
+import PgCountryRepo from "../../src/repository/PgCountryRepo";
 import CountryService from "../../src/service/CountryService";
-import PgCountryRepoMock from "../../src/test/PgCountryRepoMock";
+import { CountryBuilder } from "../builders";
 
-describe("Country", () => {
-  it("Service", async () => {
-    const countryRepo = new PgCountryRepoMock();
-    const countryService = new CountryService(countryRepo);
+let countryRepo: PgCountryRepo;
+let countryService: CountryService;
 
-    const country = countryRepo.country;
+let countryBuilder: CountryBuilder;
 
-    const createCountryRes = await countryService.createCountry(country);
-    expect(createCountryRes).toEqual(country.id);
+describe("CountryService", () => {
+  beforeAll(() => {
+    countryRepo = new PgCountryRepo(null);
+    countryService = new CountryService(countryRepo);
+  });
+  beforeEach(() => {
+    countryBuilder = new CountryBuilder();
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+  it("createCountry", async () => {
+    const country = countryBuilder.build();
 
-    const updateCountryRes = await countryService.updateCountry(country);
-    expect(updateCountryRes).toEqual(undefined);
+    jest
+      .spyOn(PgCountryRepo.prototype, "createCountry")
+      .mockResolvedValue(country.id);
 
-    const deleteCountryRes = await countryService.deleteCountry(country.id);
-    expect(deleteCountryRes).toEqual(undefined);
+    const response = await countryService.createCountry(country);
+    expect(countryRepo.createCountry).toBeCalledTimes(1);
+    expect(response).toEqual(country.id);
+  });
+  it("updateCountry", async () => {
+    const country = countryBuilder.build();
 
-    const getCountryRes = await countryService.getCountry(country.id);
-    expect(getCountryRes).toEqual(country);
+    jest.spyOn(PgCountryRepo.prototype, "updateCountry").mockResolvedValue();
 
-    const getCountryListRes = await countryService.getCountryList();
-    expect(getCountryListRes).toEqual([country]);
+    const response = await countryService.updateCountry(country);
+    expect(countryRepo.updateCountry).toBeCalledTimes(1);
+    expect(response).toEqual(undefined);
+  });
+  it("deleteCountry", async () => {
+    const country = countryBuilder.build();
+
+    jest.spyOn(PgCountryRepo.prototype, "deleteCountry").mockResolvedValue();
+
+    const response = await countryService.deleteCountry(country.id);
+    expect(countryRepo.deleteCountry).toBeCalledTimes(1);
+    expect(response).toEqual(undefined);
+  });
+  it("getCountry -- success", async () => {
+    const country = countryBuilder.build();
+
+    jest
+      .spyOn(PgCountryRepo.prototype, "getCountry")
+      .mockResolvedValue(country);
+
+    const response = await countryService.getCountry(country.id);
+    expect(countryRepo.getCountry).toBeCalledTimes(1);
+    expect(response).toEqual(country);
+  });
+  it("getCountry -- country not found", async () => {
+    const country = countryBuilder.build();
+
+    jest.spyOn(PgCountryRepo.prototype, "getCountry").mockResolvedValue(null);
+
+    const response = await countryService.getCountry(country.id);
+    expect(countryRepo.getCountry).toBeCalledTimes(1);
+    expect(response).toEqual(null);
+  });
+  it("getCountryList -- non-empty list", async () => {
+    const countryList = [];
+    for (let i = 0; i < 3; i++) countryList.push(countryBuilder.build());
+
+    jest
+      .spyOn(PgCountryRepo.prototype, "getCountryList")
+      .mockResolvedValue(countryList);
+
+    const response = await countryService.getCountryList();
+    expect(countryRepo.getCountryList).toBeCalledTimes(1);
+    expect(response).toEqual(countryList);
+  });
+  it("getCountryList -- empty list", async () => {
+    jest.spyOn(PgCountryRepo.prototype, "getCountryList").mockResolvedValue([]);
+
+    const response = await countryService.getCountryList();
+    expect(countryRepo.getCountryList).toBeCalledTimes(1);
+    expect(response).toEqual([]);
   });
 });
