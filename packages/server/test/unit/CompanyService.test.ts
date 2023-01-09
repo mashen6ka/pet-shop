@@ -27,7 +27,7 @@ describe("CompanyService", () => {
       .mockResolvedValue(company.id);
 
     const response = await companyService.createCompany(company);
-    expect(companyRepo.createCompany).toBeCalledTimes(1);
+    expect(companyRepo.createCompany).toHaveBeenCalledTimes(1);
     expect(response).toEqual(company.id);
   });
   it("updateCompany", async () => {
@@ -36,7 +36,7 @@ describe("CompanyService", () => {
     jest.spyOn(PgCompanyRepo.prototype, "updateCompany").mockResolvedValue();
 
     const response = await companyService.updateCompany(company);
-    expect(companyRepo.updateCompany).toBeCalledTimes(1);
+    expect(companyRepo.updateCompany).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
   it("deleteCompany", async () => {
@@ -45,7 +45,7 @@ describe("CompanyService", () => {
     jest.spyOn(PgCompanyRepo.prototype, "deleteCompany").mockResolvedValue();
 
     const response = await companyService.deleteCompany(company.id);
-    expect(companyRepo.deleteCompany).toBeCalledTimes(1);
+    expect(companyRepo.deleteCompany).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
   it("getCompany -- success", async () => {
@@ -56,7 +56,7 @@ describe("CompanyService", () => {
       .mockResolvedValue(company);
 
     const response = await companyService.getCompany(company.id);
-    expect(companyRepo.getCompany).toBeCalledTimes(1);
+    expect(companyRepo.getCompany).toHaveBeenCalledTimes(1);
     expect(response).toEqual(company);
   });
   it("getCompany -- company not found", async () => {
@@ -65,7 +65,7 @@ describe("CompanyService", () => {
     jest.spyOn(PgCompanyRepo.prototype, "getCompany").mockResolvedValue(null);
 
     const response = await companyService.getCompany(company.id);
-    expect(companyRepo.getCompany).toBeCalledTimes(1);
+    expect(companyRepo.getCompany).toHaveBeenCalledTimes(1);
     expect(response).toEqual(null);
   });
   it("getCompanyList -- non-empty list", async () => {
@@ -77,14 +77,14 @@ describe("CompanyService", () => {
       .mockResolvedValue(companyList);
 
     const response = await companyService.getCompanyList();
-    expect(companyRepo.getCompanyList).toBeCalledTimes(1);
+    expect(companyRepo.getCompanyList).toHaveBeenCalledTimes(1);
     expect(response).toEqual(companyList);
   });
   it("getCompanyList -- empty list", async () => {
     jest.spyOn(PgCompanyRepo.prototype, "getCompanyList").mockResolvedValue([]);
 
     const response = await companyService.getCompanyList();
-    expect(companyRepo.getCompanyList).toBeCalledTimes(1);
+    expect(companyRepo.getCompanyList).toHaveBeenCalledTimes(1);
     expect(response).toEqual([]);
   });
 });

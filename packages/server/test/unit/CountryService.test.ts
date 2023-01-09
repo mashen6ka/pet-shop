@@ -27,7 +27,7 @@ describe("CountryService", () => {
       .mockResolvedValue(country.id);
 
     const response = await countryService.createCountry(country);
-    expect(countryRepo.createCountry).toBeCalledTimes(1);
+    expect(countryRepo.createCountry).toHaveBeenCalledTimes(1);
     expect(response).toEqual(country.id);
   });
   it("updateCountry", async () => {
@@ -36,7 +36,7 @@ describe("CountryService", () => {
     jest.spyOn(PgCountryRepo.prototype, "updateCountry").mockResolvedValue();
 
     const response = await countryService.updateCountry(country);
-    expect(countryRepo.updateCountry).toBeCalledTimes(1);
+    expect(countryRepo.updateCountry).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
   it("deleteCountry", async () => {
@@ -45,7 +45,7 @@ describe("CountryService", () => {
     jest.spyOn(PgCountryRepo.prototype, "deleteCountry").mockResolvedValue();
 
     const response = await countryService.deleteCountry(country.id);
-    expect(countryRepo.deleteCountry).toBeCalledTimes(1);
+    expect(countryRepo.deleteCountry).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
   it("getCountry -- success", async () => {
@@ -56,7 +56,7 @@ describe("CountryService", () => {
       .mockResolvedValue(country);
 
     const response = await countryService.getCountry(country.id);
-    expect(countryRepo.getCountry).toBeCalledTimes(1);
+    expect(countryRepo.getCountry).toHaveBeenCalledTimes(1);
     expect(response).toEqual(country);
   });
   it("getCountry -- country not found", async () => {
@@ -65,7 +65,7 @@ describe("CountryService", () => {
     jest.spyOn(PgCountryRepo.prototype, "getCountry").mockResolvedValue(null);
 
     const response = await countryService.getCountry(country.id);
-    expect(countryRepo.getCountry).toBeCalledTimes(1);
+    expect(countryRepo.getCountry).toHaveBeenCalledTimes(1);
     expect(response).toEqual(null);
   });
   it("getCountryList -- non-empty list", async () => {
@@ -77,14 +77,14 @@ describe("CountryService", () => {
       .mockResolvedValue(countryList);
 
     const response = await countryService.getCountryList();
-    expect(countryRepo.getCountryList).toBeCalledTimes(1);
+    expect(countryRepo.getCountryList).toHaveBeenCalledTimes(1);
     expect(response).toEqual(countryList);
   });
   it("getCountryList -- empty list", async () => {
     jest.spyOn(PgCountryRepo.prototype, "getCountryList").mockResolvedValue([]);
 
     const response = await countryService.getCountryList();
-    expect(countryRepo.getCountryList).toBeCalledTimes(1);
+    expect(countryRepo.getCountryList).toHaveBeenCalledTimes(1);
     expect(response).toEqual([]);
   });
 });

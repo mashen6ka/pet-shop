@@ -25,7 +25,7 @@ describe("ShopService", () => {
     jest.spyOn(PgShopRepo.prototype, "createShop").mockResolvedValue(shop.id);
 
     const response = await shopService.createShop(shop);
-    expect(shopRepo.createShop).toBeCalledTimes(1);
+    expect(shopRepo.createShop).toHaveBeenCalledTimes(1);
     expect(response).toEqual(shop.id);
   });
   it("updateShop", async () => {
@@ -34,7 +34,7 @@ describe("ShopService", () => {
     jest.spyOn(PgShopRepo.prototype, "updateShop").mockResolvedValue();
 
     const response = await shopService.updateShop(shop);
-    expect(shopRepo.updateShop).toBeCalledTimes(1);
+    expect(shopRepo.updateShop).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
   it("deleteShop", async () => {
@@ -43,7 +43,7 @@ describe("ShopService", () => {
     jest.spyOn(PgShopRepo.prototype, "deleteShop").mockResolvedValue();
 
     const response = await shopService.deleteShop(shop.id);
-    expect(shopRepo.deleteShop).toBeCalledTimes(1);
+    expect(shopRepo.deleteShop).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
   it("getShop -- success", async () => {
@@ -52,7 +52,7 @@ describe("ShopService", () => {
     jest.spyOn(PgShopRepo.prototype, "getShop").mockResolvedValue(shop);
 
     const response = await shopService.getShop(shop.id);
-    expect(shopRepo.getShop).toBeCalledTimes(1);
+    expect(shopRepo.getShop).toHaveBeenCalledTimes(1);
     expect(response).toEqual(shop);
   });
   it("getShop -- shop not found", async () => {
@@ -61,7 +61,7 @@ describe("ShopService", () => {
     jest.spyOn(PgShopRepo.prototype, "getShop").mockResolvedValue(null);
 
     const response = await shopService.getShop(shop.id);
-    expect(shopRepo.getShop).toBeCalledTimes(1);
+    expect(shopRepo.getShop).toHaveBeenCalledTimes(1);
     expect(response).toEqual(null);
   });
   it("getShopList -- non-empty list", async () => {
@@ -71,14 +71,14 @@ describe("ShopService", () => {
     jest.spyOn(PgShopRepo.prototype, "getShopList").mockResolvedValue(shopList);
 
     const response = await shopService.getShopList();
-    expect(shopRepo.getShopList).toBeCalledTimes(1);
+    expect(shopRepo.getShopList).toHaveBeenCalledTimes(1);
     expect(response).toEqual(shopList);
   });
   it("getShopList -- empty list", async () => {
     jest.spyOn(PgShopRepo.prototype, "getShopList").mockResolvedValue([]);
 
     const response = await shopService.getShopList();
-    expect(shopRepo.getShopList).toBeCalledTimes(1);
+    expect(shopRepo.getShopList).toHaveBeenCalledTimes(1);
     expect(response).toEqual([]);
   });
 });

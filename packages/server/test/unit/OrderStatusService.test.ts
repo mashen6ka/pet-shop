@@ -27,7 +27,7 @@ describe("OrderStatusService", () => {
       .mockResolvedValue(orderStatus.id);
 
     const response = await orderStatusService.createOrderStatus(orderStatus);
-    expect(orderStatusRepo.createOrderStatus).toBeCalledTimes(1);
+    expect(orderStatusRepo.createOrderStatus).toHaveBeenCalledTimes(1);
     expect(response).toEqual(orderStatus.id);
   });
   it("updateOrderStatus", async () => {
@@ -38,7 +38,7 @@ describe("OrderStatusService", () => {
       .mockResolvedValue();
 
     const response = await orderStatusService.updateOrderStatus(orderStatus);
-    expect(orderStatusRepo.updateOrderStatus).toBeCalledTimes(1);
+    expect(orderStatusRepo.updateOrderStatus).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
   it("deleteOrderStatus", async () => {
@@ -49,7 +49,7 @@ describe("OrderStatusService", () => {
       .mockResolvedValue();
 
     const response = await orderStatusService.deleteOrderStatus(orderStatus.id);
-    expect(orderStatusRepo.deleteOrderStatus).toBeCalledTimes(1);
+    expect(orderStatusRepo.deleteOrderStatus).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
   it("getOrderStatus -- success", async () => {
@@ -60,7 +60,7 @@ describe("OrderStatusService", () => {
       .mockResolvedValue(orderStatus);
 
     const response = await orderStatusService.getOrderStatus(orderStatus.id);
-    expect(orderStatusRepo.getOrderStatus).toBeCalledTimes(1);
+    expect(orderStatusRepo.getOrderStatus).toHaveBeenCalledTimes(1);
     expect(response).toEqual(orderStatus);
   });
   it("getOrderStatus -- orderStatus not found", async () => {
@@ -71,7 +71,7 @@ describe("OrderStatusService", () => {
       .mockResolvedValue(null);
 
     const response = await orderStatusService.getOrderStatus(orderStatus.id);
-    expect(orderStatusRepo.getOrderStatus).toBeCalledTimes(1);
+    expect(orderStatusRepo.getOrderStatus).toHaveBeenCalledTimes(1);
     expect(response).toEqual(null);
   });
   it("getOrderStatusList -- non-empty list", async () => {
@@ -84,7 +84,7 @@ describe("OrderStatusService", () => {
       .mockResolvedValue(orderStatusList);
 
     const response = await orderStatusService.getOrderStatusList();
-    expect(orderStatusRepo.getOrderStatusList).toBeCalledTimes(1);
+    expect(orderStatusRepo.getOrderStatusList).toHaveBeenCalledTimes(1);
     expect(response).toEqual(orderStatusList);
   });
   it("getOrderStatusList -- empty list", async () => {
@@ -93,7 +93,7 @@ describe("OrderStatusService", () => {
       .mockResolvedValue([]);
 
     const response = await orderStatusService.getOrderStatusList();
-    expect(orderStatusRepo.getOrderStatusList).toBeCalledTimes(1);
+    expect(orderStatusRepo.getOrderStatusList).toHaveBeenCalledTimes(1);
     expect(response).toEqual([]);
   });
 });

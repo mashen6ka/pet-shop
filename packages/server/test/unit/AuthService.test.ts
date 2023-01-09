@@ -36,8 +36,8 @@ describe("AuthService", () => {
     jest.spyOn(PgUserRepo.prototype, "createSession").mockResolvedValue(token);
 
     const response = await authService.authenticateUser(authn);
-    expect(userRepo.getUserIdByLoginAndPassword).toBeCalledTimes(1);
-    expect(userRepo.createSession).toBeCalledTimes(1);
+    expect(userRepo.getUserIdByLoginAndPassword).toHaveBeenCalledTimes(1);
+    expect(userRepo.createSession).toHaveBeenCalledTimes(1);
     expect(response).toEqual(token);
   });
   it("authenticateUser -- user not found", async () => {
@@ -50,8 +50,8 @@ describe("AuthService", () => {
     jest.spyOn(PgUserRepo.prototype, "createSession").mockResolvedValue(token);
 
     const response = await authService.authenticateUser(authn);
-    expect(userRepo.getUserIdByLoginAndPassword).toBeCalledTimes(1);
-    expect(userRepo.createSession).not.toBeCalled();
+    expect(userRepo.getUserIdByLoginAndPassword).toHaveBeenCalledTimes(1);
+    expect(userRepo.createSession).not.toHaveBeenCalled();
     expect(response).toEqual(null);
   });
   it("getUserIdByToken -- success", async () => {
@@ -63,7 +63,7 @@ describe("AuthService", () => {
       .mockResolvedValue(user.id);
 
     const response = await authService.getUserIdByToken(token);
-    expect(userRepo.getUserIdByToken).toBeCalledTimes(1);
+    expect(userRepo.getUserIdByToken).toHaveBeenCalledTimes(1);
     expect(response).toEqual(user.id);
   });
   it("getUserIdByToken -- user not found", async () => {
@@ -74,7 +74,7 @@ describe("AuthService", () => {
       .mockResolvedValue(null);
 
     const response = await authService.getUserIdByToken(token);
-    expect(userRepo.getUserIdByToken).toBeCalledTimes(1);
+    expect(userRepo.getUserIdByToken).toHaveBeenCalledTimes(1);
     expect(response).toEqual(null);
   });
   it("getWorkerIdByToken -- success", async () => {
@@ -86,7 +86,7 @@ describe("AuthService", () => {
       .mockResolvedValue(worker.id);
 
     const response = await authService.getWorkerIdByToken(token);
-    expect(userRepo.getWorkerIdByToken).toBeCalledTimes(1);
+    expect(userRepo.getWorkerIdByToken).toHaveBeenCalledTimes(1);
     expect(response).toEqual(worker.id);
   });
   it("getWorkerIdByToken -- worker not found", async () => {
@@ -97,7 +97,7 @@ describe("AuthService", () => {
       .mockResolvedValue(null);
 
     const response = await authService.getWorkerIdByToken(token);
-    expect(userRepo.getWorkerIdByToken).toBeCalledTimes(1);
+    expect(userRepo.getWorkerIdByToken).toHaveBeenCalledTimes(1);
     expect(response).toEqual(null);
   });
 });

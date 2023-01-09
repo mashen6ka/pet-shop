@@ -27,7 +27,7 @@ describe("ManufacturerService", () => {
       .mockResolvedValue(manufacturer.id);
 
     const response = await manufacturerService.createManufacturer(manufacturer);
-    expect(manufacturerRepo.createManufacturer).toBeCalledTimes(1);
+    expect(manufacturerRepo.createManufacturer).toHaveBeenCalledTimes(1);
     expect(response).toEqual(manufacturer.id);
   });
   it("updateManufacturer", async () => {
@@ -38,7 +38,7 @@ describe("ManufacturerService", () => {
       .mockResolvedValue();
 
     const response = await manufacturerService.updateManufacturer(manufacturer);
-    expect(manufacturerRepo.updateManufacturer).toBeCalledTimes(1);
+    expect(manufacturerRepo.updateManufacturer).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
   it("deleteManufacturer", async () => {
@@ -51,7 +51,7 @@ describe("ManufacturerService", () => {
     const response = await manufacturerService.deleteManufacturer(
       manufacturer.id
     );
-    expect(manufacturerRepo.deleteManufacturer).toBeCalledTimes(1);
+    expect(manufacturerRepo.deleteManufacturer).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
   it("getManufacturer -- success", async () => {
@@ -62,7 +62,7 @@ describe("ManufacturerService", () => {
       .mockResolvedValue(manufacturer);
 
     const response = await manufacturerService.getManufacturer(manufacturer.id);
-    expect(manufacturerRepo.getManufacturer).toBeCalledTimes(1);
+    expect(manufacturerRepo.getManufacturer).toHaveBeenCalledTimes(1);
     expect(response).toEqual(manufacturer);
   });
   it("getManufacturer -- manufacturer not found", async () => {
@@ -73,7 +73,7 @@ describe("ManufacturerService", () => {
       .mockResolvedValue(null);
 
     const response = await manufacturerService.getManufacturer(manufacturer.id);
-    expect(manufacturerRepo.getManufacturer).toBeCalledTimes(1);
+    expect(manufacturerRepo.getManufacturer).toHaveBeenCalledTimes(1);
     expect(response).toEqual(null);
   });
   it("getManufacturerList -- non-empty list", async () => {
@@ -86,7 +86,7 @@ describe("ManufacturerService", () => {
       .mockResolvedValue(manufacturerList);
 
     const response = await manufacturerService.getManufacturerList();
-    expect(manufacturerRepo.getManufacturerList).toBeCalledTimes(1);
+    expect(manufacturerRepo.getManufacturerList).toHaveBeenCalledTimes(1);
     expect(response).toEqual(manufacturerList);
   });
   it("getManufacturerList -- empty list", async () => {
@@ -95,7 +95,7 @@ describe("ManufacturerService", () => {
       .mockResolvedValue([]);
 
     const response = await manufacturerService.getManufacturerList();
-    expect(manufacturerRepo.getManufacturerList).toBeCalledTimes(1);
+    expect(manufacturerRepo.getManufacturerList).toHaveBeenCalledTimes(1);
     expect(response).toEqual([]);
   });
 });

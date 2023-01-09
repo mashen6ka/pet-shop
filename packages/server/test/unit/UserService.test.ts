@@ -48,8 +48,8 @@ describe("UserService", () => {
     jest.spyOn(PgUserRepo.prototype, "createSession").mockResolvedValue(token);
 
     const response = await userService.authenticateUser(authn);
-    expect(userRepo.getUserIdByLoginAndPassword).toBeCalledTimes(1);
-    expect(userRepo.createSession).toBeCalledTimes(1);
+    expect(userRepo.getUserIdByLoginAndPassword).toHaveBeenCalledTimes(1);
+    expect(userRepo.createSession).toHaveBeenCalledTimes(1);
     expect(response).toEqual(token);
   });
 
@@ -67,8 +67,8 @@ describe("UserService", () => {
     jest.spyOn(PgUserRepo.prototype, "createSession").mockResolvedValue(token);
 
     const response = await userService.authenticateUser(authn);
-    expect(userRepo.getUserIdByLoginAndPassword).toBeCalledTimes(1);
-    expect(userRepo.createSession).not.toBeCalled();
+    expect(userRepo.getUserIdByLoginAndPassword).toHaveBeenCalledTimes(1);
+    expect(userRepo.createSession).not.toHaveBeenCalled();
     expect(response).toEqual(null);
   });
 
@@ -81,7 +81,7 @@ describe("UserService", () => {
       .mockResolvedValue(user.id);
 
     const response = await userService.getUserIdByToken(token);
-    expect(userRepo.getUserIdByToken).toBeCalledTimes(1);
+    expect(userRepo.getUserIdByToken).toHaveBeenCalledTimes(1);
     expect(response).toEqual(user.id);
   });
 
@@ -94,7 +94,7 @@ describe("UserService", () => {
       .mockResolvedValue(null);
 
     const response = await userService.getUserIdByToken(token);
-    expect(userRepo.getUserIdByToken).toBeCalledTimes(1);
+    expect(userRepo.getUserIdByToken).toHaveBeenCalledTimes(1);
     expect(response).toEqual(null);
   });
 
@@ -104,7 +104,7 @@ describe("UserService", () => {
     jest.spyOn(PgUserRepo.prototype, "getUser").mockResolvedValue(user);
 
     const response = await userService.getUser(user.id);
-    expect(userRepo.getUser).toBeCalledTimes(1);
+    expect(userRepo.getUser).toHaveBeenCalledTimes(1);
     expect(response).toEqual(user);
   });
 
@@ -114,7 +114,7 @@ describe("UserService", () => {
     jest.spyOn(PgUserRepo.prototype, "getUser").mockResolvedValue(null);
 
     const response = await userService.getUser(user.id);
-    expect(userRepo.getUser).toBeCalledTimes(1);
+    expect(userRepo.getUser).toHaveBeenCalledTimes(1);
     expect(response).toEqual(null);
   });
 
@@ -124,7 +124,7 @@ describe("UserService", () => {
     jest.spyOn(PgUserRepo.prototype, "createUser").mockResolvedValue(user.id);
 
     const response = await userService.createUser(user);
-    expect(userRepo.createUser).toBeCalledTimes(1);
+    expect(userRepo.createUser).toHaveBeenCalledTimes(1);
     expect(response).toEqual(user.id);
   });
 
@@ -134,7 +134,7 @@ describe("UserService", () => {
     jest.spyOn(PgUserRepo.prototype, "updateUser").mockResolvedValue();
 
     const response = await userService.updateUser(user);
-    expect(userRepo.updateUser).toBeCalledTimes(1);
+    expect(userRepo.updateUser).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
 
@@ -144,7 +144,7 @@ describe("UserService", () => {
     jest.spyOn(PgUserRepo.prototype, "deleteUser").mockResolvedValue();
 
     const response = await userService.deleteUser(user.id);
-    expect(userRepo.deleteUser).toBeCalledTimes(1);
+    expect(userRepo.deleteUser).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
 
@@ -155,7 +155,7 @@ describe("UserService", () => {
     jest.spyOn(PgUserRepo.prototype, "getUserList").mockResolvedValue(userList);
 
     const response = await userService.getUserList();
-    expect(userRepo.getUserList).toBeCalledTimes(1);
+    expect(userRepo.getUserList).toHaveBeenCalledTimes(1);
     expect(response.sort()).toEqual(userList.sort());
   });
 
@@ -163,7 +163,7 @@ describe("UserService", () => {
     jest.spyOn(PgUserRepo.prototype, "getUserList").mockResolvedValue([]);
 
     const response = await userService.getUserList();
-    expect(userRepo.getUserList).toBeCalledTimes(1);
+    expect(userRepo.getUserList).toHaveBeenCalledTimes(1);
     expect(response).toEqual([]);
   });
 
@@ -177,7 +177,7 @@ describe("UserService", () => {
       .mockResolvedValue(userCompanyList);
 
     const response = await userService.getUserCompanyList(user.id);
-    expect(userRepo.getUserCompanyList).toBeCalledTimes(1);
+    expect(userRepo.getUserCompanyList).toHaveBeenCalledTimes(1);
     expect(response.sort()).toEqual(userCompanyList.sort());
   });
 
@@ -188,7 +188,7 @@ describe("UserService", () => {
       .mockResolvedValue([]);
 
     const response = await userService.getUserCompanyList(user.id);
-    expect(userRepo.getUserCompanyList).toBeCalledTimes(1);
+    expect(userRepo.getUserCompanyList).toHaveBeenCalledTimes(1);
     expect(response).toEqual([]);
   });
 
@@ -202,7 +202,7 @@ describe("UserService", () => {
       .mockResolvedValue(userOrderList);
 
     const response = await userService.getUserOrderList(user.id);
-    expect(userRepo.getUserOrderList).toBeCalledTimes(1);
+    expect(userRepo.getUserOrderList).toHaveBeenCalledTimes(1);
     expect(response.sort()).toEqual(userOrderList.sort());
   });
 
@@ -211,7 +211,7 @@ describe("UserService", () => {
     jest.spyOn(PgUserRepo.prototype, "getUserOrderList").mockResolvedValue([]);
 
     const response = await userService.getUserOrderList(user.id);
-    expect(userRepo.getUserOrderList).toBeCalledTimes(1);
+    expect(userRepo.getUserOrderList).toHaveBeenCalledTimes(1);
     expect(response).toEqual([]);
   });
 
@@ -222,7 +222,7 @@ describe("UserService", () => {
     jest.spyOn(PgUserRepo.prototype, "createUserCompany").mockResolvedValue();
 
     const response = await userService.createUserCompany(user.id, company.id);
-    expect(userRepo.createUserCompany).toBeCalledTimes(1);
+    expect(userRepo.createUserCompany).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
 
@@ -233,7 +233,7 @@ describe("UserService", () => {
     jest.spyOn(PgUserRepo.prototype, "deleteUserCompany").mockResolvedValue();
 
     const response = await userService.deleteUserCompany(user.id, company.id);
-    expect(userRepo.deleteUserCompany).toBeCalledTimes(1);
+    expect(userRepo.deleteUserCompany).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
 });

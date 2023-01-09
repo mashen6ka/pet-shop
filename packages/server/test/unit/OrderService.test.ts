@@ -35,7 +35,7 @@ describe("OrderService", () => {
       .mockResolvedValue(order.id);
 
     const response = await orderService.createOrder(order);
-    expect(orderRepo.createOrder).toBeCalledTimes(1);
+    expect(orderRepo.createOrder).toHaveBeenCalledTimes(1);
     expect(response).toEqual(order.id);
   });
   it("updateOrder", async () => {
@@ -44,7 +44,7 @@ describe("OrderService", () => {
     jest.spyOn(PgOrderRepo.prototype, "updateOrder").mockResolvedValue();
 
     const response = await orderService.updateOrder(order);
-    expect(orderRepo.updateOrder).toBeCalledTimes(1);
+    expect(orderRepo.updateOrder).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
   it("deleteOrder", async () => {
@@ -53,7 +53,7 @@ describe("OrderService", () => {
     jest.spyOn(PgOrderRepo.prototype, "deleteOrder").mockResolvedValue();
 
     const response = await orderService.deleteOrder(order.id);
-    expect(orderRepo.deleteOrder).toBeCalledTimes(1);
+    expect(orderRepo.deleteOrder).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
   it("getOrder -- success", async () => {
@@ -62,7 +62,7 @@ describe("OrderService", () => {
     jest.spyOn(PgOrderRepo.prototype, "getOrder").mockResolvedValue(order);
 
     const response = await orderService.getOrder(order.id);
-    expect(orderRepo.getOrder).toBeCalledTimes(1);
+    expect(orderRepo.getOrder).toHaveBeenCalledTimes(1);
     expect(response).toEqual(order);
   });
   it("getOrder -- order not found", async () => {
@@ -71,7 +71,7 @@ describe("OrderService", () => {
     jest.spyOn(PgOrderRepo.prototype, "getOrder").mockResolvedValue(null);
 
     const response = await orderService.getOrder(order.id);
-    expect(orderRepo.getOrder).toBeCalledTimes(1);
+    expect(orderRepo.getOrder).toHaveBeenCalledTimes(1);
     expect(response).toEqual(null);
   });
   it("getOrderList -- non-empty list", async () => {
@@ -83,14 +83,14 @@ describe("OrderService", () => {
       .mockResolvedValue(orderList);
 
     const response = await orderService.getOrderList();
-    expect(orderRepo.getOrderList).toBeCalledTimes(1);
+    expect(orderRepo.getOrderList).toHaveBeenCalledTimes(1);
     expect(response).toEqual(orderList);
   });
   it("getOrderList -- empty list", async () => {
     jest.spyOn(PgOrderRepo.prototype, "getOrderList").mockResolvedValue([]);
 
     const response = await orderService.getOrderList();
-    expect(orderRepo.getOrderList).toBeCalledTimes(1);
+    expect(orderRepo.getOrderList).toHaveBeenCalledTimes(1);
     expect(response).toEqual([]);
   });
   it("deleteOrderProduct", async () => {
@@ -103,7 +103,7 @@ describe("OrderService", () => {
       order.id,
       product.id
     );
-    expect(orderRepo.deleteOrderProduct).toBeCalledTimes(1);
+    expect(orderRepo.deleteOrderProduct).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
   it("updateOrderProduct", async () => {
@@ -118,7 +118,7 @@ describe("OrderService", () => {
       product.id,
       quantity
     );
-    expect(orderRepo.updateOrderProduct).toBeCalledTimes(1);
+    expect(orderRepo.updateOrderProduct).toHaveBeenCalledTimes(1);
     expect(response).toEqual(undefined);
   });
   it("getOrderItemList", async () => {
@@ -131,7 +131,7 @@ describe("OrderService", () => {
       .mockResolvedValue(orderItemList);
 
     const response = await orderService.getOrderItemList(order.id);
-    expect(orderRepo.getOrderItemList).toBeCalledTimes(1);
+    expect(orderRepo.getOrderItemList).toHaveBeenCalledTimes(1);
     expect(response).toEqual(orderItemList);
   });
 });
