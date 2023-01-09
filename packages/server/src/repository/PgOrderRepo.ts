@@ -124,7 +124,7 @@ export default class PgOrderRepo implements IOrderRepo {
     return orderItemList;
   }
 
-  async createOrderItem(
+  async createOrderProduct(
     orderId: number,
     productId: number,
     quantity: number
@@ -136,7 +136,7 @@ export default class PgOrderRepo implements IOrderRepo {
     );
   }
 
-  async deleteOrderItem(orderId: number, productId: Number): Promise<void> {
+  async deleteOrderProduct(orderId: number, productId: Number): Promise<void> {
     const res = await this.conn.query(
       `DELETE FROM "order__product"
        WHERE order_id = $1 and product_id = $2`,
@@ -144,7 +144,7 @@ export default class PgOrderRepo implements IOrderRepo {
     );
   }
 
-  async updateOrderItem(
+  async updateOrderProduct(
     orderId: number,
     productId: number,
     quantity: number

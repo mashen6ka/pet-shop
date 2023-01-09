@@ -36,11 +36,11 @@ export default class OrderService {
     productId: number,
     quantity: number
   ): Promise<void> {
-    await this.repo.createOrderItem(orderId, productId, quantity);
+    await this.repo.createOrderProduct(orderId, productId, quantity);
   }
 
   async deleteOrderProduct(orderId: number, productId: number): Promise<void> {
-    await this.repo.deleteOrderItem(orderId, productId);
+    await this.repo.deleteOrderProduct(orderId, productId);
   }
 
   async updateOrderProduct(
@@ -48,7 +48,7 @@ export default class OrderService {
     productId: number,
     quantity: number
   ): Promise<void> {
-    await this.repo.updateOrderItem(orderId, productId, quantity);
+    await this.repo.updateOrderProduct(orderId, productId, quantity);
   }
 
   async getOrderItemList(orderId: number): Promise<Array<OrderItemEntity>> {
