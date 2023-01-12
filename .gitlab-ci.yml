@@ -1,0 +1,23 @@
+variables:
+  NODE_VERSION: "18.1.0"
+
+image: node:${NODE_VERSION}-alpine
+
+stages:
+  - unit_tests
+
+unit_tests:
+  stage: unit_tests
+  tags:
+    - testing-docker
+  before_script:
+    - npm ci
+    - cd /packages/server
+  script:
+    - npm run test:unit
+  artifacts:
+    when: always
+    reports:
+      junit: junit.xml
+    paths:
+      - /packages/server/allure-results
