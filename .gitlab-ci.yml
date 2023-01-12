@@ -23,7 +23,7 @@ unit_tests:
   before_script:
     - npm ci
     - cd ./packages/server
-    - npm run test:migrate
+    - npm run ci:migrate
     - npm start
   script:
     - npm run test:unit
