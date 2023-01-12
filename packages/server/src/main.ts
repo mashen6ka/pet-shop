@@ -5,6 +5,8 @@ import { Client as PgClient } from "pg";
 import log from "npmlog";
 import { Request } from "express";
 import fs from "fs";
+import dotenv from "dotenv";
+import path from "path";
 import {
   UserController,
   ProductController,
@@ -36,9 +38,12 @@ import {
   OrderStatusService,
   AuthService,
 } from "./service";
-import { logLevel, dbCredentials } from "./config";
+import { logLevel } from "./config";
 
-// import bodyParser from "body-parser";
+dotenv.config({
+  path: path.join(__dirname, "..", ".env." + process.env.NODE_ENV),
+});
+
 log.stream = fs.createWriteStream("../log.txt", { flags: "a" });
 log.level = logLevel;
 const port = 3000;
@@ -56,7 +61,7 @@ app.use((req, res, next) => {
   next();
 });
 
-const conn = connectDB(dbCredentials);
+const conn = connectDB();
 
 const userRepo = new PgUserRepo(conn as PgClient);
 const authService = new AuthService(userRepo);
@@ -361,32 +366,20 @@ function logRequest(req: Request) {
   );
 }
 
-function connectDB({
-  host,
-  port,
-  user,
-  password,
-  database,
-}: {
-  host: string;
-  port: number;
-  user: string;
-  password: string;
-  database: string;
-}) {
+function connectDB() {
   const pgClient = new PgClient({
-    host: host,
-    port: port,
-    user: user,
-    password: password,
-    database: database,
+    host: process.env.DB_HOST,
+    port: parseInt(process.env.DB_PORT),
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
   });
 
   pgClient.connect((err) => {
     if (err) {
-      console.error(`Failed to connect to DB as ${user}`, err.stack);
+      console.error(`Failed to connect to DB`, err.stack);
     } else {
-      console.log(`Connected to DB as ${user}`);
+      console.log(`Connected to DB`);
     }
   });
 

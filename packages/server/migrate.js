@@ -1,14 +1,19 @@
 const { migrate } = require("postgres-migrations");
+const dotenv = require("dotenv");
+const path = require("path");
+
+dotenv.config({
+  path: path.join(__dirname, ".env." + process.env.NODE_ENV),
+});
 
 async function main() {
   const dbConfig = {
-    database: "main",
-    user: "postgres",
-    password: "postgres",
-    host: "localhost",
-    port: 9999,
+    database: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    port: parseInt(process.env.DB_PORT),
     ensureDatabaseExists: true,
-    defaultDatabase: "postgres",
   };
 
   await migrate(dbConfig, "./migrations");

@@ -1,7 +1,7 @@
 variables:
-  NODE_VERSION: "18.1.0"
+  NODE_VERSION: "18"
 
-image: node:${NODE_VERSION}-alpine
+image: node:${NODE_VERSION}
 
 stages:
   - unit_tests
@@ -9,15 +9,27 @@ stages:
 unit_tests:
   stage: unit_tests
   tags:
-    - testing-docker
+    - local
+    - docker
+  variables:
+    POSTGRES_DB: test
+    POSTGRES_USER: test
+    POSTGRES_PASSWORD: test
+    NODE_ENV: ci
+
+  services:
+    - name: postgres:alpine
+
   before_script:
     - npm ci
-    - cd /packages/server
+    - cd ./packages/server
+    - npm run test:migrate
+    - npm start
   script:
     - npm run test:unit
   artifacts:
     when: always
     reports:
-      junit: junit.xml
+      junit: ./junit.xml
     paths:
-      - /packages/server/allure-results
+      - ./allure-results
