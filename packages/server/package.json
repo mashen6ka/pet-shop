@@ -5,7 +5,9 @@
   "type": "commonjs",
   "scripts": {
     "start": "ts-node src/main.ts",
-    "dev:start": "NODE_ENV=development nodemon src/main.ts",
+    "ci:start": "NODE_ENV=ci ts-node src/main.ts",
+    "dev:start": "NODE_ENV=development ts-node src/main.ts",
+    "dev:watch": "NODE_ENV=development nodemon src/main.ts",
     "dev:migrate": "NODE_ENV=development node ./migrate.js",
     "ci:migrate": "NODE_ENV=ci node ./migrate.js",
     "test:clear": "rm -rf allure-results",

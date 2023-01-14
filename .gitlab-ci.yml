@@ -5,9 +5,27 @@ image: node:${NODE_VERSION}
 
 stages:
   - unit_tests
+  - integration_tests
 
 unit_tests:
   stage: unit_tests
+  tags:
+    - local
+    - docker
+  before_script:
+    - npm ci
+    - cd ./packages/server
+  script:
+    - npm run test:unit
+  artifacts:
+    when: always
+    reports:
+      junit: ./packages/server/junit.xml
+    paths:
+      - ./packages/server/allure-results
+
+integration_tests:
+  stage: integration_tests
   tags:
     - local
     - docker
@@ -16,20 +34,19 @@ unit_tests:
     POSTGRES_USER: test
     POSTGRES_PASSWORD: test
     NODE_ENV: ci
-
   services:
     - name: postgres:alpine
-
   before_script:
     - npm ci
     - cd ./packages/server
     - npm run ci:migrate
-    - npm start
+    - npm run ci:start &
+    - curl -v --retry 5 --retry-delay 0 --retry-all-errors 127.0.0.1:3000
   script:
-    - npm run test:unit
+    - npm run test:integration
   artifacts:
     when: always
     reports:
-      junit: ./junit.xml
+      junit: ./packages/server/junit.xml
     paths:
-      - ./allure-results
+      - ./packages/server/allure-results
