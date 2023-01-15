@@ -1,7 +1,11 @@
 create function check_orders() returns trigger
 as $check_orders$
 begin
-	if exists (select o.id from "order" o where o.status_id in (1, 2, 3, 4) and o.user_id = old.id)
+	if exists (select o.id 
+						 from "order" o 
+						 join "order_status" os 
+						 on o.status_id = os.id 
+						 where os.name != 'Completed' and os.name != 'Cancelled' and o.user_id = old.id)
 	then
 	raise exception 'This user cannot be deleted, he/she has unfinished orders!';
 	else
