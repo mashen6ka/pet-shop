@@ -41,7 +41,7 @@ export default class UserEntity {
   @IsEmail()
   email: string;
 
-  @IsPhoneNumber()
+  @IsString()
   phone: string;
 
   @IsInt()
