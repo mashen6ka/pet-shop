@@ -41,7 +41,7 @@ import {
 import { logLevel } from "./config";
 
 dotenv.config({
-  path: path.join(__dirname, "..", ".env." + process.env.NODE_ENV),
+  path: path.join(__dirname, "..", ".env." + process.env.ENV),
 });
 
 log.stream = fs.createWriteStream("../log.txt", { flags: "a" });
@@ -376,11 +376,8 @@ function connectDB() {
   });
 
   pgClient.connect((err) => {
-    if (err) {
-      console.error(`Failed to connect to DB`, err.stack);
-    } else {
-      console.log(`Connected to DB`);
-    }
+    if (err) console.error(`Failed to connect to DB`, err.stack);
+    else console.log(`Connected to DB`);
   });
 
   return pgClient;
