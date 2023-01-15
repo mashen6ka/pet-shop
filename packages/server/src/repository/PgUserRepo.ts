@@ -113,7 +113,7 @@ export default class PgUserRepo implements IUserRepo {
       const user = new UserEntity({
         id: userFields.id,
         login: userFields.login,
-        password: userFields.password,
+        password: String.fromCharCode(...userFields.password),
         worker: userFields.worker,
         firstName: userFields.first_name,
         lastName: userFields.last_name,
@@ -135,7 +135,7 @@ export default class PgUserRepo implements IUserRepo {
       const user = new UserEntity({
         id: userFields.id,
         login: userFields.login,
-        password: userFields.password,
+        password: String.fromCharCode(...userFields.password),
         worker: userFields.worker,
         firstName: userFields.first_name,
         lastName: userFields.last_name,

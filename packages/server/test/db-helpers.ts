@@ -1,6 +1,7 @@
 import { Client as pgConn } from "pg";
 import crypto from "crypto";
 import {
+  AuthnEntity,
   CompanyEntity,
   CountryEntity,
   ManufacturerEntity,
@@ -140,6 +141,15 @@ export async function selectUser(conn: pgConn, userId: number) {
     phone: userFields.phone,
     personalDiscount: userFields.personal_discount,
   });
+}
+
+export async function selectSession(conn: pgConn, token: string) {
+  const response = await conn.query(
+    `SELECT s.user_id FROM "session" s
+    WHERE s.token = $1`,
+    [token]
+  );
+  return response.rows[0].user_id;
 }
 
 export async function insertOrder(conn: pgConn, order: OrderEntity) {
