@@ -6,6 +6,7 @@ image: node:${NODE_VERSION}
 stages:
   - unit_tests
   - integration_tests
+  - e2e_tests
 
 unit_tests:
   stage: unit_tests
@@ -33,7 +34,7 @@ integration_tests:
     POSTGRES_DB: test
     POSTGRES_USER: test
     POSTGRES_PASSWORD: test
-    NODE_ENV: ci
+    ENV: ci
   services:
     - name: postgres:alpine
   before_script:
@@ -44,6 +45,33 @@ integration_tests:
     - curl -v --retry 5 --retry-delay 0 --retry-all-errors 127.0.0.1:3000
   script:
     - npm run ci:test-integration
+  artifacts:
+    when: always
+    reports:
+      junit: ./packages/server/junit.xml
+    paths:
+      - ./packages/server/allure-results
+
+e2e_tests:
+  stage: e2e_tests
+  tags:
+    - local
+    - docker
+  variables:
+    POSTGRES_DB: test
+    POSTGRES_USER: test
+    POSTGRES_PASSWORD: test
+    ENV: ci
+  services:
+    - name: postgres:alpine
+  before_script:
+    - npm ci
+    - cd ./packages/server
+    - npm run ci:migrate
+    - npm run ci:start &
+    - curl -v --retry 5 --retry-delay 0 --retry-all-errors 127.0.0.1:3000
+  script:
+    - npm run ci:test-e2e
   artifacts:
     when: always
     reports:
