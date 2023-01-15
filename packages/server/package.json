@@ -15,8 +15,10 @@
     "ci:test": "npm run test-clear & ENV=ci NODE_OPTIONS=--experimental-vm-modules npx jest",
     "dev:test-unit": "npm run dev:test -- --testPathPattern=test/unit",
     "dev:test-integration": "npm run dev:test -- --runInBand --testPathPattern=test/integration",
+    "dev:test-e2e": "npm run dev:test -- --runInBand --testPathPattern=test/e2e",
     "ci:test-unit": "npm run ci:test -- --testPathPattern=test/unit",
-    "ci:test-integration": "npm run ci:test -- --runInBand --testPathPattern=test/integration"
+    "ci:test-integration": "npm run ci:test -- --runInBand --testPathPattern=test/integration",
+    "ci:test-e2e": "npm run ci:test -- --runInBand --testPathPattern=test/e2e"
   },
   "author": "mashen6ka",
   "dependencies": {

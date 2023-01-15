@@ -1,4 +1,5 @@
 import { Client as pgConn } from "pg";
+import crypto from "crypto";
 import {
   CompanyEntity,
   CountryEntity,
@@ -17,7 +18,7 @@ export async function insertProductShop(
   shopId: number,
   quantity: number
 ) {
-  const response = await conn.query(
+  await conn.query(
     `INSERT INTO "product__shop" (product_id, shop_id, quantity)
     VALUES ($1, $2, $3)`,
     [productId, shopId, quantity]
@@ -29,7 +30,7 @@ export async function insertOrderItem(
   orderId: number,
   orderItem: OrderItemEntity
 ) {
-  const response = await conn.query(
+  await conn.query(
     `INSERT INTO "order__product" (order_id, product_id, quantity)
     VALUES ($1, $2, $3)`,
     [orderId, orderItem.product.id, orderItem.quantity]
@@ -102,7 +103,7 @@ export async function insertUser(conn: pgConn, user: UserEntity) {
      RETURNING id`,
     [
       user.login,
-      user.password,
+      crypto.createHash("sha256").update(user.password).digest("base64"),
       user.firstName,
       user.lastName,
       user.middleName,

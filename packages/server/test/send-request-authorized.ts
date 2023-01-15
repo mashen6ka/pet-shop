@@ -5,24 +5,24 @@ export default async function sendRequestAuthorized(
   method: string,
   urlPostfix: string,
   data: any,
-  token: string
+  token: string = null
 ) {
-  if (method === "post")
-    return await axios({
+  let config;
+  if (method === "post") {
+    config = {
       method: method,
       url: process.env.SERVER_URL + urlPostfix,
       data: data,
-      headers: {
-        Cookie: `${cookieName}=${token}`,
-      },
-    });
-  else if (method === "get")
-    return await axios({
+      headers: {},
+    };
+  } else if (method === "get") {
+    config = {
       method: method,
       url: process.env.SERVER_URL + urlPostfix,
       params: data,
-      headers: {
-        Cookie: `${cookieName}=${token}`,
-      },
-    });
+      headers: {},
+    };
+  }
+  if (token) config.headers = { Cookie: `${cookieName}=${token}` };
+  return await axios(config);
 }

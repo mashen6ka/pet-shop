@@ -1,5 +1,6 @@
 import { UserEntity } from "../../src/entity";
 import Chance from "chance";
+import crypto from "crypto";
 
 export default class UserBuilder {
   user: UserEntity;
@@ -10,7 +11,10 @@ export default class UserBuilder {
     this.user = new UserEntity({
       id: chance.natural(),
       login: chance.string(),
-      password: chance.string(),
+      password: crypto
+        .createHash("sha256")
+        .update(chance.string())
+        .digest("base64"),
       worker: chance.bool({ likelihood: 10 }),
       firstName: chance.first(),
       lastName: chance.last(),
