@@ -37,8 +37,8 @@ CREATE TABLE "product" (
   "id" SERIAL PRIMARY KEY,
   "name" text NOT NULL,
   "description" text NOT NULL,
-  "country_id" int NOT NULL,
-  "manufacturer_id" int NOT NULL,
+  "country_id" int,
+  "manufacturer_id" int,
   "initial_price" int NOT NULL,
   "discount" int NOT NULL DEFAULT 0 CHECK(discount >= 0 AND  discount <= 100),
   "img_url" text NULL
