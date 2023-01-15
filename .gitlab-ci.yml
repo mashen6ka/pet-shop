@@ -16,7 +16,7 @@ unit_tests:
     - npm ci
     - cd ./packages/server
   script:
-    - npm run test:unit
+    - npm run ci:test-unit
   artifacts:
     when: always
     reports:
@@ -43,7 +43,7 @@ integration_tests:
     - npm run ci:start &
     - curl -v --retry 5 --retry-delay 0 --retry-all-errors 127.0.0.1:3000
   script:
-    - npm run test:integration
+    - npm run ci:test-integration
   artifacts:
     when: always
     reports:

@@ -16,7 +16,7 @@
     "dev:test-unit": "npm run dev:test -- --testPathPattern=test/unit",
     "dev:test-integration": "npm run dev:test -- --runInBand --testPathPattern=test/integration",
     "ci:test-unit": "npm run ci:test -- --testPathPattern=test/unit",
-    "ci:test-integration": "npm run ci:test -- --testPathPattern=test/integration"
+    "ci:test-integration": "npm run ci:test -- --runInBand --testPathPattern=test/integration"
   },
   "author": "mashen6ka",
   "dependencies": {
