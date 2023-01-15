@@ -119,7 +119,7 @@ export async function insertUser(conn: pgConn, user: UserEntity) {
 
 export async function selectUser(conn: pgConn, userId: number) {
   const response = await conn.query(
-    `SELECT login, password, first_name, last_name, 
+    `SELECT id, login, password, first_name, last_name, 
     middle_name, birthday, email, phone, personal_discount, worker
      FROM "user"
      WHERE id = $1`,
@@ -130,12 +130,12 @@ export async function selectUser(conn: pgConn, userId: number) {
   return new UserEntity({
     id: userFields.id,
     login: userFields.login,
-    password: userFields.password,
+    password: String.fromCharCode(...userFields.password),
     worker: userFields.worker,
     firstName: userFields.first_name,
     lastName: userFields.last_name,
     middleName: userFields.middle_name,
-    birthday: userFields.birthday.toLocaleDateString(),
+    birthday: userFields.birthday,
     email: userFields.email,
     phone: userFields.phone,
     personalDiscount: userFields.personal_discount,

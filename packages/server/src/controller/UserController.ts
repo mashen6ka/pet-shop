@@ -58,7 +58,7 @@ export default class UserController extends BaseController {
 
   async deleteUser(req: Request, res: Response): Promise<void> {
     try {
-      const id = await this.getUserIdByToken(req);
+      const id = req.body.id;
       await this.service.deleteUser(id);
       res.status(200).json({ success: true });
     } catch (err) {

@@ -11,15 +11,12 @@ export default class UserBuilder {
     this.user = new UserEntity({
       id: chance.natural(),
       login: chance.string(),
-      password: crypto
-        .createHash("sha256")
-        .update(chance.string())
-        .digest("base64"),
+      password: chance.string(),
       worker: chance.bool({ likelihood: 10 }),
       firstName: chance.first(),
       lastName: chance.last(),
       middleName: chance.first(),
-      birthday: chance.birthday(),
+      birthday: new Date(chance.date().toDateString()),
       email: chance.email(),
       phone: chance.phone({ formatted: false }),
       personalDiscount: chance.natural({ min: 0, max: 100 }),
