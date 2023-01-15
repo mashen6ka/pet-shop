@@ -102,7 +102,7 @@ ALTER TABLE "product" ADD FOREIGN KEY ("country_id") REFERENCES "country" ("id")
 
 ALTER TABLE "product" ADD FOREIGN KEY ("manufacturer_id") REFERENCES "manufacturer" ("id") ON DELETE SET NULL;
 
-ALTER TABLE "order" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id") ON DELETE SET NULL;
+ALTER TABLE "order" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id") ON DELETE CASCADE;
 
 ALTER TABLE "order" ADD FOREIGN KEY ("company_id") REFERENCES "company" ("id") ON DELETE SET NULL;
 
