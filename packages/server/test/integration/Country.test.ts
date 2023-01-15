@@ -3,7 +3,7 @@ import { Client as pgConn } from "pg";
 import connectDB from "../connect-db";
 import { CountryBuilder, UserBuilder } from "../builders";
 import { createAndAuthenticateUser } from "../create-and-authenticate-user";
-import sendRequestAuthorized from "../send-request-authorized";
+import sendRequest from "../send-request";
 import checkResponse from "../check-response";
 import { insertCountry, selectCountry } from "../db-helpers";
 
@@ -31,7 +31,7 @@ describe("Country", () => {
 
   it("/country/create", async () => {
     const country = new CountryBuilder().build();
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/country/create",
       country,
@@ -52,7 +52,7 @@ describe("Country", () => {
 
     const countryUpdated = new CountryBuilder().build();
     countryUpdated.id = countryId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/country/update",
       countryUpdated,
@@ -69,7 +69,7 @@ describe("Country", () => {
     const countryId = await insertCountry(conn, country);
 
     country.id = countryId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "get",
       "/country/get",
       { id: country.id },
@@ -83,7 +83,7 @@ describe("Country", () => {
     const countryId = await insertCountry(conn, country);
 
     country.id = countryId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "get",
       "/country/get/list",
       {},
@@ -97,7 +97,7 @@ describe("Country", () => {
     const countryId = await insertCountry(conn, country);
 
     country.id = countryId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/country/delete",
       { id: country.id },

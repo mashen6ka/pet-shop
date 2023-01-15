@@ -3,7 +3,7 @@ import { Client as pgConn } from "pg";
 import connectDB from "../connect-db";
 import { OrderStatusBuilder, UserBuilder } from "../builders";
 import { createAndAuthenticateUser } from "../create-and-authenticate-user";
-import sendRequestAuthorized from "../send-request-authorized";
+import sendRequest from "../send-request";
 import checkResponse from "../check-response";
 import { insertOrderStatus, selectOrderStatus } from "../db-helpers";
 
@@ -31,7 +31,7 @@ describe("OrderStatus", () => {
 
   it("/order/status/create", async () => {
     const orderStatus = new OrderStatusBuilder().build();
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/order/status/create",
       orderStatus,
@@ -52,7 +52,7 @@ describe("OrderStatus", () => {
 
     const orderStatusUpdated = new OrderStatusBuilder().build();
     orderStatusUpdated.id = orderStatusId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/order/status/update",
       orderStatusUpdated,
@@ -69,7 +69,7 @@ describe("OrderStatus", () => {
     const orderStatusId = await insertOrderStatus(conn, orderStatus);
 
     orderStatus.id = orderStatusId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "get",
       "/order/status/get",
       { id: orderStatus.id },
@@ -83,7 +83,7 @@ describe("OrderStatus", () => {
     const orderStatusId = await insertOrderStatus(conn, orderStatus);
 
     orderStatus.id = orderStatusId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "get",
       "/order/status/get/list",
       {},
@@ -97,7 +97,7 @@ describe("OrderStatus", () => {
     const orderStatusId = await insertOrderStatus(conn, orderStatus);
 
     orderStatus.id = orderStatusId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/order/status/delete",
       { id: orderStatus.id },

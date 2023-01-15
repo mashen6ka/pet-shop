@@ -13,7 +13,7 @@ import {
   ManufacturerBuilder,
 } from "../builders";
 import { createUser, authenticateUser } from "../create-and-authenticate-user";
-import sendRequestAuthorized from "../send-request-authorized";
+import sendRequest from "../send-request";
 import checkResponse from "../check-response";
 import {
   insertCompany,
@@ -77,7 +77,7 @@ describe("Order", () => {
   it("/order/create", async () => {
     const order = await buildOrderWithDependencies(conn, userId);
 
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/order/create",
       order,
@@ -106,7 +106,7 @@ describe("Order", () => {
       .build();
     orderUpdated.id = orderId;
 
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/order/update",
       orderUpdated,
@@ -123,7 +123,7 @@ describe("Order", () => {
     const orderId = await insertOrder(conn, order);
 
     order.id = orderId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "get",
       "/order/get",
       { id: order.id },
@@ -137,7 +137,7 @@ describe("Order", () => {
     const orderId = await insertOrder(conn, order);
 
     order.id = orderId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "get",
       "/order/get/list",
       {},
@@ -151,7 +151,7 @@ describe("Order", () => {
     const orderId = await insertOrder(conn, order);
 
     order.id = orderId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/order/delete",
       { id: order.id },
@@ -168,7 +168,7 @@ describe("Order", () => {
     const orderId = await insertOrder(conn, order);
     const orderItem = await buildOrderItemWithDependencies(conn);
 
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/order/create/item",
       {
@@ -201,7 +201,7 @@ describe("Order", () => {
     const orderItemUpdated = orderItem;
     orderItemUpdated.quantity = orderItem.quantity + 1;
 
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/order/update/item",
       {
@@ -231,7 +231,7 @@ describe("Order", () => {
     const orderItem = await buildOrderItemWithDependencies(conn);
     await insertOrderItem(conn, orderId, orderItem);
 
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/order/delete/item",
       {

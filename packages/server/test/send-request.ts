@@ -1,7 +1,7 @@
 import axios from "axios";
 import { cookieName } from "../src/config";
 
-export default async function sendRequestAuthorized(
+export default async function sendRequest(
   method: string,
   urlPostfix: string,
   data: any,

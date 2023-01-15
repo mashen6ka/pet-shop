@@ -3,7 +3,7 @@ import { Client as pgConn } from "pg";
 import connectDB from "../connect-db";
 import { ShopBuilder, UserBuilder } from "../builders";
 import { createAndAuthenticateUser } from "../create-and-authenticate-user";
-import sendRequestAuthorized from "../send-request-authorized";
+import sendRequest from "../send-request";
 import checkResponse from "../check-response";
 import { insertShop, selectShop } from "../db-helpers";
 
@@ -31,7 +31,7 @@ describe("Shop", () => {
 
   it("/shop/create", async () => {
     const shop = new ShopBuilder().build();
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/shop/create",
       shop,
@@ -52,7 +52,7 @@ describe("Shop", () => {
 
     const shopUpdated = new ShopBuilder().build();
     shopUpdated.id = shopId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/shop/update",
       shopUpdated,
@@ -69,7 +69,7 @@ describe("Shop", () => {
     const shopId = await insertShop(conn, shop);
 
     shop.id = shopId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "get",
       "/shop/get",
       { id: shop.id },
@@ -83,7 +83,7 @@ describe("Shop", () => {
     const shopId = await insertShop(conn, shop);
 
     shop.id = shopId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "get",
       "/shop/get/list",
       {},
@@ -97,7 +97,7 @@ describe("Shop", () => {
     const shopId = await insertShop(conn, shop);
 
     shop.id = shopId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/shop/delete",
       { id: shop.id },

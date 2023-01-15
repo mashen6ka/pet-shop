@@ -10,7 +10,7 @@ import {
   ShopBuilder,
   UserBuilder,
 } from "../builders";
-import sendRequestAuthorized from "../send-request-authorized";
+import sendRequest from "../send-request";
 import {
   insertCountry,
   insertManufacturer,
@@ -82,16 +82,11 @@ describe("PlaceOrder", () => {
       password: testUser.password,
     });
 
-    const authResponse = await sendRequestAuthorized(
-      "post",
-      "/user/authn",
-      authn,
-      null
-    );
+    const authResponse = await sendRequest("post", "/user/authn", authn, null);
     const token = authResponse.data.data.token;
 
     // получаем список товаров
-    await sendRequestAuthorized("get", "/product/get/list", {}, token);
+    await sendRequest("get", "/product/get/list", {}, token);
 
     // оформляем заказ - заполняем основные данные
     const order = new OrderBuilder()
@@ -101,7 +96,7 @@ describe("PlaceOrder", () => {
       .withUserId(testUserId)
       .build();
     order.completedAt = null;
-    const orderCreateResponse = await sendRequestAuthorized(
+    const orderCreateResponse = await sendRequest(
       "post",
       "/order/create",
       order,
@@ -113,7 +108,7 @@ describe("PlaceOrder", () => {
     // оформляем заказ - добавляем товар
     const productInOrder = productList[0];
     const productQuantity = 2;
-    await sendRequestAuthorized(
+    await sendRequest(
       "post",
       "/order/create/item",
       {
@@ -125,7 +120,7 @@ describe("PlaceOrder", () => {
     );
 
     // получаем список оформленных юзером заказов
-    await sendRequestAuthorized("get", "/user/get/order/list", {}, token);
+    await sendRequest("get", "/user/get/order/list", {}, token);
 
     // проверяем оформленный заказ в бд
     const dbOrderResponse = await selectOrder(conn, orderId);

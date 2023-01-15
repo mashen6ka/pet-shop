@@ -9,7 +9,7 @@ import {
   UserBuilder,
 } from "../builders";
 import { createAndAuthenticateUser } from "../create-and-authenticate-user";
-import sendRequestAuthorized from "../send-request-authorized";
+import sendRequest from "../send-request";
 import checkResponse from "../check-response";
 import {
   insertCountry,
@@ -56,7 +56,7 @@ describe("Product", () => {
 
   it("/product/create", async () => {
     const product = await buildProductWithDependencies(conn);
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/product/create",
       product,
@@ -78,7 +78,7 @@ describe("Product", () => {
     const productUpdated = product;
     productUpdated.name + "-updated";
     productUpdated.id = productId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/product/update",
       productUpdated,
@@ -95,7 +95,7 @@ describe("Product", () => {
     const productId = await insertProduct(conn, product);
 
     product.id = productId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "get",
       "/product/get",
       { id: product.id },
@@ -109,7 +109,7 @@ describe("Product", () => {
     const productId = await insertProduct(conn, product);
 
     product.id = productId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "get",
       "/product/get/list",
       {},
@@ -123,7 +123,7 @@ describe("Product", () => {
     const productId = await insertProduct(conn, product);
 
     product.id = productId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/product/delete",
       { id: product.id },
@@ -147,7 +147,7 @@ describe("Product", () => {
     await insertProductShop(conn, productId, shopId, 5);
 
     product.id = productId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "get",
       "/product/get/shop/list",
       { productId: productId },

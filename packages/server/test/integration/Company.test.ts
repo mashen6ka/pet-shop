@@ -3,7 +3,7 @@ import { Client as pgConn } from "pg";
 import connectDB from "../connect-db";
 import { CompanyBuilder, UserBuilder } from "../builders";
 import { createAndAuthenticateUser } from "../create-and-authenticate-user";
-import sendRequestAuthorized from "../send-request-authorized";
+import sendRequest from "../send-request";
 import checkResponse from "../check-response";
 import { insertCompany, selectCompany } from "../db-helpers";
 
@@ -31,7 +31,7 @@ describe("Company", () => {
 
   it("/company/create", async () => {
     const company = new CompanyBuilder().build();
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/company/create",
       company,
@@ -52,7 +52,7 @@ describe("Company", () => {
 
     const companyUpdated = new CompanyBuilder().build();
     companyUpdated.id = companyId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/company/update",
       companyUpdated,
@@ -69,7 +69,7 @@ describe("Company", () => {
     const companyId = await insertCompany(conn, company);
 
     company.id = companyId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "get",
       "/company/get",
       { id: company.id },
@@ -83,7 +83,7 @@ describe("Company", () => {
     const companyId = await insertCompany(conn, company);
 
     company.id = companyId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "get",
       "/company/get/list",
       {},
@@ -97,7 +97,7 @@ describe("Company", () => {
     const companyId = await insertCompany(conn, company);
 
     company.id = companyId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/company/delete",
       { id: company.id },

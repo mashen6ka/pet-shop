@@ -3,7 +3,7 @@ import { Client as pgConn } from "pg";
 import connectDB from "../connect-db";
 import { ManufacturerBuilder, UserBuilder } from "../builders";
 import { createAndAuthenticateUser } from "../create-and-authenticate-user";
-import sendRequestAuthorized from "../send-request-authorized";
+import sendRequest from "../send-request";
 import checkResponse from "../check-response";
 import { insertManufacturer, selectManufacturer } from "../db-helpers";
 
@@ -31,7 +31,7 @@ describe("Manufacturer", () => {
 
   it("/manufacturer/create", async () => {
     const manufacturer = new ManufacturerBuilder().build();
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/manufacturer/create",
       manufacturer,
@@ -52,7 +52,7 @@ describe("Manufacturer", () => {
 
     const manufacturerUpdated = new ManufacturerBuilder().build();
     manufacturerUpdated.id = manufacturerId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/manufacturer/update",
       manufacturerUpdated,
@@ -69,7 +69,7 @@ describe("Manufacturer", () => {
     const manufacturerId = await insertManufacturer(conn, manufacturer);
 
     manufacturer.id = manufacturerId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "get",
       "/manufacturer/get",
       { id: manufacturer.id },
@@ -83,7 +83,7 @@ describe("Manufacturer", () => {
     const manufacturerId = await insertManufacturer(conn, manufacturer);
 
     manufacturer.id = manufacturerId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "get",
       "/manufacturer/get/list",
       {},
@@ -97,7 +97,7 @@ describe("Manufacturer", () => {
     const manufacturerId = await insertManufacturer(conn, manufacturer);
 
     manufacturer.id = manufacturerId;
-    const serviceResponse = await sendRequestAuthorized(
+    const serviceResponse = await sendRequest(
       "post",
       "/manufacturer/delete",
       { id: manufacturer.id },
