@@ -1,5 +1,6 @@
 import { OrderStatusEntity } from "../../src/entity";
 import Chance from "chance";
+import { sample } from "lodash";
 
 export default class OrderStatusBuilder {
   orderStatus: OrderStatusEntity;
@@ -9,11 +10,23 @@ export default class OrderStatusBuilder {
 
     this.orderStatus = new OrderStatusEntity({
       id: chance.natural(),
-      name: chance.string(),
+      name: sample([
+        "Created",
+        "Accepted",
+        "Assembly",
+        "Ready",
+        "Completed",
+        "Cancelled",
+      ]),
     });
   }
 
   build() {
     return this.orderStatus;
+  }
+
+  withName(name: string) {
+    this.orderStatus.name = name;
+    return this;
   }
 }

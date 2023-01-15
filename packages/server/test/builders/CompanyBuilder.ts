@@ -10,9 +10,9 @@ export default class CompanyBuilder {
     this.company = new CompanyEntity({
       id: chance.natural(),
       name: chance.string(),
-      KPP: chance.string(),
-      INN: chance.string(),
-      address: chance.string(),
+      KPP: chance.string({ length: 9 }),
+      INN: chance.string({ length: 12 }),
+      address: chance.address(),
     });
   }
 

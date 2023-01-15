@@ -18,11 +18,16 @@ export default class OrderItemBuilder {
         discount: chance.natural({ min: 0, max: 100 }),
         imgUrl: chance.url(),
       }),
-      quantity: chance.natural(),
+      quantity: chance.natural({ min: 1, max: 100000 }),
     });
   }
 
   build() {
     return this.orderItem;
+  }
+
+  withProduct(product: ProductEntity) {
+    this.orderItem.product = product;
+    return this;
   }
 }

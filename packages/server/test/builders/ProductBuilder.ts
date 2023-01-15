@@ -13,7 +13,7 @@ export default class ProductBuilder {
       description: chance.string(),
       countryId: chance.natural(),
       manufacturerId: chance.natural(),
-      initialPrice: chance.floating(),
+      initialPrice: chance.natural({ min: 10, max: 100000 }),
       discount: chance.natural({ min: 0, max: 100 }),
       imgUrl: chance.url(),
     });
@@ -21,5 +21,15 @@ export default class ProductBuilder {
 
   build() {
     return this.product;
+  }
+
+  withCountryId(countryId: number) {
+    this.product.countryId = countryId;
+    return this;
+  }
+
+  withManufacturerId(manufacturerId: number) {
+    this.product.manufacturerId = manufacturerId;
+    return this;
   }
 }

@@ -31,4 +31,14 @@ export default class OrderBuilder {
     this.order.companyId = companyId;
     return this;
   }
+
+  withStatusId(statusId: number) {
+    this.order.statusId = statusId;
+    return this;
+  }
+
+  withShopId(shopId: number) {
+    this.order.shopId = shopId;
+    return this;
+  }
 }
