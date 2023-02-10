@@ -1,21 +1,21 @@
-address,working_hours
-"Apt. 142 34302 Rath Square, Lubowitzfort, NE 21083-9032","{""from"":8,""to"":23}"
-"Apt. 823 49319 Gutkowski Prairie, North Benedictstad, MA 16955-2076","{""from"":9,""to"":22}"
-"Apt. 668 3582 Stephani Forest, Carlitamouth, TX 86042","{""from"":8,""to"":21}"
-"Suite 455 69989 Jakubowski Rapid, South Lowellborough, ND 28791","{""from"":9,""to"":18}"
-"Suite 575 875 Shelton Wells, West Chia, TX 63993","{""from"":9,""to"":21}"
-"394 Schroeder Meadow, East Phebe, NJ 16356-8402","{""from"":7,""to"":20}"
-"Apt. 662 21925 Josiah Trace, Sanorabury, MI 39413-6121","{""from"":9,""to"":21}"
-"Suite 445 63333 Cormier Way, South Lindsay, UT 61952","{""from"":7,""to"":19}"
-"296 Casie Trafficway, South Jeremychester, NV 16167","{""from"":8,""to"":19}"
-"8232 Jerome Union, South Saundrachester, NJ 89434-0056","{""from"":8,""to"":21}"
-"8709 Lehner Springs, West Lakenyaborough, MD 83529-8582","{""from"":7,""to"":20}"
-"9977 Hong Ford, Ignacioside, OK 98204","{""from"":9,""to"":20}"
-"Apt. 870 6466 Kayce Terrace, Port Chad, NE 99400-9984","{""from"":9,""to"":18}"
-"345 Cartwright Creek, Vandervortbury, VA 10830","{""from"":7,""to"":22}"
-"Suite 421 71275 Sal Mountain, West Sonshire, AK 75591","{""from"":9,""to"":22}"
-"54739 Thompson Stravenue, New Vince, KS 25949-2600","{""from"":8,""to"":20}"
-"77609 Marlena Gateway, North Emorychester, TX 55101","{""from"":10,""to"":20}"
-"Apt. 150 92645 Madelyn Gateway, Lake Ernietown, MD 62981","{""from"":9,""to"":20}"
-"Apt. 587 953 Ed Pass, Port Lonniechester, AK 62642-1030","{""from"":9,""to"":23}"
-"9247 Rau Lodge, South Margberg, OR 19303","{""from"":9,""to"":21}"
+address,working_hours,phone
+Apt. 329 97414 Kshlerin Haven Torriview MD 41915-1023,"{""from"":9,""to"":18}",9157969367
+Apt. 428 6456 Scottie Views Gerholdview MI 41543,"{""from"":8,""to"":20}",5497755557
+Apt. 570 443 Abdul Villages O'Keefeside AZ 41165,"{""from"":9,""to"":19}",9862582279
+805 Lind Wall Kubview AK 19393,"{""from"":9,""to"":22}",8663315988
+Apt. 629 986 Leuschke Rapid Calvintown MO 16943,"{""from"":8,""to"":20}",6266514433
+Suite 638 14086 Ivana Forges North Chandramouth ME 30987-9524,"{""from"":10,""to"":20}",7796904615
+752 Noriko Village Dickiland KY 11242-8329,"{""from"":8,""to"":19}",2378422354
+18308 Dickens Trace North Joaquinland TX 88552,"{""from"":8,""to"":19}",6812828111
+Apt. 900 87685 Murphy Spring Cassimouth OH 05797,"{""from"":9,""to"":19}",8563964624
+Apt. 853 270 Collier Cliff Schusterhaven KY 71638-1171,"{""from"":10,""to"":22}",2886138161
+Suite 995 8402 Hilde Place Minnaside KS 20536-6740,"{""from"":10,""to"":21}",3154729049
+Apt. 786 5745 Carleen Motorway Champlintown ME 62768-9810,"{""from"":7,""to"":21}",7546105361
+867 Kessler Course West Alyce FL 55984,"{""from"":7,""to"":18}",5313426697
+46444 Edra Groves Sonbury WA 53786-2074,"{""from"":10,""to"":19}",4868224607
+60398 Hackett Mission Chiachester PA 31544-6484,"{""from"":10,""to"":21}",2884675803
+992 Moen Lake Stammberg MA 13413-1398,"{""from"":9,""to"":19}",4157464025
+Suite 278 2546 Effertz Mountains Port Blake LA 23633,"{""from"":7,""to"":18}",5673433706
+2721 Ferry Flats North Lilianshire NY 38715,"{""from"":9,""to"":19}",9845421247
+Suite 435 559 Bogisich Locks Prosaccofurt PA 19012-1124,"{""from"":8,""to"":21}",7579251476
+Apt. 733 130 Ruecker Meadows Lake Cristobal IL 33704-2727,"{""from"":10,""to"":19}",7646278969

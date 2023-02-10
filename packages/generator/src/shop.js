@@ -1,10 +1,12 @@
 import axios from "axios";
+import Chance from "chance";
+const chance = new Chance();
 
 function getHeader() {
   return [
     { id: "address", title: "address" },
     { id: "working_hours", title: "working_hours" },
-    // { id: "phone", title: "phone" }, // добавить телефон блинб
+    { id: "phone", title: "phone" },
   ];
 }
 
@@ -35,12 +37,12 @@ async function getData(count) {
     try {
       const res = await axios.get(url);
       data.push({
-        address: res.data.full_address.removeAll(","),
+        address: res.data.full_address.replaceAll(",", ""),
         working_hours: randomHours(),
-        // phone:
+        phone: chance.phone({ formatted: false }),
       });
     } catch (err) {
-      console.log("Error with getting shop data");
+      console.log("Error with getting shop data", err);
     }
   }
   return data;
