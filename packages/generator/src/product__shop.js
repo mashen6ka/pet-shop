@@ -9,27 +9,22 @@ function getHeader() {
 }
 
 async function getData(count, productList, shopList) {
-  function randomId(arr) {
-    const minId = 1;
-    const maxId = arr.length;
-
-    return Math.floor(Math.random() * (maxId - minId + 1) + minId);
-  }
   const minQty = 0;
   const maxQty = 50;
 
   const data = [];
-  const iter = count ? count : 15;
-  for (let i = 0; i < iter; i++) {
-    try {
-      data.push({
-        product_id: randomId(productList),
-        shop_id: randomId(shopList),
-        quantity: Math.floor(Math.random() * (maxQty - minQty + 1) + minQty),
-      });
-    } catch (err) {
-      console.log("Error with getting product__shop data");
+  try {
+    for (let i = 0; i < productList.length; i++) {
+      for (let j = 0; j < shopList.length; j++) {
+        data.push({
+          product_id: i + 1,
+          shop_id: j + 1,
+          quantity: Math.floor(Math.random() * (maxQty - minQty + 1) + minQty),
+        });
+      }
     }
+  } catch (err) {
+    console.log("Error with getting product__shop data");
   }
   return data;
 }

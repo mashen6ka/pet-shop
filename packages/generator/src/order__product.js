@@ -13,7 +13,7 @@ async function getData(count, orderList, productList) {
 
     return Math.floor(Math.random() * (maxId - minId + 1) + minId);
   }
-  const minQty = 1;
+  const minQty = 2;
   const maxQty = 4;
 
   const data = [];
@@ -22,7 +22,6 @@ async function getData(count, orderList, productList) {
     const usedProductIds = [];
     for (let j = 1; j <= itemQty; j++) {
       try {
-        // if (data.length === count) break;
         let productId = randomId(productList);
         while (usedProductIds.includes(productId)) {
           productId = randomId(productList);

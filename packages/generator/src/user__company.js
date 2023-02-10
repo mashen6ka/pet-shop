@@ -14,17 +14,31 @@ async function getData(count, userList, companyList) {
 
     return Math.floor(Math.random() * (maxId - minId + 1) + minId);
   }
+
+  const minCompanyQty = 0;
+  const maxCompanyQty = 3;
+
   const data = [];
-  const iter = count ? count : 15;
-  for (let i = 0; i < iter; i++) {
-    try {
-      data.push({
-        user_id: randomId(userList),
-        company_id: randomId(companyList),
-      });
-    } catch (err) {
-      console.log("Error with getting user__company data");
+  try {
+    for (let i = 0; i < userList.length; i++) {
+      const companyQty = Math.floor(
+        Math.random() * (maxCompanyQty - minCompanyQty + 1) + minCompanyQty
+      );
+      let usedCompanyIds = [];
+      for (let j = 0; j < companyQty; j++) {
+        let companyId = randomId(companyList);
+        while (usedCompanyIds.includes(companyId)) {
+          companyId = randomId(companyList);
+        }
+        usedCompanyIds.push(companyId);
+        data.push({
+          user_id: i + 1,
+          company_id: companyId,
+        });
+      }
     }
+  } catch (err) {
+    console.log("Error with getting user__company data", err);
   }
   return data;
 }
