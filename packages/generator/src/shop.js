@@ -30,14 +30,12 @@ async function getData(count) {
     return JSON.stringify(data);
   }
 
-  const url = "https://random-data-api.com/api/address/random_address";
   const data = [];
   const iter = count ? count : 15;
   for (let i = 0; i < iter; i++) {
     try {
-      const res = await axios.get(url);
       data.push({
-        address: res.data.full_address.replaceAll(",", ""),
+        address: chance.address().replaceAll(",", ""),
         working_hours: randomHours(),
         phone: chance.phone({ formatted: false }),
       });
