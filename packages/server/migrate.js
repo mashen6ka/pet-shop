@@ -3,7 +3,10 @@ const dotenv = require("dotenv");
 const path = require("path");
 
 dotenv.config({
-  path: path.join(__dirname, ".env." + process.env.ENV),
+  path: path.join(
+    __dirname,
+    ".env." + (process.env.ENV ? process.env.ENV : "dev")
+  ),
 });
 
 async function main() {
