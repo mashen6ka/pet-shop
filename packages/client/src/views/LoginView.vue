@@ -83,15 +83,16 @@ export default {
         this.$store.commit("user/SET_USER_ERROR", "Empty fields");
         return;
       }
+
       this.$store.dispatch("user/AUTHORIZE_USER", {
         login: this.login,
         password: this.password,
       });
-      const token = this.$store.getters["user/USER_TOKEN"];
 
-      // const token = this.$cookies.get(process.env.VUE_APP_AUTH_COOKIE_NAME);
+      const token = this.$store.getters["user/USER_TOKEN"];
       if (token) {
         this.$cookies.set(process.env.VUE_APP_AUTH_COOKIE_NAME, token);
+        this.modalShow = false;
         this.$router.push("/account");
       }
     },
