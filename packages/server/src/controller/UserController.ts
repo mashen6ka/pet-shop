@@ -45,7 +45,7 @@ export default class UserController extends BaseController {
 
   async updateUser(req: Request, res: Response): Promise<void> {
     try {
-      const id = await this.getUserIdByToken(req);
+      const id = this.getUserIdByToken(req);
       const user = plainToInstance(UserEntity, req.body);
       user.id = id;
       await validateOrReject(user);
@@ -68,7 +68,7 @@ export default class UserController extends BaseController {
 
   async getUser(req: Request, res: Response): Promise<void> {
     try {
-      const id = await this.getUserIdByToken(req);
+      const id = this.getUserIdByToken(req);
       const user = await this.service.getUser(id);
       if (user === null) {
         throw new ErrorEntity("User not found", statusCode.notFound);
@@ -94,7 +94,7 @@ export default class UserController extends BaseController {
 
   async getUserCompanyList(req: Request, res: Response): Promise<void> {
     try {
-      const userId = await this.getUserIdByToken(req);
+      const userId = this.getUserIdByToken(req);
       const companyList = await this.service.getUserCompanyList(userId);
       res.status(200).json({ success: true, data: companyList });
     } catch (err) {
@@ -104,7 +104,7 @@ export default class UserController extends BaseController {
 
   async getUserOrderList(req: Request, res: Response): Promise<void> {
     try {
-      const userId = await this.getUserIdByToken(req);
+      const userId = this.getUserIdByToken(req);
       const orderList = await this.service.getUserOrderList(userId);
       res.status(200).json({ success: true, data: orderList });
     } catch (err) {
@@ -114,7 +114,7 @@ export default class UserController extends BaseController {
 
   async createUserCompany(req: Request, res: Response): Promise<void> {
     try {
-      const userId = await this.getUserIdByToken(req);
+      const userId = this.getUserIdByToken(req);
       const companyId = req.body.companyId;
       if (!Number.isInteger(companyId)) {
         throw new ErrorEntity(
@@ -131,7 +131,7 @@ export default class UserController extends BaseController {
 
   async deleteUserCompany(req: Request, res: Response): Promise<void> {
     try {
-      const userId = await this.getUserIdByToken(req);
+      const userId = this.getUserIdByToken(req);
       const companyId = req.body.companyId;
       if (!Number.isInteger(companyId)) {
         throw new ErrorEntity(

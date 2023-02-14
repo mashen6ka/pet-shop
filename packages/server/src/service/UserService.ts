@@ -1,6 +1,13 @@
 import crypto from "crypto";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import path from "path";
 import { CompanyEntity, UserEntity, OrderEntity, AuthnEntity } from "../entity";
 import { IUserRepo } from "../repository";
+
+dotenv.config({
+  path: path.join(__dirname, "..", ".env." + process.env.ENV),
+});
 
 export default class UserService {
   private repo: IUserRepo;
@@ -13,24 +20,22 @@ export default class UserService {
     return crypto.createHash("sha256").update(str).digest("base64");
   }
 
-  async createUser(user: UserEntity): Promise<number> {
-    user.password = this.hash(user.password);
-    const id = await this.repo.createUser(user);
-    return id;
-  }
-
   async authenticateUser(authn: AuthnEntity): Promise<string> {
+    console.log(process.env);
     const password = this.hash(authn.password);
     const userId = await this.repo.getUserIdByLoginAndPassword(
       authn.login,
       password
     );
     if (userId === null) return null;
-    return await this.repo.createSession(userId);
+    return jwt.sign({ userId: userId }, process.env.TOKEN_KEY, {
+      expiresIn: "2h",
+    });
   }
 
-  async getUserIdByToken(token: string): Promise<number> {
-    const id = await this.repo.getUserIdByToken(token);
+  async createUser(user: UserEntity): Promise<number> {
+    user.password = this.hash(user.password);
+    const id = await this.repo.createUser(user);
     return id;
   }
 

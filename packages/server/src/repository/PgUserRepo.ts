@@ -21,33 +21,14 @@ export default class PgUserRepo implements IUserRepo {
     return res?.rows?.[0]?.id || null;
   }
 
-  async createSession(userId: number): Promise<string> {
+  async getWorkerByUserId(userId: number): Promise<boolean> {
     const res = await this.conn.query(
-      `INSERT INTO "session" (user_id, token)
-       VALUES ($1, md5(random()::text))
-       RETURNING token`,
+      `SELECT u.worker 
+       FROM "user" u
+       WHERE u.id = $1`,
       [userId]
     );
-    return res?.rows?.[0]?.token || null;
-  }
-
-  async getUserIdByToken(token: string): Promise<number> {
-    const res = await this.conn.query(
-      `SELECT s.user_id FROM "session" s
-       WHERE s.token = $1`,
-      [token]
-    );
-    return res?.rows?.[0]?.user_id || null;
-  }
-
-  async getWorkerIdByToken(token: string): Promise<number> {
-    const res = await this.conn.query(
-      `SELECT s.user_id 
-       FROM "session" s LEFT JOIN "users" u ON s.user_id = u.id
-       WHERE s.token = $1 AND u.worker = TRUE`,
-      [token]
-    );
-    return res?.rows?.[0]?.user_id || null;
+    return res?.rows?.[0]?.worker || null;
   }
 
   async createUser(user: UserEntity): Promise<number> {
