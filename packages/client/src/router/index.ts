@@ -12,11 +12,13 @@ import LoginView from "../views/LoginView.vue";
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
-  // {
-  //   path: "/",
-  //   name: "home",
-  //   component: HomeView,
-  // },
+  {
+    path: "/",
+    name: "home",
+    redirect: () => {
+      return "catalogue";
+    },
+  },
   {
     path: "/catalogue",
     name: "catalogue",
