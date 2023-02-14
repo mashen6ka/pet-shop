@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <b-container>
     <b-card no-body class="m-3">
       <b-tabs card>
         <b-tab title="My Profile" content-class="m-3">
-          <b-list-group class="m-3">
+          <b-list-group>
             <b-list-group-item>
               <b-row align-v="center" class="m-1">
-                <b-col>
+                <b-col class="text-left">
                   <label>Login: </label>
                 </b-col>
                 <b-col>
@@ -136,7 +136,7 @@
           </b-list-group>
         </b-tab>
         <b-tab title="My Orders">
-          <b-list-group v-if="userOrderList.length !== 0" class="m-3">
+          <b-list-group v-if="userOrderList.length !== 0">
             <b-list-group-item variant="primary">
               <b-row align-v="center" class="m-1">
                 <b-col>
@@ -324,7 +324,7 @@
         </b-list-group-item>
       </b-list-group>
     </b-modal>
-  </div>
+  </b-container>
 </template>
 
 <script>

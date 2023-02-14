@@ -1,9 +1,9 @@
 <template>
   <div>
     <b-card class="m-3" v-if="shopList.length !== 0">
-      <b-list-group class="m-3">
+      <b-list-group class="mb-3">
         <b-list-group-item variant="primary">
-          <b-row align-v="center" class="m-1">
+          <b-row align-v="center" class="m-1" cols="1" cols-sm="3">
             <b-col>
               <label> Address: </label>
             </b-col>
@@ -16,9 +16,9 @@
           </b-row>
         </b-list-group-item>
       </b-list-group>
-      <b-list-group class="m-3">
+      <b-list-group>
         <b-list-group-item v-for="shop in shopList" :key="shop.id">
-          <b-row align-v="center" class="m-1">
+          <b-row align-v="center" class="m-1" cols="1" cols-sm="3">
             <b-col>
               <label>{{ shop.address || "-" }} </label>
             </b-col>

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <b-container id="app">
     <nav>
       <router-link to="/catalogue">Catalogue</router-link> |
       <router-link to="/contacts">Contacts</router-link> |
@@ -17,15 +17,16 @@
       <router-link to="/account">Account</router-link>
     </nav>
     <router-view />
-  </div>
+  </b-container>
 </template>
 
 <script>
-import { BBadge } from "bootstrap-vue";
+import { BBadge, BContainer } from "bootstrap-vue";
 
 export default {
   components: {
     BBadge,
+    BContainer,
   },
   computed: {
     totalQuantity() {

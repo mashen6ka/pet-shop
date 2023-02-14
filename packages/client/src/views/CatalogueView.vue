@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <div class="fixed-top" align="right">
+  <b-container>
+    <b-container class="fixed-top" align="right">
       <b-alert
-        style="max-width: 25%"
+        style="width: fit-content"
         variant="success"
         dismissible
         fade
@@ -10,39 +10,40 @@
       >
         Successfully added product to cart!
       </b-alert>
-    </div>
+    </b-container>
 
-    <div>
+    <b-container class="justify-content-center">
+      <b-form-input
+        type="search"
+        v-model="searchValue"
+        placeholder="Type something"
+      ></b-form-input>
       <b-card-group
         deck
-        class="m-1"
         :per-page="perPage"
         :current-page="currentPage"
+        class="justify-content-between my-2"
       >
-        <b-form-input
-          type="search"
-          v-model="searchValue"
-          placeholder="Type something"
-          class="m-3"
-        ></b-form-input>
         <b-card
           v-for="product in productListByPage"
           :key="product.id"
-          class="text-center mx-auto my-2"
+          class="text-between my-2"
+          style="min-width: 20%; max-height: 30rem"
           img-top
-          img-height="250"
-          style="max-width: 15rem; min-width: 15rem"
+          img-height="60%"
           :img-src="serverAddress + product.imgUrl"
         >
-          <b-card-text style="max-height: 8rem; min-height: 8rem"
+          <b-card-text style="max-height: 30%" class="mb-4"
             ><b-link :to="{ name: 'product', params: { id: product.id } }">{{
               product.name
             }}</b-link></b-card-text
           >
-          <b-button @click="addProductToCart(product)">
-            {{ product.initialPrice / 100 }} ₽
-            <b-icon-cart></b-icon-cart>
-          </b-button>
+          <template #footer>
+            <b-button @click="addProductToCart(product)">
+              {{ product.initialPrice / 100 }} ₽
+              <b-icon-cart></b-icon-cart>
+            </b-button>
+          </template>
         </b-card>
       </b-card-group>
       <b-pagination
@@ -51,8 +52,8 @@
         :per-page="perPage"
         align="center"
       ></b-pagination>
-    </div>
-  </div>
+    </b-container>
+  </b-container>
 </template>
 
 <script>
@@ -66,6 +67,8 @@ import {
   BLink,
   BPagination,
   BFormInput,
+  BContainer,
+  BCol,
 } from "bootstrap-vue";
 
 export default {
@@ -79,6 +82,7 @@ export default {
     BLink,
     BPagination,
     BFormInput,
+    BContainer,
   },
   computed: {
     serverAddress() {

@@ -33,7 +33,7 @@
       </b-row>
 
       <template #modal-footer>
-        <div style="max-width: 30rem; min-width: 30rem">
+        <div style="width: 100%">
           <b-row class="m-1">
             <b-col>
               <span v-if="errorMessage" class="text-danger">

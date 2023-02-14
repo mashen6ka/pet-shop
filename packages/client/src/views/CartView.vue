@@ -1,108 +1,77 @@
 <template>
-  <div>
+  <b-container>
     <b-list-group v-if="itemsQuantity !== 0" class="m-3">
       <b-list-group-item>
-        <b-card
-          :img-src="serverAddress + item.product.imgUrl"
-          img-alt="Card image"
-          img-left
-          img-width="150"
-          class="m-3"
-          v-for="item in itemList"
-          :key="item.product.id"
-          style="max-height: 8rem; min-height: 8rem"
-        >
-          <b-card-body align="left" align-v="center">
-            <b-row align-v="center">
-              <b-col
-                ><p class="mb-0">
-                  {{ item.product.name }}
-                </p></b-col
-              >
+        <b-card v-for="item in itemList" :key="item.product.id">
+          <b-row align-v="center" cols="1" cols-sm="5">
+            <b-col style="max-height: 10%">
+              <b-card-img
+                :src="serverAddress + item.product.imgUrl"
+              ></b-card-img>
+            </b-col>
+            <b-col
+              ><p class="mb-0">
+                {{ item.product.name }}
+              </p></b-col
+            >
 
-              <b-col
-                style="max-width: 12rem; min-width: 12rem"
-                class="text-center"
-                ><p class="my-auto">
-                  {{ item.product.initialPrice / 100 }} ₽
-                </p></b-col
-              >
+            <b-col class="text-center"
+              ><p class="my-auto">
+                {{ item.product.initialPrice / 100 }} ₽
+              </p></b-col
+            >
 
-              <b-col
-                style="max-width: 12rem; min-width: 12rem"
-                class="text-center"
-              >
-                <b-input-group>
-                  <b-input-group-prepend>
-                    <b-button
-                      @click="
-                        updateCartItem(item.product.id, item.quantity - 1)
-                      "
-                      >-</b-button
-                    >
-                  </b-input-group-prepend>
+            <b-col class="text-center">
+              <b-input-group>
+                <b-input-group-prepend>
+                  <b-button
+                    @click="updateCartItem(item.product.id, item.quantity - 1)"
+                    >-</b-button
+                  >
+                </b-input-group-prepend>
 
-                  <b-form-input
-                    type="number"
-                    min="1"
-                    :disabled="disableInput"
-                    v-model="item.quantity"
-                    class="text-center"
-                  ></b-form-input>
+                <b-form-input
+                  type="number"
+                  min="1"
+                  :disabled="disableInput"
+                  v-model="item.quantity"
+                  class="text-center"
+                ></b-form-input>
 
-                  <b-input-group-append>
-                    <b-button
-                      @click="
-                        updateCartItem(item.product.id, item.quantity + 1)
-                      "
-                      >+</b-button
-                    >
-                  </b-input-group-append>
-                </b-input-group>
-              </b-col>
+                <b-input-group-append>
+                  <b-button
+                    @click="updateCartItem(item.product.id, item.quantity + 1)"
+                    >+</b-button
+                  >
+                </b-input-group-append>
+              </b-input-group>
+            </b-col>
 
-              <b-col
-                style="max-width: 12rem; min-width: 12rem"
-                class="text-center"
-                ><p class="mb-0">
+            <b-col class="text-center"
+              ><p class="mb-0">
+                <b>
                   {{ (item.product.initialPrice / 100) * item.quantity }} ₽
-                </p></b-col
-              >
-            </b-row>
-          </b-card-body>
+                </b>
+              </p></b-col
+            >
+          </b-row>
         </b-card>
       </b-list-group-item>
     </b-list-group>
     <b-list-group v-if="itemsQuantity !== 0" class="m-3">
       <b-list-group-item>
-        <b-row align-v="center" class="m-3">
-          <b-col
-            ><h3
-              style="max-width: 36rem; min-width: 36rem"
-              class="p-0 my-auto text-left"
-            >
-              Total:
-            </h3></b-col
-          >
+        <b-row align-v="center" class="m-3" cols="1" cols-sm="4">
+          <b-col><h3 class="p-0 my-auto text-center">Total:</h3></b-col>
 
-          <b-col
-            style="max-width: 12rem; min-width: 12rem"
-            class="p-0 text-center"
-          >
+          <b-col class="p-0 text-center">
             <h4 class="my-auto text-center">{{ totalQuantity }} item(s)</h4>
           </b-col>
 
-          <b-col
-            style="max-width: 12rem; min-width: 12rem"
-            class="p-0 text-center"
-          >
+          <b-col class="p-0 text-center">
             <h4 class="mb-0 text-center">{{ totalPrice / 100 }} ₽</h4>
           </b-col>
 
-          <b-col
-            style="max-width: 12rem; min-width: 12rem"
-            class="p-0 text-center"
-          >
+          <b-col class="p-0 text-center">
             <h4 class="my-auto text-center">
               <b-button @click="showOrderModal()">Place order</b-button>
             </h4>
@@ -113,21 +82,19 @@
     <p v-if="itemsQuantity === 0">Oops! Your cart is empty for now :(</p>
 
     <b-modal v-model="isOrderModal" size="xl" title="Submit Order">
-      <b-list-group class="m-3">
+      <b-list-group class="mb-3">
         <b-list-group-item variant="primary">
-          <b-row align-v="center" class="m-3">
-            <b-col class="text-left">E-mail: {{ this.user.email }}</b-col>
-            <b-col class="text-center">Phone: {{ this.user.phone }}</b-col>
-            <b-col class="text-center"
-              >Name: {{ this.user.lastName }} {{ this.user.firstName }}</b-col
-            >
-            <b-col class="text-right"
-              >Total Price: {{ this.totalPrice / 100 }} ₽</b-col
+          <b-row align-v="center" class="m-3" cols="1" cols-sm="2" cols-md="4">
+            <b-col class="p-0"><b>E-mail:</b> {{ this.user.email }}</b-col>
+            <b-col class="p-0"><b>Phone:</b> {{ this.user.phone }}</b-col>
+            <b-col class="p-0"><b>Name:</b> {{ this.user.firstName }}</b-col>
+            <b-col class="p-0"
+              ><b>Total Price:</b> {{ this.totalPrice / 100 }} ₽</b-col
             >
           </b-row>
         </b-list-group-item>
       </b-list-group>
-      <b-list-group class="m-3">
+      <b-list-group>
         <b-list-group-item>
           <b-form>
             <b-form-group label="Shop:">
@@ -168,9 +135,9 @@
       </template>
     </b-modal>
 
-    <div class="fixed-top" align="right">
+    <b-container class="fixed-top" align="right">
       <b-alert
-        style="max-width: 25%"
+        style="width: fit-content"
         variant="success"
         dismissible
         fade
@@ -178,11 +145,11 @@
       >
         Successfully created order!
       </b-alert>
-    </div>
+    </b-container>
 
-    <div class="fixed-top" align="right">
+    <b-container class="fixed-top" align="right">
       <b-alert
-        style="max-width: 25%"
+        style="width: fit-content"
         variant="danger"
         dismissible
         fade
@@ -190,8 +157,8 @@
       >
         Something went wrong, try again later :(
       </b-alert>
-    </div>
-  </div>
+    </b-container>
+  </b-container>
 </template>
 
 <!-- вынести окно оформления заказа в компоненты -->
@@ -200,7 +167,6 @@ import {
   BListGroup,
   BListGroupItem,
   BCard,
-  BCardBody,
   BInputGroup,
   BInputGroupAppend,
   BInputGroupPrepend,
@@ -210,6 +176,7 @@ import {
   BFormInput,
   BForm,
   BAlert,
+  BContainer,
 } from "bootstrap-vue";
 
 export default {
@@ -217,7 +184,6 @@ export default {
     BListGroup,
     BListGroupItem,
     BCard,
-    BCardBody,
     BInputGroup,
     BInputGroupAppend,
     BInputGroupPrepend,
@@ -227,6 +193,7 @@ export default {
     BFormInput,
     BForm,
     BAlert,
+    BContainer,
   },
   computed: {
     // надо норм проверку на авторизацию сделать везде, чтобы в консоль ошибки не летели
