@@ -460,7 +460,6 @@ export default {
   },
   methods: {
     logout() {
-      console.log("gfgf");
       this.$cookies.remove(process.env.VUE_APP_AUTH_COOKIE_NAME);
       this.$router.push("/catalogue");
     },
