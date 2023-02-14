@@ -3,10 +3,15 @@
     <b-card no-body class="m-3">
       <b-tabs card>
         <b-tab title="My Profile" content-class="m-3">
+          <b-row class="m-1">
+            <b-col class="text-right">
+              <b-link @click="logout">Log out</b-link>
+            </b-col>
+          </b-row>
           <b-list-group>
             <b-list-group-item>
               <b-row align-v="center" class="m-1">
-                <b-col class="text-left">
+                <b-col>
                   <label>Login: </label>
                 </b-col>
                 <b-col>
@@ -348,6 +353,7 @@ import {
   BInputGroup,
   BInputGroupAppend,
   BModal,
+  BLink,
 } from "bootstrap-vue";
 
 import { validationMixin } from "vuelidate";
@@ -372,6 +378,7 @@ export default {
     BInputGroup,
     BInputGroupAppend,
     BModal,
+    BLink,
   },
   computed: {
     // надо норм проверку на авторизацию сделать везде, чтобы в консоль ошибки не летели
@@ -452,6 +459,11 @@ export default {
     };
   },
   methods: {
+    logout() {
+      console.log("gfgf");
+      this.$cookies.remove(process.env.VUE_APP_AUTH_COOKIE_NAME);
+      this.$router.push("/catalogue");
+    },
     // переименовать orderStatus везде в status (в бд наверн тоже)
     getOrderStatusName(id) {
       return this.orderStatusList.find((orderStatus) => orderStatus.id === id)
