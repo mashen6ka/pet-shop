@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ActionContext } from "vuex";
+import buildAuthHeader from "../build-auth-header";
 import { APIResponse, Order } from "../types";
 
 type orderState = {
@@ -22,9 +23,10 @@ const mutations = {
 // реорганизовать store/user и store/order
 const actions = {
   GET_ORDER_LIST: async (context: ActionContext<orderState, null>) => {
+    const authHeader = buildAuthHeader();
     const orderRes = await axios.get<APIResponse<Order[]>>(
-      process.env.VUE_APP_SERVER_ADDRESS + "/order/get/list",
-      { withCredentials: true }
+      process.env.VUE_APP_SERVER_ADDRESS + "/orders",
+      { withCredentials: true, headers: { Authorization: authHeader } }
     );
     let orderList: Order[];
     if (orderRes.data.success) {
@@ -33,9 +35,8 @@ const actions = {
         // если в заказе нет айтемов, все сломается
         const orderId = order.id;
         const { data } = await axios.get(
-          process.env.VUE_APP_SERVER_ADDRESS +
-            `/order/get/item/list/?orderId=${orderId}`,
-          { withCredentials: true }
+          process.env.VUE_APP_SERVER_ADDRESS + `/orders/${orderId}/items`,
+          { withCredentials: true, headers: { Authorization: authHeader } }
         );
         order.itemList = data.data;
       }
@@ -58,19 +59,18 @@ const actions = {
     context: ActionContext<orderState, null>,
     payload: Order
   ) => {
-    await axios.post(
-      process.env.VUE_APP_SERVER_ADDRESS + "/order/update",
+    const authHeader = buildAuthHeader();
+    await axios.put(
+      process.env.VUE_APP_SERVER_ADDRESS + `/orders/${payload.id}`,
       payload,
-      { withCredentials: true }
+      { withCredentials: true, headers: { Authorization: authHeader } }
     );
-    // наверн сюда еще апдейт айтемов надо вынести
     const orderList = context?.state?.orderList?.map((order: Order) => {
       if (order.id === payload.id) {
         order = payload;
       }
       return order;
     });
-    // не очень хорошо, что в запрос улетает еще список товаров
     context.commit("SET_ORDER_LIST", orderList);
   },
 };

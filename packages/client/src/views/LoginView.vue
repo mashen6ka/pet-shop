@@ -91,7 +91,13 @@ export default {
 
       const token = this.$store.getters["user/USER_TOKEN"];
       if (token) {
-        this.$cookies.set(process.env.VUE_APP_AUTH_COOKIE_NAME, token);
+        // this.$cookies.set(process.env.VUE_APP_AUTH_COOKIE_NAME, token, {
+        //   httpOnly: true,
+        // });
+        localStorage.setItem("token", token);
+        // axios.defaults.headers.common[
+        //   "Authorization"
+        // ] = `Bearer ${localStorage.token}`;
         this.modalShow = false;
         this.$router.push("/account");
       }

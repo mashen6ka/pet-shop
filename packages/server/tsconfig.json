@@ -6,7 +6,8 @@
     "noImplicitAny": true,
     "module": "CommonJS",
     "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "resolveJsonModule": true
   },
   "ts-node": {
     "compilerOptions": {

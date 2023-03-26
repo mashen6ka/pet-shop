@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ActionContext } from "vuex";
+import buildAuthHeader from "../build-auth-header";
 import { APIResponse, Company, Order, User } from "../types";
 
 type userState = {
@@ -47,9 +48,11 @@ const actions = {
     context: ActionContext<userState, null>,
     payload: { login: string; password: string }
   ) => {
+    const authHeader = buildAuthHeader();
     axios
       .post(process.env.VUE_APP_SERVER_ADDRESS + "/user/authn/", payload, {
         withCredentials: false,
+        headers: { Authorization: authHeader },
       })
       .then((res) => {
         context.commit("SET_USER_ERROR", "");
@@ -60,11 +63,11 @@ const actions = {
         context.commit("SET_USER_TOKEN", "");
       });
   },
-  // переписать тут все вообще блин!
   GET_USER_ORDER_LIST: async (context: ActionContext<userState, null>) => {
+    const authHeader = buildAuthHeader();
     const orderRes = await axios.get<APIResponse<Order[]>>(
-      process.env.VUE_APP_SERVER_ADDRESS + "/user/get/order/list/",
-      { withCredentials: true }
+      process.env.VUE_APP_SERVER_ADDRESS + "/user/orders",
+      { withCredentials: true, headers: { Authorization: authHeader } }
     );
     let orderList: Order[];
     if (orderRes.data.success) {
@@ -74,8 +77,8 @@ const actions = {
         const orderId = order.id;
         const { data } = await axios.get(
           process.env.VUE_APP_SERVER_ADDRESS +
-            `/order/get/item/list/?orderId=${orderId}`,
-          { withCredentials: true }
+            `/orders/${orderId}/items?orderId=${orderId}`,
+          { withCredentials: true, headers: { Authorization: authHeader } }
         );
         order.itemList = data.data;
       }
@@ -94,27 +97,30 @@ const actions = {
     }
   },
   GET_USER_COMPANY_LIST: async (context: ActionContext<userState, null>) => {
+    const authHeader = buildAuthHeader();
     const { data } = await axios.get<APIResponse<Company[]>>(
-      process.env.VUE_APP_SERVER_ADDRESS + "/user/get/company/list/",
-      { withCredentials: true }
+      process.env.VUE_APP_SERVER_ADDRESS + "/user/companies",
+      { withCredentials: true, headers: { Authorization: authHeader } }
     );
     if (data.success) {
       context.commit("SET_USER_COMPANY_LIST", data.data);
     }
   },
   GET_USER: async (context: ActionContext<userState, null>) => {
+    const authHeader = buildAuthHeader();
     const { data } = await axios.get<APIResponse<User>>(
-      process.env.VUE_APP_SERVER_ADDRESS + "/user/get/",
-      { withCredentials: true }
+      process.env.VUE_APP_SERVER_ADDRESS + "/user",
+      { withCredentials: true, headers: { Authorization: authHeader } }
     );
     if (data.success) {
       context.commit("SET_USER", data.data);
     }
   },
   GET_USER_LIST: async (context: ActionContext<userState, null>) => {
+    const authHeader = buildAuthHeader();
     const { data } = await axios.get<APIResponse<User[]>>(
-      process.env.VUE_APP_SERVER_ADDRESS + "/user/get/list/",
-      { withCredentials: true }
+      process.env.VUE_APP_SERVER_ADDRESS + "/users",
+      { withCredentials: true, headers: { Authorization: authHeader } }
     );
     if (data.success) {
       context.commit("SET_USER_LIST", data.data);
@@ -125,8 +131,9 @@ const actions = {
     context: ActionContext<userState, null>,
     payload: Order
   ) => {
+    const authHeader = buildAuthHeader();
     const { data } = await axios.post(
-      process.env.VUE_APP_SERVER_ADDRESS + "/order/create/",
+      process.env.VUE_APP_SERVER_ADDRESS + "/orders",
       {
         id: payload.id,
         userId: payload.userId,
@@ -137,20 +144,18 @@ const actions = {
         shopId: payload.shopId,
         price: payload.price,
       },
-      { withCredentials: true }
+      { withCredentials: true, headers: { Authorization: authHeader } }
     );
-    // пока пофиг на все проверки если что
     const orderId = data.data.id;
 
     for (const item of payload.itemList) {
       await axios.post(
-        process.env.VUE_APP_SERVER_ADDRESS + "/order/create/item/",
+        process.env.VUE_APP_SERVER_ADDRESS +
+          `/orders/${orderId}/items/${item.product.id}`,
         {
-          orderId: orderId,
-          productId: item.product.id,
           quantity: item.quantity,
         },
-        { withCredentials: true }
+        { withCredentials: true, headers: { Authorization: authHeader } }
       );
     }
   },

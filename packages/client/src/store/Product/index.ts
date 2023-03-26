@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ActionContext } from "vuex";
+import buildAuthHeader from "../build-auth-header";
 import { Product, Shop } from "../types";
 
 type productState = {
@@ -31,9 +32,10 @@ const mutations = {
 
 const actions = {
   GET_PRODUCT_LIST: async (context: ActionContext<productState, null>) => {
+    const authHeader = buildAuthHeader();
     const { data } = await axios.get(
-      process.env.VUE_APP_SERVER_ADDRESS + "/product/get/list",
-      { withCredentials: true }
+      process.env.VUE_APP_SERVER_ADDRESS + "/products",
+      { withCredentials: true, headers: { Authorization: authHeader } }
     );
     if (data.success) {
       context.commit("SET_PRODUCT_LIST", data.data);
@@ -41,12 +43,13 @@ const actions = {
   },
   GET_PRODUCT: async (
     context: ActionContext<productState, null>,
-    payload: { [k: string]: unknown }
+    payload: { id: number }
   ) => {
-    const params = Object.entries(payload).map((e) => `${e[0]}=${e[1]}`);
+    const id = payload.id;
+    const authHeader = buildAuthHeader();
     const { data } = await axios.get(
-      process.env.VUE_APP_SERVER_ADDRESS + "/product/get/?" + params.join("&"),
-      { withCredentials: true }
+      process.env.VUE_APP_SERVER_ADDRESS + `/products/${id}`,
+      { withCredentials: true, headers: { Authorization: authHeader } }
     );
     if (data.success) {
       context.commit("SET_PRODUCT", data.data);
@@ -54,14 +57,13 @@ const actions = {
   },
   GET_PRODUCT_SHOP_LIST: async (
     context: ActionContext<productState, null>,
-    payload: { [k: string]: unknown }
+    payload: { productId: number }
   ) => {
-    const params = Object.entries(payload).map((e) => `${e[0]}=${e[1]}`);
+    const productId = payload.productId;
+    const authHeader = buildAuthHeader();
     const { data } = await axios.get(
-      process.env.VUE_APP_SERVER_ADDRESS +
-        "/product/get/shop/list/?" +
-        params.join("&"),
-      { withCredentials: true }
+      process.env.VUE_APP_SERVER_ADDRESS + `/products/${productId}/shops`,
+      { withCredentials: true, headers: { Authorization: authHeader } }
     );
     if (data.success) {
       context.commit("SET_PRODUCT_SHOP_LIST", data.data);

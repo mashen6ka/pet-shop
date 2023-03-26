@@ -5,9 +5,7 @@
         <b-card v-for="item in itemList" :key="item.product.id">
           <b-row align-v="center" cols="1" cols-sm="5">
             <b-col style="max-height: 10%">
-              <b-card-img
-                :src="serverAddress + item.product.imgUrl"
-              ></b-card-img>
+              <b-card-img :src="item.product.imgUrl"></b-card-img>
             </b-col>
             <b-col
               ><p class="mb-0">
@@ -85,9 +83,9 @@
       <b-list-group class="mb-3">
         <b-list-group-item variant="primary">
           <b-row align-v="center" class="m-3" cols="1" cols-sm="2" cols-md="4">
-            <b-col class="p-0"><b>E-mail:</b> {{ this.user.email }}</b-col>
-            <b-col class="p-0"><b>Phone:</b> {{ this.user.phone }}</b-col>
-            <b-col class="p-0"><b>Name:</b> {{ this.user.firstName }}</b-col>
+            <b-col class="p-0"><b>E-mail:</b> {{ this.user?.email }}</b-col>
+            <b-col class="p-0"><b>Phone:</b> {{ this.user?.phone }}</b-col>
+            <b-col class="p-0"><b>Name:</b> {{ this.user?.firstName }}</b-col>
             <b-col class="p-0"
               ><b>Total Price:</b> {{ this.totalPrice / 100 }} ₽</b-col
             >
@@ -231,17 +229,18 @@ export default {
     },
   },
   mounted() {
-    const token = this.$cookies.get(process.env.VUE_APP_AUTH_COOKIE_NAME);
+    // const token = this.$cookies.get(process.env.VUE_APP_AUTH_COOKIE_NAME);
+    const token = localStorage.getItem("token");
     if (!token) {
       this.$router.push("/login");
+    } else {
+      Promise.all([
+        this.$store.dispatch("user/GET_USER"),
+        this.$store.dispatch("user/GET_USER_COMPANY_LIST"),
+        this.$store.dispatch("shop/GET_SHOP_LIST"),
+        this.$store.dispatch("cart/SET_CART", JSON.parse(localStorage.cart)),
+      ]);
     }
-
-    Promise.all([
-      this.$store.dispatch("user/GET_USER"),
-      this.$store.dispatch("user/GET_USER_COMPANY_LIST"),
-      this.$store.dispatch("shop/GET_SHOP_LIST"),
-      this.$store.dispatch("cart/SET_CART", JSON.parse(localStorage.cart)),
-    ]);
   },
   data() {
     return {

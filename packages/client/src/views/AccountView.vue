@@ -14,8 +14,12 @@
                 <b-col>
                   <label>Login: </label>
                 </b-col>
-                <b-col>
-                  <b-form-input v-model="user.login" disabled></b-form-input>
+                <b-col style="min-width: fit-content">
+                  <b-form-input
+                    v-model="user.login"
+                    style="min-width: fit-content"
+                    disabled
+                  ></b-form-input>
                 </b-col>
               </b-row>
             </b-list-group-item>
@@ -24,8 +28,9 @@
                 <b-col>
                   <label>Password: </label>
                 </b-col>
-                <b-col>
+                <b-col style="min-width: fit-content">
                   <b-form-input
+                    style="min-width: fit-content"
                     type="password"
                     v-model="form.password"
                     placeholder="●●●●●"
@@ -37,8 +42,9 @@
                 <b-col>
                   <label>First Name: </label>
                 </b-col>
-                <b-col>
+                <b-col style="min-width: fit-content">
                   <b-form-input
+                    style="min-width: fit-content"
                     v-model="form.firstName"
                     :placeholder="user.firstName"
                   ></b-form-input>
@@ -49,8 +55,9 @@
                 <b-col>
                   <label>Last Name: </label>
                 </b-col>
-                <b-col>
+                <b-col style="min-width: fit-content">
                   <b-form-input
+                    style="min-width: fit-content"
                     v-model="form.lastName"
                     :placeholder="user.lastName"
                   ></b-form-input>
@@ -61,9 +68,10 @@
                 <b-col>
                   <label>Middle Name: </label>
                 </b-col>
-                <b-col>
+                <b-col style="min-width: fit-content">
                   <b-form-input
                     required
+                    style="min-width: fit-content"
                     v-model="form.middleName"
                     :placeholder="user.middleName"
                   ></b-form-input>
@@ -74,8 +82,9 @@
                 <b-col>
                   <label>E-mail: </label>
                 </b-col>
-                <b-col>
+                <b-col style="min-width: fit-content">
                   <b-form-input
+                    style="min-width: fit-content"
                     type="email"
                     v-model="form.email"
                     :placeholder="user.email"
@@ -87,9 +96,10 @@
                 <b-col>
                   <label>Birthday: </label>
                 </b-col>
-                <b-col>
+                <b-col style="min-width: fit-content">
                   <b-input-group>
                     <b-form-input
+                      style="min-width: fit-content"
                       v-model="form.birthday"
                       :placeholder="user.birthday"
                     ></b-form-input>
@@ -110,8 +120,9 @@
                 <b-col>
                   <label>Phone Number: </label>
                 </b-col>
-                <b-col>
+                <b-col style="min-width: fit-content">
                   <b-form-input
+                    style="min-width: fit-content"
                     type="text"
                     v-model="form.phone"
                     :placeholder="user.phone"
@@ -123,8 +134,9 @@
                 <b-col>
                   <label>Personal Discount: </label>
                 </b-col>
-                <b-col>
+                <b-col style="min-width: fit-content">
                   <b-form-input
+                    style="min-width: fit-content"
                     disabled
                     v-model="user.personalDiscount"
                   ></b-form-input>
@@ -143,7 +155,14 @@
         <b-tab title="My Orders">
           <b-list-group v-if="userOrderList.length !== 0">
             <b-list-group-item variant="primary">
-              <b-row align-v="center" class="m-1">
+              <b-row
+                align-v="center"
+                class="m-1"
+                cols="1"
+                cols-sm="2"
+                cols-md="2"
+                cols-lg="2"
+              >
                 <b-col>
                   <label> Order №: </label>
                 </b-col>
@@ -172,7 +191,14 @@
           </b-list-group>
           <b-list-group class="m-3">
             <b-list-group-item v-for="order in userOrderList" :key="order.id">
-              <b-row align-v="center" class="m-1">
+              <b-row
+                align-v="center"
+                class="m-1"
+                cols="1"
+                cols-sm="2"
+                cols-md="2"
+                cols-lg="2"
+              >
                 <b-col>
                   <label>{{ order.id }} </label>
                 </b-col>
@@ -240,7 +266,7 @@
                 </b-col> </b-row
             ></b-list-group-item>
           </b-list-group>
-          <b-list-group class="m-3">
+          <!-- <b-list-group class="m-3">
             <b-list-group-item>
               <b-row align-v="center" class="m-1">
                 <b-col>
@@ -259,7 +285,7 @@
                   ><b-button><b-icon-plus></b-icon-plus></b-button
                 ></b-col> </b-row
             ></b-list-group-item>
-          </b-list-group>
+          </b-list-group> -->
           <b-list-group class="m-3">
             <b-list-group-item
               v-for="company in userCompanyList"
@@ -365,7 +391,7 @@ export default {
     BListGroup,
     BButton,
     BIconTrash,
-    BIconPlus,
+    // BIconPlus,
     BIconSearch,
     BListGroupItem,
     BCard,
@@ -402,20 +428,21 @@ export default {
     },
   },
   mounted() {
-    const token = this.$cookies.get(process.env.VUE_APP_AUTH_COOKIE_NAME);
+    // const token = this.$cookies.get(process.env.VUE_APP_AUTH_COOKIE_NAME);
+    const token = localStorage.getItem("token");
     if (!token) {
       this.$router.push("/login");
+    } else {
+      // мб юзера сохранять в локал сторэдж?
+      Promise.all([
+        this.$store.dispatch("user/GET_USER"),
+        this.$store.dispatch("user/GET_USER_COMPANY_LIST"),
+        this.$store.dispatch("user/GET_USER_ORDER_LIST"),
+        this.$store.dispatch("company/GET_COMPANY_LIST"),
+        this.$store.dispatch("orderStatus/GET_ORDER_STATUS_LIST"),
+        this.$store.dispatch("shop/GET_SHOP_LIST"),
+      ]);
     }
-
-    // мб юзера сохранять в локал сторэдж?
-    Promise.all([
-      this.$store.dispatch("user/GET_USER"),
-      this.$store.dispatch("user/GET_USER_COMPANY_LIST"),
-      this.$store.dispatch("user/GET_USER_ORDER_LIST"),
-      this.$store.dispatch("company/GET_COMPANY_LIST"),
-      this.$store.dispatch("orderStatus/GET_ORDER_STATUS_LIST"),
-      this.$store.dispatch("shop/GET_SHOP_LIST"),
-    ]);
   },
   data() {
     return {
@@ -431,7 +458,6 @@ export default {
         birthday: "",
         phone: "",
       },
-      // валидация пока не юзается, надо потом сделать
       validations: {
         form: {
           password: {
@@ -460,7 +486,8 @@ export default {
   },
   methods: {
     logout() {
-      this.$cookies.remove(process.env.VUE_APP_AUTH_COOKIE_NAME);
+      // this.$cookies.remove(process.env.VUE_APP_AUTH_COOKIE_NAME);
+      localStorage.removeItem("token");
       this.$router.push("/catalogue");
     },
     // переименовать orderStatus везде в status (в бд наверн тоже)

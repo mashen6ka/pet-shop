@@ -20,6 +20,13 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
+    path: "/test",
+    name: "home",
+    redirect: () => {
+      return "catalogue";
+    },
+  },
+  {
     path: "/catalogue",
     name: "catalogue",
     component: CatalogueView,

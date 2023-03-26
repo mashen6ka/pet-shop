@@ -6,7 +6,7 @@
 
 \copy public.order_status(name) FROM ../generator/data/order_status.csv WITH DELIMITER ',' NULL as '' CSV header;
 
-\copy public.shop(address,working_hours) FROM ../generator/data/shop.csv WITH DELIMITER ',' NULL as '' CSV header;
+\copy public.shop(address,working_hours,phone) FROM ../generator/data/shop.csv WITH DELIMITER ',' NULL as '' CSV header;
 
 \copy public.order(user_id,company_id,status_id,created_at,completed_at,shop_id) FROM ../generator/data/order.csv WITH DELIMITER ',' NULL as '' CSV header;
 

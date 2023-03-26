@@ -43,7 +43,7 @@ export default class ProductController extends BaseController {
   async deleteProduct(req: Request, res: Response): Promise<void> {
     try {
       await this.checkWorkerToken(req);
-      const id = req.body.id;
+      const id = Number(req.params.id);
       if (!Number.isInteger(id)) {
         throw new ErrorEntity(
           "Product id must be a positive integer",
@@ -59,7 +59,7 @@ export default class ProductController extends BaseController {
 
   async getProduct(req: Request, res: Response): Promise<void> {
     try {
-      const id = Number(req.query.id);
+      const id = Number(req.params.id);
       if (!id) {
         throw new ErrorEntity(
           "Product id must be a positive integer",
@@ -90,7 +90,7 @@ export default class ProductController extends BaseController {
 
   async getProductShopList(req: Request, res: Response): Promise<void> {
     try {
-      const productId = Number(req.query.productId);
+      const productId = Number(req.params.productId);
       if (!productId) {
         throw new ErrorEntity(
           "Product id must be a positive integer",

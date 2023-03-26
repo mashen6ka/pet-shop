@@ -1,0 +1,12 @@
+FROM node:18
+
+WORKDIR /app
+COPY package.json .
+COPY package-lock.json .
+COPY packages/server/package.json ./server/package.json
+
+WORKDIR /app/server
+RUN npm i
+COPY packages/server .
+
+ENTRYPOINT ["npm", "run", "start"]

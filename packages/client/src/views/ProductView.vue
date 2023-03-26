@@ -19,7 +19,7 @@
             <b-row cols="1" cols-sm="2" cols-md="2" cols-lg="2">
               <b-col style="min-width: 50%">
                 <b-card-img
-                  :src="serverAddress + this.product.imgUrl"
+                  :src="this.product.imgUrl"
                   style="min-height: 80%"
                 ></b-card-img>
               </b-col>
@@ -203,8 +203,11 @@ export default {
       }),
       this.$store.dispatch("manufacturer/GET_MANUFACTURER_LIST"),
       this.$store.dispatch("country/GET_COUNTRY_LIST"),
-      this.$store.dispatch("cart/SET_CART", JSON.parse(localStorage.cart)),
     ]);
+    const cart = localStorage.cart;
+    if (cart) {
+      Promise.all([this.$store.dispatch("cart/SET_CART", JSON.parse(cart))]);
+    }
   },
   data() {
     return {

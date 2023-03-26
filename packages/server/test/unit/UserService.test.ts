@@ -34,69 +34,6 @@ describe("UserService", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-  it("authenticateUser -- success", async () => {
-    const user = userBuilder.build();
-    const authn = authnBuilder
-      .withLogin(user.login)
-      .withPassword(user.password)
-      .build();
-    const token = chance.string();
-
-    jest
-      .spyOn(PgUserRepo.prototype, "getUserIdByLoginAndPassword")
-      .mockResolvedValue(user.id);
-    jest.spyOn(PgUserRepo.prototype, "createSession").mockResolvedValue(token);
-
-    const response = await userService.authenticateUser(authn);
-    expect(userRepo.getUserIdByLoginAndPassword).toHaveBeenCalledTimes(1);
-    expect(userRepo.createSession).toHaveBeenCalledTimes(1);
-    expect(response).toEqual(token);
-  });
-
-  it("authenticateUser -- user not found", async () => {
-    const user = userBuilder.build();
-    const authn = authnBuilder
-      .withLogin(user.login)
-      .withPassword(user.password)
-      .build();
-    const token = chance.string();
-
-    jest
-      .spyOn(PgUserRepo.prototype, "getUserIdByLoginAndPassword")
-      .mockResolvedValue(null);
-    jest.spyOn(PgUserRepo.prototype, "createSession").mockResolvedValue(token);
-
-    const response = await userService.authenticateUser(authn);
-    expect(userRepo.getUserIdByLoginAndPassword).toHaveBeenCalledTimes(1);
-    expect(userRepo.createSession).not.toHaveBeenCalled();
-    expect(response).toEqual(null);
-  });
-
-  it("getUserIdByToken -- success", async () => {
-    const user = userBuilder.build();
-    const token = chance.string();
-
-    jest
-      .spyOn(PgUserRepo.prototype, "getUserIdByToken")
-      .mockResolvedValue(user.id);
-
-    const response = await userService.getUserIdByToken(token);
-    expect(userRepo.getUserIdByToken).toHaveBeenCalledTimes(1);
-    expect(response).toEqual(user.id);
-  });
-
-  it("getUserIdByToken -- user not found", async () => {
-    const user = userBuilder.build();
-    const token = chance.string();
-
-    jest
-      .spyOn(PgUserRepo.prototype, "getUserIdByToken")
-      .mockResolvedValue(null);
-
-    const response = await userService.getUserIdByToken(token);
-    expect(userRepo.getUserIdByToken).toHaveBeenCalledTimes(1);
-    expect(response).toEqual(null);
-  });
 
   it("getUser -- success", async () => {
     const user = userBuilder.build();

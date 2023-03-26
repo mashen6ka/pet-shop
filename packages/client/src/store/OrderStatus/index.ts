@@ -1,15 +1,14 @@
 import axios from "axios";
 import { ActionContext } from "vuex";
+import buildAuthHeader from "../build-auth-header";
 import { OrderStatus } from "../types";
 
 type orderStatusState = {
   orderStatusList: OrderStatus[];
-  orderStatus: OrderStatus | null;
 };
 
 const state: orderStatusState = {
   orderStatusList: [],
-  orderStatus: null,
 };
 
 const getters = {
@@ -27,9 +26,10 @@ const actions = {
   GET_ORDER_STATUS_LIST: async (
     context: ActionContext<orderStatusState, null>
   ) => {
+    const authHeader = buildAuthHeader();
     const { data } = await axios.get(
-      process.env.VUE_APP_SERVER_ADDRESS + "/order/status/get/list",
-      { withCredentials: true }
+      process.env.VUE_APP_SERVER_ADDRESS + "/statuses",
+      { withCredentials: true, headers: { Authorization: authHeader } }
     );
     if (data.success) {
       context.commit("SET_ORDER_STATUS_LIST", data.data);

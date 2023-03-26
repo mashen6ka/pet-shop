@@ -46,7 +46,7 @@ export default class OrderStatusController extends BaseController {
   async deleteOrderStatus(req: Request, res: Response): Promise<void> {
     try {
       await this.checkWorkerToken(req);
-      const id = req.body.id;
+      const id = Number(req.params.id);
       if (!Number.isInteger(id)) {
         throw new ErrorEntity(
           "OrderStatus id must be a positive integer",
@@ -62,7 +62,7 @@ export default class OrderStatusController extends BaseController {
 
   async getOrderStatus(req: Request, res: Response): Promise<void> {
     try {
-      const id = Number(req.query.id);
+      const id = Number(req.params.id);
       if (!id) {
         throw new ErrorEntity(
           "OrderStatus id must be a positive integer",

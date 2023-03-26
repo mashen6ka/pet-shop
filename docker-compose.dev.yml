@@ -1,0 +1,60 @@
+version: "3.5"
+
+services:
+  postgres:
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "9999:5432"
+
+  nginx:
+    build:
+      args:
+        SERVER_ADDRESS: https://pet-shop.test/api/v1
+        AUTH_COOKIE_NAME: PET-SHOP
+
+  server:
+    environment:
+      DB_NAME: main
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      SERVER_URL: https://pet-shop.test/api/v1
+      TOKEN_KEY: ls8k1l2pq3k9
+      VERSION: "2.0.0"
+    expose:
+      - 3000
+    volumes:
+      - ./packages/server/src:/app/server/src
+    entrypoint: npm run watch
+
+  server-mirror:
+    environment:
+      DB_NAME: main
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      SERVER_URL: https://pet-shop.test/api/v1
+      TOKEN_KEY: ls8k1l2pq3k9
+      VERSION: "1.0.0"
+      HTTP_BASE_PATH: /mirror1
+    expose:
+      - 3000
+    volumes:
+      - ./packages/server/src:/app/server/src
+    entrypoint: npm run watch
+
+  migrations:
+    environment:
+      DB_NAME: main
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+
+  tests:
+    environment:
+      SERVER_URL: http://nginx/api/v1

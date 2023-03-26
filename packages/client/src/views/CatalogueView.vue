@@ -31,7 +31,7 @@
           style="min-width: 20%; max-height: 30rem"
           img-top
           img-height="60%"
-          :img-src="serverAddress + product.imgUrl"
+          :img-src="product.imgUrl"
         >
           <b-card-text style="max-height: 30%" class="mb-4"
             ><b-link :to="{ name: 'product', params: { id: product.id } }">{{
@@ -111,10 +111,11 @@ export default {
     },
   },
   mounted() {
-    Promise.all([
-      this.$store.dispatch("product/GET_PRODUCT_LIST"),
-      this.$store.dispatch("cart/SET_CART", JSON.parse(localStorage.cart)),
-    ]);
+    Promise.all([this.$store.dispatch("product/GET_PRODUCT_LIST")]);
+    const cart = localStorage.cart;
+    if (cart) {
+      Promise.all([this.$store.dispatch("cart/SET_CART", JSON.parse(cart))]);
+    }
   },
   data() {
     return {

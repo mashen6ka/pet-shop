@@ -44,7 +44,7 @@ export default class OrderController extends BaseController {
   async deleteOrder(req: Request, res: Response): Promise<void> {
     try {
       await this.checkWorkerToken(req);
-      const id = req.body.id;
+      const id = Number(req.params.id);
       if (!Number.isInteger(id)) {
         throw new ErrorEntity(
           "Order id must be a positive integer",
@@ -61,7 +61,7 @@ export default class OrderController extends BaseController {
   async getOrder(req: Request, res: Response): Promise<void> {
     try {
       await this.checkWorkerToken(req);
-      const id = Number(req.query.id);
+      const id = Number(req.params.id);
       if (!id) {
         throw new ErrorEntity(
           "Order id must be a positive integer",
@@ -93,8 +93,8 @@ export default class OrderController extends BaseController {
 
   async createOrderItem(req: Request, res: Response): Promise<void> {
     try {
-      const orderId = req.body.orderId;
-      const productId = req.body.productId;
+      const orderId = Number(req.params.orderId);
+      const productId = Number(req.params.productId);
       const quantity = req.body.quantity;
       if (!Number.isInteger(orderId)) {
         throw new ErrorEntity(
@@ -125,8 +125,8 @@ export default class OrderController extends BaseController {
 
   async deleteOrderItem(req: Request, res: Response): Promise<void> {
     try {
-      const orderId = req.body.orderId;
-      const productId = req.body.productId;
+      const orderId = Number(req.params.orderId);
+      const productId = Number(req.params.productId);
       if (!Number.isInteger(orderId)) {
         throw new ErrorEntity(
           "Order id must be a positive integer",
@@ -150,8 +150,8 @@ export default class OrderController extends BaseController {
 
   async updateOrderItem(req: Request, res: Response): Promise<void> {
     try {
-      const orderId = req.body.orderId;
-      const productId = req.body.productId;
+      const orderId = Number(req.params.orderId);
+      const productId = Number(req.params.productId);
       const quantity = req.body.quantity;
       if (!Number.isInteger(orderId)) {
         throw new ErrorEntity(
@@ -180,7 +180,7 @@ export default class OrderController extends BaseController {
 
   async getOrderItemList(req: Request, res: Response): Promise<void> {
     try {
-      const orderId = Number(req.query.orderId);
+      const orderId = Number(req.params.orderId);
       if (!orderId) {
         throw new ErrorEntity(
           "Order id must be a positive integer",

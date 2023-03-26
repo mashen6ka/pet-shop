@@ -58,7 +58,7 @@ export default class UserController extends BaseController {
 
   async deleteUser(req: Request, res: Response): Promise<void> {
     try {
-      const id = req.body.id;
+      const id = Number(req.params.id);
       await this.service.deleteUser(id);
       res.status(200).json({ success: true });
     } catch (err) {
@@ -132,7 +132,7 @@ export default class UserController extends BaseController {
   async deleteUserCompany(req: Request, res: Response): Promise<void> {
     try {
       const userId = this.getUserIdByToken(req);
-      const companyId = req.body.companyId;
+      const companyId = Number(req.params.companyId);
       if (!Number.isInteger(companyId)) {
         throw new ErrorEntity(
           "Company id must be a positive integer",

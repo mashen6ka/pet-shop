@@ -43,7 +43,7 @@ export default class CompanyController extends BaseController {
   async deleteCompany(req: Request, res: Response): Promise<void> {
     try {
       await this.checkWorkerToken(req);
-      const id = req.body.id;
+      const id = Number(req.params.id);
       if (!Number.isInteger(id)) {
         throw new ErrorEntity(
           "Company id must be a positive integer",
@@ -60,7 +60,7 @@ export default class CompanyController extends BaseController {
   async getCompany(req: Request, res: Response): Promise<void> {
     try {
       await this.checkWorkerToken(req);
-      const id = Number(req.query.id);
+      const id = Number(req.params.id);
       if (!id) {
         throw new ErrorEntity(
           "Company id must be a positive integer",

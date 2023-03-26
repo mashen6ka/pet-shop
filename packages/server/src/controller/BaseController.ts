@@ -36,17 +36,20 @@ export default abstract class BaseController {
       `path: ${JSON.stringify(req.route.path)}`,
       `body: ${JSON.stringify(req.body)}`,
       `query: ${JSON.stringify(req.query)}`,
-      `cookies: ${JSON.stringify(req.cookies)}`
+      `cookies: ${JSON.stringify(req.cookies)}`,
+      `params: ${JSON.stringify(req.params)}`,
+      `headers: ${JSON.stringify(req.headers)}`
     );
     log.error("stack", error.stack);
     res.status(errCode).json({ success: false, error: errMessage });
   }
 
   protected getUserIdByToken(req: Request): number {
-    const token = req.cookies[cookieName];
-    if (!token) {
+    const bearer = req.headers.authorization;
+    if (!bearer || !bearer.startsWith("Bearer ") || bearer === "Bearer ") {
       throw new ErrorEntity("User is not authorized", statusCode.unauthorized);
     }
+    const token = bearer.replace("Bearer ", "");
     const { userId } = jwt.verify(token, process.env.TOKEN_KEY) as JwtPayload;
     if (!userId) {
       throw new ErrorEntity("User is not authorized", statusCode.unauthorized);
@@ -55,10 +58,6 @@ export default abstract class BaseController {
   }
 
   protected async checkWorkerToken(req: Request) {
-    const token = req.cookies[cookieName];
-    if (!token) {
-      throw new ErrorEntity("User is not authorized", statusCode.unauthorized);
-    }
     const userId = this.getUserIdByToken(req);
     const worker = await this.authService.getWorkerByUserId(userId);
 
