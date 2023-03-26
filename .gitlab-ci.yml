@@ -1,80 +1,95 @@
+image: docker:20.10.16
+
 variables:
-  NODE_VERSION: "18"
+  DOCKER_TLS_CERTDIR: "/certs"
 
-image: node:${NODE_VERSION}
+services:
+  - docker:20.10.16-dind
 
-stages:
-  - unit_tests
-  - integration_tests
-  - e2e_tests
+before_script:
+  - docker info
 
-unit_tests:
-  stage: unit_tests
-  tags:
-    - local
-    - docker
-  before_script:
-    - npm ci
-    - cd ./packages/server
+build:
+  stage: build
   script:
-    - npm run ci:test-unit
-  artifacts:
-    when: always
-    reports:
-      junit: ./packages/server/junit.xml
-    paths:
-      - ./packages/server/allure-results
+    - docker compose -f docker-compose.yml -f docker-compose.dev.yml run tests
+# variables:
+#   NODE_VERSION: "18"
 
-integration_tests:
-  stage: integration_tests
-  tags:
-    - local
-    - docker
-  variables:
-    POSTGRES_DB: test
-    POSTGRES_USER: test
-    POSTGRES_PASSWORD: test
-    ENV: ci
-  services:
-    - name: postgres:alpine
-  before_script:
-    - npm ci
-    - cd ./packages/server
-    - npm run ci:migrate
-    - npm run ci:start &
-    - curl -v --retry 5 --retry-delay 0 --retry-all-errors 127.0.0.1:3000
-  script:
-    - npm run ci:test-integration
-  artifacts:
-    when: always
-    reports:
-      junit: ./packages/server/junit.xml
-    paths:
-      - ./packages/server/allure-results
+# image: node:${NODE_VERSION}
 
-e2e_tests:
-  stage: e2e_tests
-  tags:
-    - local
-    - docker
-  variables:
-    POSTGRES_DB: test
-    POSTGRES_USER: test
-    POSTGRES_PASSWORD: test
-    ENV: ci
-  services:
-    - name: postgres:alpine
-  before_script:
-    - npm ci
-    - cd ./packages/server
-    - npm run ci:migrate
-    - npm run ci:start &
-    - curl -v --retry 5 --retry-delay 0 --retry-all-errors 127.0.0.1:3000
-  script:
-    - npm run ci:test-e2e
-  artifacts:
-    when: always
-    reports:
-      junit: ./packages/server/junit.xml
-    paths:
-      - ./packages/server/allure-results
+# stages:
+#   - unit_tests
+#   - integration_tests
+#   - e2e_tests
+
+# unit_tests:
+#   stage: unit_tests
+#   tags:
+#     - local
+#     - docker
+#   before_script:
+#     - npm ci
+#     - cd ./packages/server
+#   script:
+#     - npm run ci:test-unit
+#   artifacts:
+#     when: always
+#     reports:
+#       junit: ./packages/server/junit.xml
+#     paths:
+#       - ./packages/server/allure-results
+
+# integration_tests:
+#   stage: integration_tests
+#   tags:
+#     - local
+#     - docker
+#   variables:
+#     POSTGRES_DB: test
+#     POSTGRES_USER: test
+#     POSTGRES_PASSWORD: test
+#     ENV: ci
+#   services:
+#     - name: postgres:alpine
+#   before_script:
+#     - npm ci
+#     - cd ./packages/server
+#     - npm run ci:migrate
+#     - npm run ci:start &
+#     - curl -v --retry 5 --retry-delay 0 --retry-all-errors 127.0.0.1:3000
+#   script:
+#     - npm run ci:test-integration
+#   artifacts:
+#     when: always
+#     reports:
+#       junit: ./packages/server/junit.xml
+#     paths:
+#       - ./packages/server/allure-results
+
+# e2e_tests:
+#   stage: e2e_tests
+#   tags:
+#     - local
+#     - docker
+#   variables:
+#     POSTGRES_DB: test
+#     POSTGRES_USER: test
+#     POSTGRES_PASSWORD: test
+#     ENV: ci
+#   services:
+#     - name: postgres:alpine
+#   before_script:
+#     - npm ci
+#     - cd ./packages/server
+#     - npm run ci:migrate
+#     - npm run ci:start &
+#     - curl -v --retry 5 --retry-delay 0 --retry-all-errors 127.0.0.1:3000
+#   script:
+#     - npm run ci:test-e2e
+#   artifacts:
+#     when: always
+#     reports:
+#       junit: ./packages/server/junit.xml
+#     paths:
+#       - ./packages/server/allure-results
